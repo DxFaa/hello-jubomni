@@ -33,7 +33,7 @@ class Autoloader {
 	 * Register the autoloader with SPL
 	 */
 	public static function register() {
-		self::$base_dir = trailingslashit( dirname( __DIR__ ) );
+		self::$base_dir = rtrim( dirname( __DIR__ ), '/\\' ) . DIRECTORY_SEPARATOR;
 
 		spl_autoload_register( array( __CLASS__, 'autoload' ) );
 	}

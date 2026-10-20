@@ -17,19 +17,27 @@ class AdminCleanup {
 	 * Register hooks
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'register_developer_role' ) );
-		add_action( 'admin_init', array( __CLASS__, 'cleanup_comments_admin' ) );
+		// Frontend & Global
 		add_filter( 'comments_open', '__return_false', 20 );
 		add_filter( 'pings_open', '__return_false', 20 );
 		add_filter( 'comments_array', '__return_empty_array', 10 );
-		add_action( 'admin_menu', array( __CLASS__, 'remove_admin_menus' ) );
-		add_action( 'init', array( __CLASS__, 'remove_admin_bar_comments' ) );
-		add_filter( 'mce_buttons_2', array( __CLASS__, 'tinymce_buttons' ) );
-		add_filter( 'tiny_mce_before_init', array( __CLASS__, 'tinymce_formats' ) );
 		add_filter( 'xmlrpc_enabled', '__return_false' );
 		add_action( 'init', array( __CLASS__, 'disable_xmlrpc' ) );
 		add_filter( 'option_blogname', array( __CLASS__, 'fallback_blogname' ) );
 		add_action( 'wp_head', array( __CLASS__, 'bing_verification_meta' ) );
+
+		// Admin & Dashboard only (Zero overhead on frontend)
+		if ( is_admin() ) {
+			add_action( 'init', array( __CLASS__, 'register_developer_role' ) );
+			add_action( 'admin_init', array( __CLASS__, 'cleanup_comments_admin' ) );
+			add_action( 'admin_menu', array( __CLASS__, 'remove_admin_menus' ) );
+			add_filter( 'mce_buttons_2', array( __CLASS__, 'tinymce_buttons' ) );
+			add_filter( 'tiny_mce_before_init', array( __CLASS__, 'tinymce_formats' ) );
+		}
+
+		if ( is_admin_bar_showing() ) {
+			add_action( 'init', array( __CLASS__, 'remove_admin_bar_comments' ) );
+		}
 	}
 
 	public static function register_developer_role() {
@@ -84,9 +92,7 @@ class AdminCleanup {
 	}
 
 	public static function remove_admin_bar_comments() {
-		if ( is_admin_bar_showing() ) {
-			remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 );
-		}
+		remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 );
 	}
 
 	public static function tinymce_buttons( $buttons ) {

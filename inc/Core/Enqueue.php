@@ -93,9 +93,10 @@ class Enqueue {
 			true
 		);
 
-		// Cerita Pebisnis Section Styles
+		// Cerita Pebisnis Section Styles & Scripts
+		// Registered for on-demand loading: Elementor only loads them on pages where the widget is present!
 		if ( file_exists( $dir . '/assets/css/cerita-pebisnis.css' ) ) {
-			wp_enqueue_style(
+			wp_register_style(
 				'jubelio-cerita-pebisnis',
 				$uri . '/assets/css/cerita-pebisnis.css',
 				array( 'hello-elementor-child-style' ),
@@ -103,9 +104,8 @@ class Enqueue {
 			);
 		}
 
-		// Cerita Pebisnis Section Scripts
 		if ( file_exists( $dir . '/assets/js/cerita-pebisnis.js' ) ) {
-			wp_enqueue_script(
+			wp_register_script(
 				'jubelio-cerita-pebisnis',
 				$uri . '/assets/js/cerita-pebisnis.js',
 				array( 'jquery' ),

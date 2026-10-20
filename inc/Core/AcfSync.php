@@ -34,17 +34,20 @@ class AcfSync {
 	}
 
 	/**
-	 * Add theme's acf-json directory to ACF load paths
+	 * Append theme's acf-json directory to ACF load paths without removing defaults
 	 *
 	 * @param array $paths Default load paths.
 	 * @return array Updated load paths.
 	 */
 	public static function load_point( $paths ) {
-		// Remove original path (optional, but clean)
-		unset( $paths[0] );
-
-		// Append our theme path
-		$paths[] = get_stylesheet_directory() . '/acf-json';
+		$theme_path = get_stylesheet_directory() . '/acf-json';
+		if ( is_array( $paths ) ) {
+			if ( ! in_array( $theme_path, $paths, true ) ) {
+				$paths[] = $theme_path;
+			}
+		} else {
+			$paths = array( $theme_path );
+		}
 
 		return $paths;
 	}
