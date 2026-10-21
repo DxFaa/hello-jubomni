@@ -93,13 +93,29 @@ class Enqueue {
 			true
 		);
 
+		// Vendor: Swiper v11 for modern responsive touch slider & carousel
+		wp_register_style(
+			'jubelio-swiper',
+			'//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+			array(),
+			'11.1.4'
+		);
+		wp_register_script(
+			'jubelio-swiper',
+			'//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+			array(),
+			'11.1.4',
+			true
+		);
+
 		// Cerita Pebisnis Section Styles & Scripts
 		// Registered for on-demand loading: Elementor only loads them on pages where the widget is present!
+		// 'elementor-frontend' dependency ensures our CSS loads AFTER Elementor Kit styles in the DOM <head>
 		if ( file_exists( $dir . '/assets/css/cerita-pebisnis.css' ) ) {
 			wp_register_style(
 				'jubelio-cerita-pebisnis',
 				$uri . '/assets/css/cerita-pebisnis.css',
-				array( 'hello-elementor-child-style' ),
+				array( 'elementor-frontend', 'hello-elementor-child-style', 'jubelio-swiper' ),
 				$ver
 			);
 		}
@@ -108,7 +124,7 @@ class Enqueue {
 			wp_register_script(
 				'jubelio-cerita-pebisnis',
 				$uri . '/assets/js/cerita-pebisnis.js',
-				array( 'jquery' ),
+				array( 'jquery', 'jubelio-swiper' ),
 				$ver,
 				true
 			);

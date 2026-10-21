@@ -23,6 +23,9 @@ class Module {
 		// Initialize Post Type & Taxonomy
 		PostType::init();
 
+		// Initialize Demo Data Seeder for WP Admin
+		Seeder::init();
+
 		// Register Elementor Widget(s) for this module
 		ElementorManager::add_widget( GridWidget::class );
 	}

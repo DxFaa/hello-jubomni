@@ -1,0 +1,63 @@
+{
+    "key": "taxonomy_industri",
+    "title": "Industri",
+    "menu_order": 0,
+    "active": true,
+    "taxonomy": "industri",
+    "object_type": [
+        "cerita-pebisnis"
+    ],
+    "advanced_configuration": true,
+    "import_source": "",
+    "import_date": "",
+    "labels": {
+        "name": "Industri",
+        "singular_name": "Industri",
+        "menu_name": "Industri",
+        "all_items": "Semua Industri",
+        "edit_item": "Edit Industri",
+        "view_item": "Lihat Industri",
+        "update_item": "Update Industri",
+        "add_new_item": "Tambah Industri Baru",
+        "new_item_name": "Nama Industri Baru",
+        "search_items": "Cari Industri"
+    },
+    "description": "Kategori Industri untuk Cerita Pebisnis",
+    "capabilities": {
+        "manage_terms": "manage_categories",
+        "edit_terms": "manage_categories",
+        "delete_terms": "manage_categories",
+        "assign_terms": "edit_posts"
+    },
+    "public": true,
+    "publicly_queryable": true,
+    "hierarchical": true,
+    "show_ui": true,
+    "show_in_menu": true,
+    "show_in_nav_menus": true,
+    "show_in_rest": true,
+    "rest_base": "",
+    "rest_namespace": "wp\/v2",
+    "rest_controller_class": "WP_REST_Terms_Controller",
+    "show_tagcloud": true,
+    "show_in_quick_edit": true,
+    "show_admin_column": true,
+    "rewrite": {
+        "slug": "industri",
+        "with_front": false,
+        "hierarchical": true
+    },
+    "query_var": "industri",
+    "query_var_name": "",
+    "default_term": {
+        "default_term_enabled": false,
+        "default_term_name": "",
+        "default_term_slug": "",
+        "default_term_description": ""
+    },
+    "sort": false,
+    "meta_box": "default",
+    "meta_box_cb": "",
+    "meta_box_sanitize_cb": "",
+    "modified": 1792555992
+}

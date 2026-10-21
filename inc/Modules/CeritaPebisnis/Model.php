@@ -57,14 +57,14 @@ class Model {
 		// 1. Headline / Solution (e.g. "Optimalkan Stok dari Banyak Channel")
 		$headline_val = $get_val(
 			isset( $field_keys['headline'] ) ? $field_keys['headline'] : '',
-			array( 'headline', 'subjudul', 'highlight', 'solusi', 'tagline', 'ringkasan_solusi' )
+			array( 'cp_headline', 'headline', 'subjudul', 'highlight', 'solusi', 'tagline', 'ringkasan_solusi' )
 		);
 		$data['headline'] = ! empty( $headline_val ) ? esc_html( $headline_val ) : '';
 
 		// 2. Description (excerpt or content or ACF)
 		$desc_val = $get_val(
 			isset( $field_keys['description'] ) ? $field_keys['description'] : '',
-			array( 'deskripsi', 'description', 'cerita_singkat', 'short_description', 'ringkasan' )
+			array( 'cp_deskripsi', 'deskripsi', 'description', 'cerita_singkat', 'short_description', 'ringkasan' )
 		);
 		if ( ! empty( $desc_val ) ) {
 			$data['description'] = is_string( $desc_val ) ? $desc_val : '';
@@ -76,7 +76,7 @@ class Model {
 		// 3. Company Logo (array, id, or url)
 		$logo_val = $get_val(
 			isset( $field_keys['company_logo'] ) ? $field_keys['company_logo'] : '',
-			array( 'logo_bisnis', 'logo', 'logo_toko', 'brand_logo', 'client_logo', 'company_logo' )
+			array( 'cp_logo_bisnis', 'logo_bisnis', 'logo', 'logo_toko', 'brand_logo', 'client_logo', 'company_logo' )
 		);
 		if ( is_array( $logo_val ) && isset( $logo_val['url'] ) ) {
 			$data['company_logo'] = $logo_val['url'];
@@ -89,7 +89,7 @@ class Model {
 		// 4. Card Main Image (Store / Warehouse photo)
 		$img_val = $get_val(
 			isset( $field_keys['card_image'] ) ? $field_keys['card_image'] : '',
-			array( 'foto_toko', 'store_image', 'card_image', 'gambar_utama', 'foto_gudang' )
+			array( 'cp_foto_toko', 'foto_toko', 'store_image', 'card_image', 'gambar_utama', 'foto_gudang' )
 		);
 		if ( is_array( $img_val ) && isset( $img_val['url'] ) ) {
 			$data['card_image'] = $img_val['url'];
@@ -101,12 +101,13 @@ class Model {
 			$data['card_image'] = get_the_post_thumbnail_url( $post_id, 'large' );
 		}
 
-		// 5. CTA Link URL
+		// 5. CTA Link URL (defaults to the post's own URL; custom_link preserved if ACF field is set)
 		$link_val = $get_val(
 			isset( $field_keys['cta_link'] ) ? $field_keys['cta_link'] : '',
-			array( 'link_konsultasi', 'cta_link', 'url_konsultasi', 'link_cerita' )
+			array( 'cp_link_konsultasi', 'link_konsultasi', 'cta_link', 'url_konsultasi', 'link_cerita' )
 		);
-		$data['cta_link'] = ! empty( $link_val ) ? esc_url( $link_val ) : $data['permalink'];
+		$data['custom_link'] = ! empty( $link_val ) ? esc_url( $link_val ) : '';
+		$data['cta_link']    = ! empty( $data['permalink'] ) ? $data['permalink'] : get_permalink( $post_id );
 
 		// 6. Industry Taxonomy ('industri')
 		$terms = get_the_terms( $post_id, 'industri' );
