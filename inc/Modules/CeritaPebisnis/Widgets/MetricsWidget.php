@@ -111,7 +111,7 @@ class MetricsWidget extends Widget_Base {
 		$this->start_controls_section(
 			'section_header_content',
 			array(
-				'label' => __( 'Teks Header & Ajakan (CTA)', 'hello-elementor-child' ),
+				'label' => __( 'Teks Header', 'hello-elementor-child' ),
 			)
 		);
 
@@ -176,64 +176,6 @@ class MetricsWidget extends Widget_Base {
 				'rows'        => 3,
 				'default'     => 'Bersama Jubelio, berbagai bisnis telah merasakan peningkatan efisiensi operasional, penjualan, dan pertumbuhan yang signifikan.',
 				'placeholder' => 'Deskripsi dampak bisnis bersama Jubelio...',
-			)
-		);
-
-		$this->add_control(
-			'show_cta',
-			array(
-				'label'        => __( 'Tampilkan Tombol Konsultasi (CTA)', 'hello-elementor-child' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Ya', 'hello-elementor-child' ),
-				'label_off'    => __( 'Tidak', 'hello-elementor-child' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-				'separator'    => 'before',
-			)
-		);
-
-		$this->add_control(
-			'cta_text',
-			array(
-				'label'       => __( 'Teks Tombol CTA', 'hello-elementor-child' ),
-				'type'        => Controls_Manager::TEXT,
-				'default'     => 'Konsultasikan Kebutuhan Bisnis',
-				'placeholder' => 'Konsultasikan Kebutuhan Bisnis',
-				'condition'   => array(
-					'show_cta' => 'yes',
-				),
-			)
-		);
-
-		$this->add_control(
-			'cta_url',
-			array(
-				'label'       => __( 'Link URL Tombol CTA', 'hello-elementor-child' ),
-				'type'        => Controls_Manager::URL,
-				'placeholder' => 'https://jubelio.com/demo',
-				'default'     => array(
-					'url'         => 'https://jubelio.com/demo',
-					'is_external' => false,
-					'nofollow'    => false,
-				),
-				'condition'   => array(
-					'show_cta' => 'yes',
-				),
-			)
-		);
-
-		$this->add_control(
-			'show_cta_arrow',
-			array(
-				'label'        => __( 'Tampilkan Panah di Tombol CTA', 'hello-elementor-child' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Ya', 'hello-elementor-child' ),
-				'label_off'    => __( 'Tidak', 'hello-elementor-child' ),
-				'return_value' => 'yes',
-				'default'      => '',
-				'condition'    => array(
-					'show_cta' => 'yes',
-				),
 			)
 		);
 
@@ -470,119 +412,6 @@ class MetricsWidget extends Widget_Base {
 				'selector' => '{{WRAPPER}} .jubelio-metrics-desc',
 			)
 		);
-
-		$this->end_controls_section();
-
-		// ==================== STYLE TAB: TOMBOL CTA ====================
-		$this->start_controls_section(
-			'section_style_cta',
-			array(
-				'label' => __( 'Tombol Konsultasi (CTA)', 'hello-elementor-child' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'cta_typography',
-				'selector' => '{{WRAPPER}} .jubelio-metrics-cta-btn',
-			)
-		);
-
-		$this->start_controls_tabs( 'tabs_cta_style' );
-
-		$this->start_controls_tab(
-			'tab_cta_normal',
-			array(
-				'label' => __( 'Normal', 'hello-elementor-child' ),
-			)
-		);
-
-		$this->add_control(
-			'cta_text_color',
-			array(
-				'label'     => __( 'Warna Teks', 'hello-elementor-child' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#FFFFFF',
-				'selectors' => array(
-					'{{WRAPPER}} .jubelio-metrics-cta-btn' => 'color: {{VALUE}} !important;',
-				),
-			)
-		);
-
-		$this->add_control(
-			'cta_bg_color',
-			array(
-				'label'     => __( 'Warna Background', 'hello-elementor-child' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#163A50',
-				'selectors' => array(
-					'{{WRAPPER}} .jubelio-metrics-cta-btn' => 'background-color: {{VALUE}} !important;',
-				),
-			)
-		);
-
-		$this->add_control(
-			'cta_border_color',
-			array(
-				'label'     => __( 'Warna Border', 'hello-elementor-child' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#163A50',
-				'selectors' => array(
-					'{{WRAPPER}} .jubelio-metrics-cta-btn' => 'border-color: {{VALUE}} !important;',
-				),
-			)
-		);
-
-		$this->end_controls_tab();
-
-		$this->start_controls_tab(
-			'tab_cta_hover',
-			array(
-				'label' => __( 'Hover', 'hello-elementor-child' ),
-			)
-		);
-
-		$this->add_control(
-			'cta_text_color_hover',
-			array(
-				'label'     => __( 'Warna Teks Hover', 'hello-elementor-child' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#FFFFFF',
-				'selectors' => array(
-					'{{WRAPPER}} .jubelio-metrics-cta-btn:hover' => 'color: {{VALUE}} !important;',
-				),
-			)
-		);
-
-		$this->add_control(
-			'cta_bg_color_hover',
-			array(
-				'label'     => __( 'Warna Background Hover', 'hello-elementor-child' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#4B68EF',
-				'selectors' => array(
-					'{{WRAPPER}} .jubelio-metrics-cta-btn:hover' => 'background-color: {{VALUE}} !important;',
-				),
-			)
-		);
-
-		$this->add_control(
-			'cta_border_color_hover',
-			array(
-				'label'     => __( 'Warna Border Hover', 'hello-elementor-child' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#4B68EF',
-				'selectors' => array(
-					'{{WRAPPER}} .jubelio-metrics-cta-btn:hover' => 'border-color: {{VALUE}} !important;',
-				),
-			)
-		);
-
-		$this->end_controls_tab();
-
-		$this->end_controls_tabs();
 
 		$this->end_controls_section();
 

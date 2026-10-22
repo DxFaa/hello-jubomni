@@ -18,14 +18,8 @@ $eyebrow_text     = ! empty( $settings['eyebrow_text'] ) ? $settings['eyebrow_te
 $title_text       = ! empty( $settings['title_text'] ) ? $settings['title_text'] : __( 'Dampak Nyata untuk Pertumbuhan Bisnis Bersama Jubelio', 'hello-elementor-child' );
 $title_tag        = ! empty( $settings['title_tag'] ) ? $settings['title_tag'] : 'h2';
 $desc_text        = ! empty( $settings['description_text'] ) ? $settings['description_text'] : __( 'Bersama Jubelio, berbagai bisnis telah merasakan peningkatan efisiensi operasional, penjualan, dan pertumbuhan yang signifikan.', 'hello-elementor-child' );
-$show_cta         = ! isset( $settings['show_cta'] ) || 'yes' === $settings['show_cta'];
-$cta_text         = ! empty( $settings['cta_text'] ) ? $settings['cta_text'] : __( 'Konsultasikan Kebutuhan Bisnis', 'hello-elementor-child' );
-$cta_url          = ! empty( $settings['cta_url']['url'] ) ? esc_url( $settings['cta_url']['url'] ) : 'https://jubelio.com/demo';
-$cta_is_external  = ! empty( $settings['cta_url']['is_external'] ) ? ' target="_blank"' : '';
-$cta_nofollow     = ! empty( $settings['cta_url']['nofollow'] ) ? ' rel="nofollow"' : '';
 $enable_counter   = ! isset( $settings['enable_counter'] ) || 'yes' === $settings['enable_counter'];
 $show_icons       = ! empty( $settings['show_card_icons'] ) && 'yes' === $settings['show_card_icons'];
-$show_cta_arrow   = ! empty( $settings['show_cta_arrow'] ) && 'yes' === $settings['show_cta_arrow'];
 $metrics_items    = ! empty( $settings['metrics_list'] ) && is_array( $settings['metrics_list'] ) ? $settings['metrics_list'] : array();
 $total_items      = count( $metrics_items );
 
@@ -43,7 +37,7 @@ $render_chart = function( $item, $index ) {
 
 	if ( 'custom' === $chart_type && ! empty( $item['custom_chart']['url'] ) ) {
 		?>
-		<img src="<?php echo esc_url( $item['custom_chart']['url'] ); ?>" alt="<?php echo esc_attr( ! empty( $item['metric_label'] ) ? $item['metric_label'] : 'Metric Chart' ); ?>" class="jubelio-chart-img" loading="lazy" />
+		<img src="<?php echo esc_url( $item['custom_chart']['url'] ); ?>" alt="<?php echo esc_attr( ! empty( $item['metric_label'] ) ? $item['metric_label'] : 'Metric Chart' ); ?>" class="jubelio-chart-img" loading="lazy" decoding="async" />
 		<?php
 		return;
 	}
@@ -268,14 +262,14 @@ $render_metric_icon = function( $item ) {
 			</div>
 		<?php endif; ?>
 
-		<!-- Outer Container with Glass-Style / Gradient Border Effect -->
+		<?php /* Outer Container with Glass-Style / Gradient Border Effect */ ?>
 		<div class="jubelio-metrics-glass-outer">
 			<div class="jubelio-metrics-glass-backdrop">
 
-				<!-- Solid Inner Container Wrapping All Cards -->
+				<?php /* Solid Inner Container Wrapping All Cards */ ?>
 				<div class="jubelio-metrics-solid-container">
 
-					<!-- 3 Columns x 2 Rows Desktop Grid Layout -->
+					<?php /* 3 Columns x 2 Rows Desktop Grid Layout */ ?>
 					<div class="jubelio-metrics-grid-3col">
 						<?php if ( ! empty( $metrics_items ) ) : ?>
 							<?php foreach ( $metrics_items as $index => $item ) :
@@ -285,14 +279,14 @@ $render_metric_icon = function( $item ) {
 							?>
 								<div class="jubelio-metric-card-box elementor-repeater-item-<?php echo esc_attr( $card_id ); ?>">
 									<div class="jubelio-metric-card-top">
-										<!-- Top: Number Metrics (<h3> tag) -->
+										<?php /* Top: Number Metrics (<h3> tag) */ ?>
 										<h3 class="jubelio-metric-number">
 											<span class="jubelio-metric-number-val" data-raw="<?php echo esc_attr( $val ); ?>">
 												<?php echo esc_html( $val ); ?>
 											</span>
 										</h3>
 
-										<!-- Middle: Description Text (<h4> tag) -->
+										<?php /* Middle: Description Text (<h4> tag) */ ?>
 										<?php if ( ! empty( $label ) ) : ?>
 											<h4 class="jubelio-metric-desc">
 												<?php echo esc_html( $label ); ?>
@@ -300,7 +294,7 @@ $render_metric_icon = function( $item ) {
 										<?php endif; ?>
 									</div>
 
-									<!-- Bottom: Image / Chart Anchored at Bottom -->
+									<?php /* Bottom: Image / Chart Anchored at Bottom */ ?>
 									<div class="jubelio-metric-chart-wrap">
 										<?php $render_chart( $item, $index ); ?>
 									</div>
@@ -313,16 +307,6 @@ $render_metric_icon = function( $item ) {
 
 			</div>
 		</div>
-
-		<?php if ( $show_cta && ! empty( $cta_text ) ) : ?>
-			<div class="elementor-button-wrapper jubelio-metrics-cta-wrap">
-				<a href="<?php echo $cta_url; ?>" class="elementor-button elementor-size-md jubelio-metrics-cta-btn"<?php echo $cta_is_external . $cta_nofollow; ?> role="button">
-					<span class="elementor-button-content-wrapper">
-						<span class="elementor-button-text"><?php echo esc_html( $cta_text ); ?></span>
-					</span>
-				</a>
-			</div>
-		<?php endif; ?>
 
 	<?php elseif ( 'arc' === $layout_type ) : ?>
 		<div class="jubelio-metrics-arc-stage">
@@ -347,7 +331,7 @@ $render_metric_icon = function( $item ) {
 				</div>
 			<?php endif; ?>
 
-			<!-- Top Curved Fan Arc of Cards -->
+			<?php /* Top Curved Fan Arc of Cards */ ?>
 			<div class="jubelio-metrics-arc-wrap">
 				<?php if ( ! empty( $metrics_items ) ) : ?>
 					<?php
@@ -407,20 +391,6 @@ $render_metric_icon = function( $item ) {
 							<?php echo esc_html( $desc_text ); ?>
 						</p>
 					<?php endif; ?>
-
-					<?php if ( $show_cta && ! empty( $cta_text ) ) : ?>
-						<div class="jubelio-metrics-cta-wrap">
-							<a href="<?php echo $cta_url; ?>" class="jubelio-metrics-cta-btn"<?php echo $cta_is_external . $cta_nofollow; ?>>
-								<span><?php echo esc_html( $cta_text ); ?></span>
-								<?php if ( $show_cta_arrow ) : ?>
-									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-										<line x1="5" y1="12" x2="19" y2="12"></line>
-										<polyline points="12 5 19 12 12 19"></polyline>
-									</svg>
-								<?php endif; ?>
-							</a>
-						</div>
-					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 
@@ -444,20 +414,6 @@ $render_metric_icon = function( $item ) {
 					<p class="jubelio-metrics-desc">
 						<?php echo esc_html( $desc_text ); ?>
 					</p>
-				<?php endif; ?>
-
-				<?php if ( $show_cta && ! empty( $cta_text ) ) : ?>
-					<div class="jubelio-metrics-cta-wrap">
-						<a href="<?php echo $cta_url; ?>" class="jubelio-metrics-cta-btn"<?php echo $cta_is_external . $cta_nofollow; ?>>
-							<span><?php echo esc_html( $cta_text ); ?></span>
-							<?php if ( $show_cta_arrow ) : ?>
-								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-									<line x1="5" y1="12" x2="19" y2="12"></line>
-									<polyline points="12 5 19 12 12 19"></polyline>
-								</svg>
-							<?php endif; ?>
-						</a>
-					</div>
 				<?php endif; ?>
 			</div>
 
