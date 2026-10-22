@@ -93,18 +93,18 @@ class Enqueue {
 			true
 		);
 
-		// Vendor: Swiper v11 for modern responsive touch slider & carousel
+		// Vendor: Swiper v14 for modern responsive touch slider & carousel
 		wp_register_style(
 			'jubelio-swiper',
-			'//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+			'//cdn.jsdelivr.net/npm/swiper@14/swiper-bundle.min.css',
 			array(),
-			'11.1.4'
+			'14.3.0'
 		);
 		wp_register_script(
 			'jubelio-swiper',
-			'//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+			'//cdn.jsdelivr.net/npm/swiper@14/swiper-bundle.min.js',
 			array(),
-			'11.1.4',
+			'14.3.0',
 			true
 		);
 

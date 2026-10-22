@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Jubelio\Integrations\ElementorManager;
 use Jubelio\Modules\CeritaPebisnis\Widgets\GridWidget;
+use Jubelio\Modules\CeritaPebisnis\Widgets\MetricsWidget;
 
 class Module {
 
@@ -28,5 +29,6 @@ class Module {
 
 		// Register Elementor Widget(s) for this module
 		ElementorManager::add_widget( GridWidget::class );
+		ElementorManager::add_widget( MetricsWidget::class );
 	}
 }

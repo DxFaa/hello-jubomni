@@ -54,6 +54,13 @@ $filter_align     = ! empty( $settings['filter_align'] ) ? $settings['filter_ali
 		</div>
 	<?php endif; ?>
 
+	<?php
+	$is_load_more  = ( 'grid' === $layout_type ) && ( ! isset( $settings['enable_load_more'] ) || 'yes' === $settings['enable_load_more'] );
+	$initial_limit = ! empty( $settings['posts_per_page'] ) && intval( $settings['posts_per_page'] ) > 0 ? intval( $settings['posts_per_page'] ) : 6;
+	$total_items   = count( $items );
+	$has_hidden    = $is_load_more && ( $total_items > $initial_limit );
+	?>
+
 	<?php if ( 'slider' === $layout_type ) : ?>
 		<div class="jubelio-slider-main-wrap">
 
@@ -110,13 +117,28 @@ $filter_align     = ! empty( $settings['filter_align'] ) ? $settings['filter_ali
 			<?php endif; ?>
 		</div>
 	<?php else : ?>
-		<div class="jubelio-grid-cards-container <?php echo esc_attr( $cols_class ); ?>">
+		<div class="jubelio-grid-cards-container <?php echo esc_attr( $cols_class ); ?>" data-load-more="<?php echo esc_attr( $is_load_more ? 'yes' : 'no' ); ?>" data-initial="<?php echo esc_attr( $initial_limit ); ?>">
 			<?php
+			$idx = 0;
 			foreach ( $items as $item ) {
+				$idx++;
+				$is_hidden_initial = ( $is_load_more && $idx > $initial_limit );
+				$extra_card_class  = $is_hidden_initial ? 'jubelio-card-load-more-hidden' : '';
 				include __DIR__ . '/card.php';
 			}
 			?>
 		</div>
+
+		<?php if ( $has_hidden ) : ?>
+			<div class="jubelio-grid-load-more-wrap">
+				<button type="button" class="jubelio-grid-load-more-btn" data-step="<?php echo esc_attr( $initial_limit ); ?>">
+					<span><?php echo esc_html( ! empty( $settings['load_more_btn_text'] ) ? $settings['load_more_btn_text'] : __( 'Lihat Cerita Lainnya', 'hello-elementor-child' ) ); ?></span>
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<polyline points="6 9 12 15 18 9"></polyline>
+					</svg>
+				</button>
+			</div>
+		<?php endif; ?>
 	<?php endif; ?>
 
 </div>

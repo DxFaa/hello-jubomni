@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="jubelio-grid-card" data-industry="<?php echo esc_attr( $item['industry_slug'] ); ?>">
+<div class="jubelio-grid-card <?php echo ! empty( $extra_card_class ) ? esc_attr( $extra_card_class ) : ''; ?>" data-industry="<?php echo esc_attr( $item['industry_slug'] ); ?>">
 
 	<?php if ( 'yes' === $settings['show_image'] ) : ?>
 		<div class="jubelio-grid-card-media">

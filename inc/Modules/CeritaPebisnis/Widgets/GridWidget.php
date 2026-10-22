@@ -183,12 +183,13 @@ class GridWidget extends Widget_Base {
 		$this->add_control(
 			'posts_per_page',
 			array(
-				'label'   => __( 'Jumlah Kartu Ditampilkan', 'hello-elementor-child' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 6,
-				'min'     => 1,
-				'max'     => 30,
-				'step'    => 1,
+				'label'       => __( 'Jumlah Kartu Ditampilkan', 'hello-elementor-child' ),
+				'type'        => Controls_Manager::NUMBER,
+				'default'     => 6,
+				'min'         => -1,
+				'max'         => 60,
+				'step'        => 1,
+				'description' => __( 'Default: 12. Isi -1 untuk menampilkan SEMUA Cerita Pebisnis.', 'hello-elementor-child' ),
 			)
 		);
 
@@ -280,6 +281,52 @@ class GridWidget extends Widget_Base {
 				'default'      => 'yes',
 				'condition'    => array(
 					'layout_type' => 'slider',
+				),
+			)
+		);
+
+		$this->add_control(
+			'dynamic_pagination',
+			array(
+				'label'        => __( 'Pagination Dynamic Bullets', 'hello-elementor-child' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Ya', 'hello-elementor-child' ),
+				'label_off'    => __( 'Tidak', 'hello-elementor-child' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'description'  => __( 'Menampilkan bullet titik pagination dinamis ala Swiper JS (ukuran bullet menyesuaikan posisi slide aktif).', 'hello-elementor-child' ),
+				'condition'    => array(
+					'layout_type'     => 'slider',
+					'show_pagination' => 'yes',
+				),
+			)
+		);
+
+		$this->add_control(
+			'enable_load_more',
+			array(
+				'label'        => __( 'Aktifkan Tombol Load More', 'hello-elementor-child' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Ya', 'hello-elementor-child' ),
+				'label_off'    => __( 'Tidak', 'hello-elementor-child' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'description'  => __( 'Menampilkan tombol untuk memuat sisa kartu secara dinamis tanpa refresh halaman.', 'hello-elementor-child' ),
+				'condition'    => array(
+					'layout_type' => 'grid',
+				),
+			)
+		);
+
+		$this->add_control(
+			'load_more_btn_text',
+			array(
+				'label'     => __( 'Teks Tombol Load More', 'hello-elementor-child' ),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => 'Lihat Cerita Lainnya',
+				'condition' => array(
+					'layout_type'      => 'grid',
+					'enable_load_more' => 'yes',
 				),
 			)
 		);
@@ -801,7 +848,7 @@ class GridWidget extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#4B68EF',
 				'selectors' => array(
-					'{{WRAPPER}} .swiper-pagination-bullet-active' => 'background-color: {{VALUE}} !important;',
+					'{{WRAPPER}} .swiper-pagination-bullet-active, {{WRAPPER}} .swiper-pagination-bullet-active-main' => 'background-color: {{VALUE}} !important;',
 				),
 				'separator' => 'before',
 			)
@@ -997,11 +1044,17 @@ class GridWidget extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
-		// Query Args
+		$layout_type = ! empty( $settings['layout_type'] ) ? $settings['layout_type'] : 'slider';
+
+		// Query Args: In slider mode or when Load More is enabled, query all posts (-1)
+		$is_load_more      = ( 'grid' === $layout_type ) && ( ! isset( $settings['enable_load_more'] ) || 'yes' === $settings['enable_load_more'] );
+		$posts_count       = isset( $settings['posts_per_page'] ) ? intval( $settings['posts_per_page'] ) : 6;
+		$posts_query_limit = ( 'slider' === $layout_type || $is_load_more || -1 === $posts_count || 0 === $posts_count ) ? -1 : $posts_count;
+
 		$query_args = array(
 			'post_type'      => 'cerita-pebisnis',
 			'post_status'    => 'publish',
-			'posts_per_page' => intval( $settings['posts_per_page'] ),
+			'posts_per_page' => $posts_query_limit,
 			'orderby'        => sanitize_key( $settings['orderby'] ),
 			'order'          => sanitize_text_field( $settings['order'] ),
 		);
@@ -1088,9 +1141,14 @@ class GridWidget extends Widget_Base {
 		}
 
 		// Layout and navigation guaranteed defaults
-		$layout_type     = ! empty( $settings['layout_type'] ) ? $settings['layout_type'] : 'slider';
-		$show_navigation = ! isset( $settings['show_navigation'] ) || 'yes' === $settings['show_navigation'];
-		$show_pagination = ! isset( $settings['show_pagination'] ) || 'yes' === $settings['show_pagination'];
+		$layout_type        = ! empty( $settings['layout_type'] ) ? $settings['layout_type'] : 'slider';
+		$show_navigation    = ! isset( $settings['show_navigation'] ) || 'yes' === $settings['show_navigation'];
+		$show_pagination    = ! isset( $settings['show_pagination'] ) || 'yes' === $settings['show_pagination'];
+		$dynamic_pagination = ! isset( $settings['dynamic_pagination'] ) || 'yes' === $settings['dynamic_pagination'];
+
+		$swiper_config = array(
+			'dynamicPagination' => $dynamic_pagination,
+		);
 
 		// Delegate HTML rendering to the view template partial
 		include dirname( __DIR__ ) . '/views/grid.php';
