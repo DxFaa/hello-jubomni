@@ -125,28 +125,37 @@ class Seeder {
 		// 2. Demo Posts matching Wireframe
 		$posts = array(
 			array(
-				'title'     => 'Cuit Baby Wear',
-				'slug'      => 'cuit-baby-wear',
-				'industry'  => 'pakaian-bayi-anak',
-				'headline'  => 'Optimalkan Stok dari Banyak Channel',
-				'desc'      => 'Cuit Baby Wear meningkatkan efisiensi pengelolaan stok untuk berbagai channel penjualan dan operasional gudang dengan Jubelio.',
-				'cta_link'  => '',
+				'title'       => 'Cuit Baby Wear',
+				'slug'        => 'cuit-baby-wear',
+				'industry'    => 'pakaian-bayi-anak',
+				'headline'    => 'Optimalkan Stok dari Banyak Channel',
+				'desc'        => 'Cuit Baby Wear meningkatkan efisiensi pengelolaan stok untuk berbagai channel penjualan dan operasional gudang dengan Jubelio.',
+				'quote'       => 'Gak perlu buat software sendiri, Jubelio sudah sangat efisien buat Cuit Baby Wear. Sebab, kami bisa memaksimalkan potensi dari setiap store dengan memanfaatkan stok yang optimal. Selain itu, CS Jubelio juga sangat membantu sekali',
+				'client_name' => 'Hansa Artupas',
+				'client_role' => 'Owner Cuit BabyWear',
+				'cta_link'    => '',
 			),
 			array(
-				'title'     => 'Clowny',
-				'slug'      => 'clowny',
-				'industry'  => 'fashion',
-				'headline'  => 'Kelola Ribuan Pesanan Tanpa Selisih Stok',
-				'desc'      => 'Clowny berhasil memproses ribuan order harian dari berbagai marketplace secara otomatis dan real-time bersama Jubelio.',
-				'cta_link'  => '',
+				'title'       => 'Clowny',
+				'slug'        => 'clowny',
+				'industry'    => 'fashion',
+				'headline'    => 'Kelola Ribuan Pesanan Tanpa Selisih Stok',
+				'desc'        => 'Clowny berhasil memproses ribuan order harian dari berbagai marketplace secara otomatis dan real-time bersama Jubelio.',
+				'quote'       => 'Sebelum pakai Jubelio, sering banget selisih stok antar marketplace sampai orderan harus dibatalkan. Sekarang semua stok tersinkronisasi otomatis dalam hitungan detik.',
+				'client_name' => 'Vincent',
+				'client_role' => 'Founder Clowny',
+				'cta_link'    => '',
 			),
 			array(
-				'title'     => 'Rodeo Junior',
-				'slug'      => 'rodeo-junior',
-				'industry'  => 'fashion-apparel',
-				'headline'  => 'Sinkronisasi Multi-Store Online & Offline',
-				'desc'      => 'Rodeo Junior mengintegrasikan sistem POS toko fisik dengan marketplace online secara mulus dalam satu dashboard Jubelio Omnichannel.',
-				'cta_link'  => '',
+				'title'       => 'Rodeo Junior',
+				'slug'        => 'rodeo-junior',
+				'industry'    => 'fashion-apparel',
+				'headline'    => 'Sinkronisasi Multi-Store Online & Offline',
+				'desc'        => 'Rodeo Junior mengintegrasikan sistem POS toko fisik dengan marketplace online secara mulus dalam satu dashboard Jubelio Omnichannel.',
+				'quote'       => 'Integrasi toko fisik dan puluhan marketplace kami sekarang berjalan sangat seamless. Efisiensi operasional tim kami meningkat lebih dari 80%.',
+				'client_name' => 'Rudy Kurniawan',
+				'client_role' => 'Head of Operations Rodeo Junior',
+				'cta_link'    => '',
 			),
 		);
 
@@ -154,6 +163,17 @@ class Seeder {
 			// Check if post already exists by slug
 			$existing_post = get_page_by_path( $p['slug'], OBJECT, 'cerita-pebisnis' );
 			if ( $existing_post ) {
+				$existing_id = $existing_post->ID;
+				if ( empty( get_post_meta( $existing_id, 'cp_quote', true ) ) && ! empty( $p['quote'] ) ) {
+					update_post_meta( $existing_id, 'cp_quote', sanitize_textarea_field( $p['quote'] ) );
+					update_post_meta( $existing_id, 'cp_client_name', sanitize_text_field( $p['client_name'] ) );
+					update_post_meta( $existing_id, 'cp_client_role', sanitize_text_field( $p['client_role'] ) );
+					if ( function_exists( 'update_field' ) ) {
+						update_field( 'field_cp_quote', $p['quote'], $existing_id );
+						update_field( 'field_cp_client_name', $p['client_name'], $existing_id );
+						update_field( 'field_cp_client_role', $p['client_role'], $existing_id );
+					}
+				}
 				continue;
 			}
 
@@ -177,12 +197,18 @@ class Seeder {
 					update_field( 'field_cp_headline', $p['headline'], $post_id );
 					update_field( 'field_cp_deskripsi', $p['desc'], $post_id );
 					update_field( 'field_cp_link_konsultasi', $p['cta_link'], $post_id );
+					update_field( 'field_cp_quote', $p['quote'], $post_id );
+					update_field( 'field_cp_client_name', $p['client_name'], $post_id );
+					update_field( 'field_cp_client_role', $p['client_role'], $post_id );
 				}
 
 				// Fallback standard post meta (both cp_ prefix and legacy)
 				update_post_meta( $post_id, 'cp_headline', sanitize_text_field( $p['headline'] ) );
 				update_post_meta( $post_id, 'cp_deskripsi', sanitize_textarea_field( $p['desc'] ) );
 				update_post_meta( $post_id, 'cp_link_konsultasi', esc_url_raw( $p['cta_link'] ) );
+				update_post_meta( $post_id, 'cp_quote', sanitize_textarea_field( $p['quote'] ) );
+				update_post_meta( $post_id, 'cp_client_name', sanitize_text_field( $p['client_name'] ) );
+				update_post_meta( $post_id, 'cp_client_role', sanitize_text_field( $p['client_role'] ) );
 				update_post_meta( $post_id, 'headline', sanitize_text_field( $p['headline'] ) );
 				update_post_meta( $post_id, 'deskripsi', sanitize_textarea_field( $p['desc'] ) );
 				update_post_meta( $post_id, 'link_konsultasi', esc_url_raw( $p['cta_link'] ) );

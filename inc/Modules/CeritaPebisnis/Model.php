@@ -129,6 +129,36 @@ class Model {
 		);
 		$data['client_name'] = ! empty( $name_val ) ? esc_html( $name_val ) : $data['title'];
 
+		// 8. Client Quote (Kutipan Langsung)
+		$quote_val = $get_val(
+			isset( $field_keys['quote'] ) ? $field_keys['quote'] : '',
+			array( 'cp_quote', 'quote', 'kutipan', 'testimoni', 'client_quote', 'testimonial_quote' )
+		);
+		if ( ! empty( $quote_val ) ) {
+			$data['quote'] = is_string( $quote_val ) ? trim( $quote_val ) : '';
+		} else {
+			// Fallback to description
+			$data['quote'] = ! empty( $data['description'] ) ? wp_strip_all_tags( $data['description'] ) : '';
+		}
+
+		// 9. Client Person / Spokesperson Name (e.g. Hansa Artupas)
+		$person_name_val = $get_val(
+			isset( $field_keys['client_person_name'] ) ? $field_keys['client_person_name'] : '',
+			array( 'cp_client_name', 'client_person_name', 'nama_tokoh', 'narasumber', 'person_name' )
+		);
+		$data['client_person_name'] = ! empty( $person_name_val ) ? esc_html( $person_name_val ) : $data['client_name'];
+
+		// 10. Client Person Role / Business Title (e.g. Owner Cuit BabyWear)
+		$person_role_val = $get_val(
+			isset( $field_keys['client_person_role'] ) ? $field_keys['client_person_role'] : '',
+			array( 'cp_client_role', 'client_person_role', 'jabatan', 'role', 'posisi' )
+		);
+		if ( ! empty( $person_role_val ) ) {
+			$data['client_person_role'] = esc_html( $person_role_val );
+		} else {
+			$data['client_person_role'] = ! empty( $data['client_name'] ) ? 'Owner ' . $data['client_name'] : ( ! empty( $data['industry_name'] ) ? $data['industry_name'] : 'Klien Jubelio' );
+		}
+
 		return $data;
 	}
 }

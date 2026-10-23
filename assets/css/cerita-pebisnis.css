@@ -950,7 +950,6 @@
 		box-shadow 0.35s ease,
 		border-color 0.3s ease,
 		background-color 0.3s ease;
-	cursor: pointer;
 	position: relative;
 	overflow: hidden;
 }
@@ -1437,5 +1436,549 @@
 	.jubelio-metrics-arc-wrap {
 		grid-template-columns: 1fr;
 		gap: 10px;
+	}
+}
+
+/* ==========================================================================
+   4. KATA PELANGGAN TENTANG JUBELIO (TESTIMONIALS SLIDER SECTION)
+   ========================================================================== */
+
+.jubelio-testimonials-section {
+	width: 100%;
+	box-sizing: border-box;
+	position: relative;
+	overflow: hidden;
+}
+
+.jubelio-testimonials-header {
+	text-align: center;
+	margin: 0 auto 32px;
+	padding: 0 20px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+}
+
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-testimonials-title,
+.jubelio-testimonials-section .jubelio-testimonials-title {
+	font-family: "Nunito Sans", Sans-serif;
+	font-weight: 700;
+	line-height: 1.25em;
+	color: #163A50;
+	margin: 0;
+	font-size: 32px;
+}
+
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-testimonials-desc,
+.jubelio-testimonials-section .jubelio-testimonials-desc {
+	font-family: "Nunito Sans", Sans-serif;
+	font-weight: 400;
+	line-height: 1.6em;
+	color: #64748B;
+	margin: 0;
+	font-size: 15.5px;
+}
+
+.jubelio-testimonials-action-wrap {
+	margin-top: 6px;
+}
+
+.jubelio-testimonials-action-link {
+	font-family: "Nunito Sans", Sans-serif;
+	font-size: 14.5px;
+	font-weight: 700;
+	color: #4B68EF;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	transition: all 0.25s ease;
+}
+
+.jubelio-testimonials-action-link:hover {
+	color: #4B68EF;
+	text-decoration: underline;
+}
+
+/* Slider Stage & Centered Side Peeking Track */
+.jubelio-testimonials-slider-stage {
+	position: relative;
+	width: 100%;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.jubelio-testimonials-swiper {
+	width: 100%;
+	overflow: visible !important;
+	-webkit-mask-image: linear-gradient(to right,
+			transparent 0%,
+			rgba(0, 0, 0, 0.08) 20px,
+			rgba(0, 0, 0, 0.6) 60px,
+			black 110px,
+			black calc(100% - 110px),
+			rgba(0, 0, 0, 0.6) calc(100% - 60px),
+			rgba(0, 0, 0, 0.08) calc(100% - 20px),
+			transparent 100%);
+	mask-image: linear-gradient(to right,
+			transparent 0%,
+			rgba(0, 0, 0, 0.08) 20px,
+			rgba(0, 0, 0, 0.6) 60px,
+			black 110px,
+			black calc(100% - 110px),
+			rgba(0, 0, 0, 0.6) calc(100% - 60px),
+			rgba(0, 0, 0, 0.08) calc(100% - 20px),
+			transparent 100%);
+	-webkit-mask-size: 100% 100%;
+	mask-size: 100% 100%;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	padding-top: 6px;
+}
+
+.jubelio-testimonials-swiper .swiper-wrapper {
+	align-items: stretch;
+}
+
+.jubelio-testimonial-slide {
+	height: auto;
+	display: flex;
+	box-sizing: border-box;
+	transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Inactive / Side Cards are subtly faded */
+.jubelio-testimonial-slide:not(.swiper-slide-active) {
+	opacity: 0.42;
+	cursor: pointer;
+}
+
+.jubelio-testimonial-slide:not(.swiper-slide-active):hover {
+	opacity: 0.75;
+}
+
+/* Active Center Card is 100% prominent with light blue border & background */
+.jubelio-testimonial-slide.swiper-slide-active {
+	opacity: 1;
+	z-index: 5;
+}
+
+/* Card Container */
+.jubelio-testimonial-card {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	gap: 28px;
+	width: 100%;
+	background: #FFFFFF;
+	border: 1.5px solid #E2E8F0;
+	border-radius: 24px;
+	padding: 26px 28px;
+	box-sizing: border-box;
+	text-decoration: none;
+	box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+	transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
+}
+
+.swiper-slide-active .jubelio-testimonial-card {
+	background: #F6FAFF !important;
+	border-color: #BAE6FD !important;
+}
+
+.jubelio-testimonial-card:hover {
+	transform: translateY(-6px);
+}
+
+/* Left Media Column (Square Photo + Overlapping Brand Logo Badge) */
+.jubelio-testimonial-media {
+	flex: 0 0 230px;
+	width: 230px;
+	min-width: 230px;
+	align-self: stretch;
+	min-height: 210px;
+	border-radius: 18px;
+	overflow: hidden;
+	position: relative;
+	background: #F1F5F9;
+}
+
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-testimonial-photo,
+.jubelio-testimonial-photo {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	min-width: 100% !important;
+	min-height: 100% !important;
+	max-width: none !important;
+	object-fit: cover !important;
+	object-position: center center !important;
+	display: block !important;
+	border-radius: 18px !important;
+}
+
+.jubelio-testimonial-photo-placeholder {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
+	background: #EEF2F6;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 18px;
+}
+
+/* Brand Logo Badge Tab overlapping photo at bottom-left */
+.jubelio-testimonial-logo-tab {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background: #FFFFFF;
+	padding: 8px 18px;
+	border-top-right-radius: 16px;
+	box-shadow: 2px -2px 10px rgba(15, 23, 42, 0.06);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 150px;
+	min-height: 38px;
+	box-sizing: border-box;
+	z-index: 2;
+}
+
+.jubelio-testimonial-logo-img {
+	max-height: 22px;
+	max-width: 110px;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	display: block;
+}
+
+.jubelio-testimonial-logo-text {
+	font-family: "Nunito Sans", Sans-serif;
+	font-size: 13.5px;
+	font-weight: 700;
+	color: #D97706;
+	letter-spacing: -0.01em;
+	white-space: nowrap;
+}
+
+/* Right Content Column (Quote & Author info) */
+.jubelio-testimonial-content {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 6px 0;
+	min-width: 0;
+}
+
+.jubelio-testimonial-quote {
+	font-family: "Nunito Sans", Sans-serif;
+	font-weight: 700;
+	font-size: 15.5px;
+	line-height: 1.6em;
+	color: #163A50;
+	margin: 0 0 20px 0;
+	padding: 0;
+	border: none;
+	text-align: left;
+}
+
+.jubelio-testimonial-author-box {
+	margin-top: auto;
+	text-align: left;
+}
+
+.jubelio-testimonial-author-name {
+	font-family: "Nunito Sans", Sans-serif;
+	font-weight: 700;
+	font-size: 15px;
+	line-height: 1.3em;
+	color: #163A50;
+	margin-bottom: 3px;
+}
+
+.jubelio-testimonial-author-role {
+	font-family: "Nunito Sans", Sans-serif;
+	font-weight: 400;
+	font-size: 13.5px;
+	line-height: 1.4em;
+	color: #64748B;
+}
+
+/* Side Navigation Arrows on Desktop (Matching Pilih Berdasarkan Industri design) */
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section button.jubelio-side-nav,
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-side-nav,
+.jubelio-testimonials-section .jubelio-side-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 20;
+	width: 44px !important;
+	height: 44px !important;
+	min-width: 44px !important;
+	border-radius: 50% !important;
+	border: 1px solid var(--jubelio-border) !important;
+	background: #FFFFFF !important;
+	color: var(--jubelio-navy) !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 !important;
+	cursor: pointer;
+	box-shadow: 0 4px 18px rgba(22, 58, 80, 0.12) !important;
+	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	outline: none;
+}
+
+.jubelio-testimonials-slider-stage .jubelio-side-prev {
+	left: calc(50% - 390px);
+}
+
+.jubelio-testimonials-slider-stage .jubelio-side-next {
+	right: calc(50% - 390px);
+}
+
+/* Priority Override: Ensure Testimonials Navigation Buttons ALWAYS match Filter by Industry section */
+html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-section button.jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn,
+html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-section .jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn,
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-section button.jubelio-slider-btn.jubelio-slider-btn,
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-section .jubelio-slider-btn.jubelio-slider-btn,
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section button.jubelio-slider-btn,
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-slider-btn,
+.jubelio-testimonials-section .jubelio-slider-btn {
+	background: #FFFFFF !important;
+	background-color: #FFFFFF !important;
+	color: var(--jubelio-navy) !important;
+	border: 1px solid var(--jubelio-border) !important;
+	border-color: var(--jubelio-border) !important;
+}
+
+.jubelio-testimonials-section .jubelio-slider-btn svg {
+	color: inherit !important;
+	stroke: currentColor !important;
+	transition: stroke 0.25s ease, color 0.25s ease;
+}
+
+html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-section button.jubelio-side-nav.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-section .jubelio-side-nav.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-section button.jubelio-side-nav:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-section .jubelio-side-nav:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section button.jubelio-side-nav:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-side-nav:hover:not(:disabled),
+.jubelio-testimonials-section .jubelio-side-nav:hover:not(:disabled) {
+	background: var(--jubelio-blue) !important;
+	background-color: var(--jubelio-blue) !important;
+	border-color: var(--jubelio-blue) !important;
+	color: #FFFFFF !important;
+	transform: translateY(-50%) scale(1.08) !important;
+	box-shadow: 0 8px 24px rgba(75, 104, 239, 0.35) !important;
+}
+
+html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-section button.jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-section .jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-section button.jubelio-slider-btn:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-section .jubelio-slider-btn:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section button.jubelio-slider-btn:hover:not(:disabled),
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-slider-btn:hover:not(:disabled),
+.jubelio-testimonials-section .jubelio-slider-btn:hover:not(:disabled) {
+	background: var(--jubelio-blue) !important;
+	background-color: var(--jubelio-blue) !important;
+	border-color: var(--jubelio-blue) !important;
+	color: #FFFFFF !important;
+}
+
+html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-section .jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled) svg,
+.jubelio-testimonials-section .jubelio-slider-btn:hover:not(:disabled) svg {
+	color: #FFFFFF !important;
+	stroke: #FFFFFF !important;
+}
+
+.jubelio-testimonials-section .jubelio-side-nav:disabled,
+.jubelio-testimonials-section .jubelio-side-nav.swiper-button-disabled {
+	opacity: 0.35 !important;
+	cursor: not-allowed;
+	transform: translateY(-50%) !important;
+	box-shadow: none !important;
+	pointer-events: none;
+}
+
+/* Footer & Pagination / Mobile Nav (Matching Pilih Berdasarkan Industri) */
+.jubelio-testimonials-footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	margin-top: 24px;
+	min-height: 36px;
+}
+
+.jubelio-testimonials-footer .swiper-pagination-bullet {
+	background: #CBD5E1;
+	opacity: 0.7;
+	transition: all 0.28s ease;
+}
+
+.jubelio-testimonials-footer .swiper-pagination-bullet-active {
+	background: #4B68EF !important;
+	opacity: 1 !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE (TESTIMONIALS SLIDER)
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+	.jubelio-testimonials-slider-stage .jubelio-side-prev {
+		left: 12px;
+	}
+
+	.jubelio-testimonials-slider-stage .jubelio-side-next {
+		right: 12px;
+	}
+}
+
+@media (max-width: 768px) {
+	.jubelio-testimonials-swiper {
+		-webkit-mask-image: linear-gradient(to right,
+				transparent 0%,
+				black 2px,
+				black calc(100% - 2px),
+				transparent 100%);
+		mask-image: linear-gradient(to right,
+				transparent 0%,
+				black 2px,
+				black calc(100% - 2px),
+				transparent 100%);
+	}
+
+	.jubelio-testimonials-header {
+		margin-bottom: 24px;
+	}
+
+	:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-testimonials-title,
+	.jubelio-testimonials-section .jubelio-testimonials-title {
+		font-size: 26px;
+	}
+
+	:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-testimonials-section .jubelio-testimonials-desc,
+	.jubelio-testimonials-section .jubelio-testimonials-desc {
+		font-size: 14.5px;
+	}
+
+	.jubelio-testimonial-card {
+		flex-direction: column;
+		gap: 18px;
+		padding: 20px;
+		border-radius: 20px;
+	}
+
+	.jubelio-testimonial-media {
+		flex: none;
+		width: 100%;
+		height: 200px;
+		min-height: 200px;
+		align-self: stretch;
+		position: relative;
+		border-radius: 16px;
+	}
+
+	.jubelio-testimonial-photo {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100% !important;
+		height: 100% !important;
+		object-fit: cover !important;
+		object-position: center center !important;
+	}
+
+	.jubelio-testimonial-quote {
+		font-size: 14.5px;
+		line-height: 1.55em;
+		margin-bottom: 16px;
+	}
+
+	/* On mobile, hide floating side buttons and use footer nav buttons (matching industri section) */
+	.jubelio-testimonials-slider-stage .jubelio-side-nav {
+		display: none !important;
+	}
+
+	.jubelio-testimonials-footer {
+		justify-content: space-between !important;
+		align-items: center !important;
+		margin-top: 20px !important;
+		padding: 0 16px !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+
+	.jubelio-testimonials-footer .jubelio-swiper-pagination {
+		margin: 0 !important;
+		text-align: left !important;
+	}
+
+	.jubelio-testimonials-footer .jubelio-mobile-only {
+		display: flex !important;
+		gap: 10px;
+	}
+
+	html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-footer button.jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn,
+	html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-footer .jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn,
+	:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-footer button.jubelio-slider-btn.jubelio-slider-btn,
+	:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-footer .jubelio-slider-btn.jubelio-slider-btn,
+	.jubelio-testimonials-footer .jubelio-slider-btn {
+		width: 38px !important;
+		height: 38px !important;
+		min-width: 38px !important;
+		border-radius: 50% !important;
+		border: 1px solid var(--jubelio-border) !important;
+		border-color: var(--jubelio-border) !important;
+		background: #FFFFFF !important;
+		background-color: #FFFFFF !important;
+		color: var(--jubelio-navy) !important;
+		padding: 0 !important;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 2px 8px rgba(22, 58, 80, 0.05) !important;
+		cursor: pointer;
+	}
+
+	html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-footer button.jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+	html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-footer .jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+	:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-footer button.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+	:is(.elementor-kit-8, [class*="elementor-kit-"], body) .elementor-element .jubelio-testimonials-footer .jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled),
+	.jubelio-testimonials-footer .jubelio-slider-btn:hover:not(:disabled) {
+		background: var(--jubelio-blue) !important;
+		background-color: var(--jubelio-blue) !important;
+		border-color: var(--jubelio-blue) !important;
+		color: #FFFFFF !important;
+	}
+
+	.jubelio-testimonials-footer .jubelio-slider-btn svg {
+		color: inherit !important;
+		stroke: currentColor !important;
+	}
+
+	html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor-element, [class*="elementor-element"]) .jubelio-testimonials-footer .jubelio-slider-btn.jubelio-slider-btn.jubelio-slider-btn:hover:not(:disabled) svg,
+	.jubelio-testimonials-footer .jubelio-slider-btn:hover:not(:disabled) svg {
+		color: #FFFFFF !important;
+		stroke: #FFFFFF !important;
+	}
+
+	.jubelio-testimonials-footer .jubelio-slider-btn:disabled,
+	.jubelio-testimonials-footer .jubelio-slider-btn.swiper-button-disabled {
+		opacity: 0.35 !important;
+		cursor: not-allowed !important;
+		pointer-events: none !important;
 	}
 }

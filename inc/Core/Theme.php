@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Jubelio\Integrations\ContactForm7;
 use Jubelio\Integrations\Tracking;
+use Jubelio\Integrations\Bitrix24;
+use Jubelio\Integrations\FormLeadHandler;
 use Jubelio\Integrations\ElementorQueries;
 use Jubelio\Integrations\ElementorManager;
 use Jubelio\Shortcodes\LegacyShortcodes;
@@ -25,14 +27,17 @@ class Theme {
 	 * Boot all core services and feature modules
 	 */
 	public static function init() {
-		// 1. Core Services
+		// 1. Core Services & Performance
 		AcfSync::init();
 		Enqueue::init();
 		AdminCleanup::init();
+		Performance::init();
 
 		// 2. Integrations
 		ContactForm7::init();
 		Tracking::init();
+		Bitrix24::init();
+		FormLeadHandler::init();
 		ElementorQueries::init();
 		ElementorManager::init();
 

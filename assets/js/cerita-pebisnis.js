@@ -364,10 +364,124 @@
 		});
 	}
 
+	/**
+	 * Initialize Cerita Pebisnis Testimonials Centered Slider & Dynamic Bullets
+	 */
+	function initTestimonialsSection($scope) {
+		var $sections = $scope ? $scope.find('.jubelio-testimonials-section') : $('.jubelio-testimonials-section');
+
+		$sections.each(function() {
+			var $section = $(this);
+			var $swiperEl = $section.find('.jubelio-testimonials-swiper');
+			if (!$swiperEl.length || typeof Swiper === 'undefined') return;
+
+			var configAttr = $swiperEl.attr('data-swiper-config');
+			var customConfig = {};
+			try {
+				if (configAttr) {
+					customConfig = JSON.parse(configAttr);
+				}
+			} catch (err) {
+				customConfig = {};
+			}
+
+			var $nextBtn = $section.find('.jubelio-slider-next');
+			var $prevBtn = $section.find('.jubelio-slider-prev');
+			var $pagination = $section.find('.jubelio-swiper-pagination');
+			var isDynamicBullets = (customConfig.dynamicPagination !== false);
+			var slideCount = $swiperEl.find('.swiper-slide').length;
+
+			// Loop is supported when there are at least 3 slides
+			var canLoop = (slideCount >= 3);
+
+			var swiperOptions = {
+				centeredSlides: true,
+				loop: canLoop,
+				slidesPerView: 1.15,
+				spaceBetween: 16,
+				speed: 500,
+				grabCursor: true,
+				watchSlidesProgress: true,
+				watchOverflow: true,
+				observer: true,
+				observeParents: true,
+				navigation: false, // Managed customly below with !swiperInstance.animating guard
+				pagination: {
+					el: $pagination[0],
+					clickable: true,
+					dynamicBullets: isDynamicBullets,
+					dynamicMainBullets: 1
+				},
+				breakpoints: {
+					640: {
+						slidesPerView: 1.35,
+						spaceBetween: 24,
+						centeredSlides: true
+					},
+					1024: {
+						slidesPerView: 1.62,
+						spaceBetween: 28,
+						centeredSlides: true
+					},
+					1440: {
+						slidesPerView: 1.75,
+						spaceBetween: 32,
+						centeredSlides: true
+					}
+				}
+			};
+
+			if (customConfig.autoplay) {
+				swiperOptions.autoplay = {
+					delay: customConfig.autoplaySpeed || 4500,
+					disableOnInteraction: false,
+					pauseOnMouseEnter: true
+				};
+			}
+
+			// Destroy previous instance in Elementor editor
+			if ($swiperEl[0].swiper) {
+				$swiperEl[0].swiper.destroy(true, true);
+			}
+
+			var swiperInstance = new Swiper($swiperEl[0], swiperOptions);
+
+			// Synchronize button disabled states when loop is disabled
+			function syncNavButtons() {
+				if (!swiperInstance || canLoop) return;
+				var isBeg = swiperInstance.isBeginning;
+				var isEnd = swiperInstance.isEnd;
+				$prevBtn.prop('disabled', isBeg).toggleClass('swiper-button-disabled', isBeg);
+				$nextBtn.prop('disabled', isEnd).toggleClass('swiper-button-disabled', isEnd);
+			}
+
+			// Exactly ONE card slides per click
+			$nextBtn.off('click.jubelioTestimonialNav').on('click.jubelioTestimonialNav', function(e) {
+				e.preventDefault();
+				if (swiperInstance && !swiperInstance.animating && !$(this).prop('disabled') && !$(this).hasClass('swiper-button-disabled')) {
+					swiperInstance.slideNext();
+				}
+			});
+			$prevBtn.off('click.jubelioTestimonialNav').on('click.jubelioTestimonialNav', function(e) {
+				e.preventDefault();
+				if (swiperInstance && !swiperInstance.animating && !$(this).prop('disabled') && !$(this).hasClass('swiper-button-disabled')) {
+					swiperInstance.slidePrev();
+				}
+			});
+
+			if (swiperInstance) {
+				swiperInstance.on('slideChange', syncNavButtons);
+				swiperInstance.on('update', syncNavButtons);
+				syncNavButtons();
+			}
+		});
+	}
+
 	// Document Ready
 	$(document).ready(function() {
 		initCeritaPebisnis();
 		initMetricsSection();
+		initTestimonialsSection();
 	});
 
 	// Elementor Live Editor Support
@@ -378,6 +492,9 @@
 			});
 			elementorFrontend.hooks.addAction('frontend/element_ready/jubelio_cerita_pebisnis_metrics.default', function($scope) {
 				initMetricsSection($scope);
+			});
+			elementorFrontend.hooks.addAction('frontend/element_ready/jubelio_cerita_pebisnis_testimonials.default', function($scope) {
+				initTestimonialsSection($scope);
 			});
 		}
 	});

@@ -18,6 +18,7 @@ class Enqueue {
 	 */
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_frontend' ), 20 );
+		add_filter( 'script_loader_tag', array( __CLASS__, 'add_script_attributes' ), 10, 2 );
 	}
 
 	/**
@@ -129,5 +130,32 @@ class Enqueue {
 				true
 			);
 		}
+
+		// Client-side Lead & Traffic Attribution Tracker
+		if ( file_exists( $dir . '/assets/js/lead-tracker.js' ) ) {
+			wp_enqueue_script(
+				'jubelio-lead-tracker',
+				$uri . '/assets/js/lead-tracker.js',
+				array(),
+				$ver,
+				true
+			);
+		}
+	}
+
+	/**
+	 * Add defer attribute to non-blocking tracker script
+	 *
+	 * @param string $tag Script HTML tag.
+	 * @param string $handle Script handle.
+	 * @return string Modified script tag.
+	 */
+	public static function add_script_attributes( $tag, $handle ) {
+		if ( 'jubelio-lead-tracker' === $handle ) {
+			if ( false === strpos( $tag, 'defer' ) ) {
+				$tag = str_replace( ' src', ' defer="defer" src', $tag );
+			}
+		}
+		return $tag;
 	}
 }
