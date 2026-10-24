@@ -1,7 +1,175 @@
 {
     "key": "group_cerita_pebisnis",
     "title": "Cerita Pebisnis - Detail Informasi",
-    "fields": [],
+    "fields": [
+        {
+            "key": "field_cp_headline",
+            "label": "Headline / Solusi Utama",
+            "name": "cp_headline",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Headline singkat pencapaian atau solusi. Contoh: Optimalkan Stok dari Banyak Channel",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Optimalkan Stok dari Banyak Channel",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_logo_bisnis",
+            "label": "Logo Brand / Toko",
+            "name": "cp_logo_bisnis",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Upload logo brand atau toko klien (format PNG transparan atau SVG)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0,
+            "mime_types": ""
+        },
+        {
+            "key": "field_cp_foto_toko",
+            "label": "Foto Toko / Gudang",
+            "name": "cp_foto_toko",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Foto aktivitas toko/gudang (opsional, jika tidak diisi akan memakai Featured Image)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0,
+            "mime_types": ""
+        },
+        {
+            "key": "field_cp_deskripsi",
+            "label": "Deskripsi Singkat Cerita",
+            "name": "cp_deskripsi",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "2-3 kalimat ringkasan cerita sukses klien bersama Jubelio",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "placeholder": "Cuit Baby Wear meningkatkan efisiensi pengelolaan stok untuk berbagai channel penjualan dan operasional gudang dengan Jubelio.",
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_cp_quote",
+            "label": "Kutipan Langsung / Testimonial",
+            "name": "cp_quote",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Kutipan langsung atau testimoni dari klien untuk section Testimoni",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 4,
+            "placeholder": "Gak perlu buat software sendiri, Jubelio sudah sangat efisien buat kami...",
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_cp_client_name",
+            "label": "Nama Tokoh / Narasumber",
+            "name": "cp_client_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Nama pemilik atau perwakilan bisnis klien (contoh: Hansa Artupas)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Hansa Artupas",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_client_role",
+            "label": "Jabatan / Role Tokoh",
+            "name": "cp_client_role",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Jabatan atau peran tokoh di bisnis tersebut (contoh: Owner Cuit BabyWear)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Owner Cuit BabyWear",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_link_konsultasi",
+            "label": "Link Aksi (CTA)",
+            "name": "cp_link_konsultasi",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Link untuk tombol Konsultasikan Kebutuhan Bisnis (kosongkan jika mengarah ke halaman detail cerita)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "https://jubelio.com/demo",
+            "default_value": ""
+        }
+    ],
     "location": [
         [
             {
@@ -18,7 +186,7 @@
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": true,
-    "description": "Field kustom untuk halaman Cerita Pebisnis Jubelio sesuai wireframe",
+    "description": "Field kustom untuk halaman Cerita Pebisnis Jubelio",
     "show_in_rest": 1,
-    "modified": 1792658967
+    "modified": 1792731500
 }

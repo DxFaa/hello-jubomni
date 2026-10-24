@@ -943,7 +943,6 @@
 	background: #FFFFFF;
 	border: 1.5px solid #F1F5F9;
 	border-radius: 22px;
-	padding: 26px 24px 20px 24px;
 	box-shadow: 0 4px 18px rgba(15, 23, 42, 0.035);
 	box-sizing: border-box;
 	transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -963,6 +962,7 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+	padding: 32px;
 }
 
 /* 1. Number Metrics (<h3> tag - follow Elementor typography) */
@@ -1002,23 +1002,18 @@
 	display: flex;
 	align-items: flex-end;
 	justify-content: center;
-	min-height: 75px;
-	padding-top: 22px;
 	box-sizing: border-box;
 }
 
 .jubelio-metric-card-box .jubelio-metric-chart-wrap svg {
 	width: 100%;
-	max-width: 220px;
 	height: auto;
-	max-height: 65px;
 	display: block;
 	overflow: visible;
 }
 
 .jubelio-metric-card-box .jubelio-metric-chart-wrap img {
 	max-width: 100%;
-	max-height: 75px;
 	object-fit: contain;
 	display: block;
 }
