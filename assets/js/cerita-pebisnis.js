@@ -477,11 +477,99 @@
 		});
 	}
 
+	/**
+	 * Initialize Cerita Pebisnis Single Post Hero Video Section
+	 * High-performance LCP & Core Web Vitals inline embed player
+	 */
+	function initSingleHeroSection($scope) {
+		var $sections = $scope ? $scope.find('.jubelio-single-hero-section') : $('.jubelio-single-hero-section');
+
+		$sections.each(function() {
+			var $section = $(this);
+			var $videoBox = $section.find('.jubelio-single-hero-video-box');
+			if (!$videoBox.length) return;
+
+			var videoUrl = $videoBox.attr('data-video-url');
+			if (!videoUrl) return;
+
+			var $playBtn = $videoBox.find('.jubelio-single-hero-play-btn');
+			var $playerTarget = $videoBox.find('.jubelio-single-hero-player-target');
+
+			function extractYouTubeId(url) {
+				if (!url) return null;
+				var regExp = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i;
+				var match = url.match(regExp);
+				return (match && match[1]) ? match[1] : null;
+			}
+
+			function extractVimeoId(url) {
+				if (!url) return null;
+				var match = url.match(/(?:vimeo\.com\/)(\d+)/i);
+				return (match && match[1]) ? match[1] : null;
+			}
+
+			function playVideo() {
+				if ($videoBox.hasClass('is-playing')) return;
+
+				var ytId = extractYouTubeId(videoUrl);
+				var vimeoId = extractVimeoId(videoUrl);
+				var isDirectVideo = /\.(mp4|webm|ogg)($|\?)/i.test(videoUrl);
+
+				var playerHtml = '';
+
+				if (ytId) {
+					playerHtml = '<iframe src="https://www.youtube-nocookie.com/embed/' + ytId + '?autoplay=1&rel=0&modestbranding=1&playsinline=1" ' +
+						'title="Video Player" ' +
+						'class="jubelio-single-hero-iframe" ' +
+						'frameborder="0" ' +
+						'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+						'allowfullscreen></iframe>';
+				} else if (vimeoId) {
+					playerHtml = '<iframe src="https://player.vimeo.com/video/' + vimeoId + '?autoplay=1" ' +
+						'title="Video Player" ' +
+						'class="jubelio-single-hero-iframe" ' +
+						'frameborder="0" ' +
+						'allow="autoplay; fullscreen; picture-in-picture" ' +
+						'allowfullscreen></iframe>';
+				} else if (isDirectVideo) {
+					playerHtml = '<video src="' + videoUrl + '" ' +
+						'class="jubelio-single-hero-video-elem" ' +
+						'autoplay controls playsinline></video>';
+				} else {
+					playerHtml = '<iframe src="' + videoUrl + '" ' +
+						'title="Video Player" ' +
+						'class="jubelio-single-hero-iframe" ' +
+						'frameborder="0" ' +
+						'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+						'allowfullscreen></iframe>';
+				}
+
+				$playerTarget.html(playerHtml);
+				$videoBox.addClass('is-playing');
+			}
+
+			// Play on clicking button or video container
+			$playBtn.off('click.jubelioPlay').on('click.jubelioPlay', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				playVideo();
+			});
+
+			$videoBox.off('click.jubelioPlay').on('click.jubelioPlay', function(e) {
+				if (!$(this).hasClass('is-playing')) {
+					e.preventDefault();
+					playVideo();
+				}
+			});
+		});
+	}
+
 	// Document Ready
 	$(document).ready(function() {
 		initCeritaPebisnis();
 		initMetricsSection();
 		initTestimonialsSection();
+		initSingleHeroSection();
 	});
 
 	// Elementor Live Editor Support
@@ -496,7 +584,11 @@
 			elementorFrontend.hooks.addAction('frontend/element_ready/jubelio_cerita_pebisnis_testimonials.default', function($scope) {
 				initTestimonialsSection($scope);
 			});
+			elementorFrontend.hooks.addAction('frontend/element_ready/jubelio_cerita_pebisnis_single_hero.default', function($scope) {
+				initSingleHeroSection($scope);
+			});
 		}
 	});
 
 })(jQuery);
+

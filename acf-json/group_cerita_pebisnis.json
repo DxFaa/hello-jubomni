@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_cp_headline",
-            "label": "Headline / Solusi Utama",
+            "label": "Headline \/ Solusi Utama",
             "name": "cp_headline",
             "aria-label": "",
             "type": "text",
@@ -24,7 +24,7 @@
         },
         {
             "key": "field_cp_logo_bisnis",
-            "label": "Logo Brand / Toko",
+            "label": "Logo Brand \/ Toko",
             "name": "cp_logo_bisnis",
             "aria-label": "",
             "type": "image",
@@ -49,11 +49,11 @@
         },
         {
             "key": "field_cp_foto_toko",
-            "label": "Foto Toko / Gudang",
+            "label": "Foto Toko \/ Gudang",
             "name": "cp_foto_toko",
             "aria-label": "",
             "type": "image",
-            "instructions": "Foto aktivitas toko/gudang (opsional, jika tidak diisi akan memakai Featured Image)",
+            "instructions": "Foto aktivitas toko\/gudang (opsional, jika tidak diisi akan memakai Featured Image)",
             "required": 0,
             "conditional_logic": false,
             "wrapper": {
@@ -71,6 +71,23 @@
             "max_height": 0,
             "max_size": 0,
             "mime_types": ""
+        },
+        {
+            "key": "field_cp_video_url",
+            "label": "Link Video YouTube \/ Vimeo",
+            "name": "cp_video_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Masukkan URL video YouTube atau Vimeo (contoh: https:\/\/www.youtube.com\/watch?v=XXXX)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "https:\/\/www.youtube.com\/watch?v=...",
+            "default_value": ""
         },
         {
             "key": "field_cp_deskripsi",
@@ -94,7 +111,7 @@
         },
         {
             "key": "field_cp_quote",
-            "label": "Kutipan Langsung / Testimonial",
+            "label": "Kutipan Langsung \/ Testimonial",
             "name": "cp_quote",
             "aria-label": "",
             "type": "textarea",
@@ -114,7 +131,7 @@
         },
         {
             "key": "field_cp_client_name",
-            "label": "Nama Tokoh / Narasumber",
+            "label": "Nama Tokoh \/ Narasumber",
             "name": "cp_client_name",
             "aria-label": "",
             "type": "text",
@@ -134,7 +151,7 @@
         },
         {
             "key": "field_cp_client_role",
-            "label": "Jabatan / Role Tokoh",
+            "label": "Jabatan \/ Role Tokoh",
             "name": "cp_client_role",
             "aria-label": "",
             "type": "text",
@@ -166,8 +183,326 @@
                 "class": "",
                 "id": ""
             },
-            "placeholder": "https://jubelio.com/demo",
+            "placeholder": "https:\/\/jubelio.com\/demo",
             "default_value": ""
+        },
+        {
+            "key": "field_cp_lokasi",
+            "label": "Lokasi Bisnis \/ Klien",
+            "name": "cp_lokasi",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Lokasi kantor atau operasional klien (contoh: Indonesia atau Jakarta, Indonesia)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Indonesia",
+            "placeholder": "Indonesia",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_industri_custom",
+            "label": "Industri Bisnis (Kustom)",
+            "name": "cp_industri_custom",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Kosongkan untuk otomatis menggunakan kategori taksonomi Industri Bisnis",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Fashion & Apparel",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_produk_list",
+            "label": "Produk Jubelio yang Digunakan",
+            "name": "cp_produk_list",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Daftar produk Jubelio yang dipakai klien (contoh: Jubelio Omnichannel, Jubelio POS, Jubelio Shipment)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "+ Tambah Produk",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_cp_prod_nama",
+                    "label": "Nama Produk",
+                    "name": "nama_produk",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "Jubelio Omnichannel",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_produk_list"
+                },
+                {
+                    "key": "field_cp_prod_link",
+                    "label": "Link Halaman Produk",
+                    "name": "link_produk",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "\/omnichannel\/",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_produk_list"
+                }
+            ]
+        },
+        {
+            "key": "field_cp_fitur_list",
+            "label": "Fitur yang Digunakan",
+            "name": "cp_fitur_list",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Daftar modul\/fitur yang dipakai klien (contoh: Inventory, Gudang (WMS), Pesanan)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "+ Tambah Fitur",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_cp_feat_nama",
+                    "label": "Nama Fitur",
+                    "name": "nama_fitur",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "Inventory",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_fitur_list"
+                },
+                {
+                    "key": "field_cp_feat_link",
+                    "label": "Link Halaman Fitur",
+                    "name": "link_fitur",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "\/fitur\/inventory\/",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_fitur_list"
+                }
+            ]
+        },
+        {
+            "key": "field_cp_overview_klien",
+            "label": "Paragraf Overview Cerita Klien",
+            "name": "cp_overview_klien",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Paragraf pengantar profil klien yang tampil di bawah kartu spesifikasi profil",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "placeholder": "Kisah lengkap bagaimana brand mengelola operasional dan ekspansi bisnis bersama Jubelio...",
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_cp_masalah_deskripsi",
+            "label": "Deskripsi Pengantar Masalah",
+            "name": "cp_masalah_deskripsi",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Pengantar ringkas kendala atau tantangan operasional sebelum memakai Jubelio",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "placeholder": "Sebelum menggunakan Jubelio, operasional bisnis menghadapi kendala...",
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_cp_masalah_list",
+            "label": "Daftar Poin Masalah (List Merah)",
+            "name": "cp_masalah_list",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Poin-poin masalah (ditampilkan dengan ikon silang merah)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "+ Tambah Poin Masalah",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_cp_prob_item",
+                    "label": "Poin Masalah",
+                    "name": "item",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "Pencatatan stok manual di berbagai marketplace...",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_masalah_list"
+                }
+            ]
+        },
+        {
+            "key": "field_cp_solusi_deskripsi",
+            "label": "Deskripsi Pengantar Solusi Jubelio",
+            "name": "cp_solusi_deskripsi",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Pengantar ringkas solusi dan strategi transformasi yang diimplementasikan",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "placeholder": "Jubelio menyediakan solusi menyeluruh untuk menyederhanakan operasional...",
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_cp_solusi_list",
+            "label": "Daftar Poin Solusi (List Hijau)",
+            "name": "cp_solusi_list",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Poin-poin solusi (ditampilkan dengan ikon centang hijau)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "+ Tambah Poin Solusi",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_cp_sol_item",
+                    "label": "Poin Solusi",
+                    "name": "item",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "Sinkronisasi inventori otomatis ke semua channel secara real-time...",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_solusi_list"
+                }
+            ]
         }
     ],
     "location": [
@@ -188,5 +523,5 @@
     "active": true,
     "description": "Field kustom untuk halaman Cerita Pebisnis Jubelio",
     "show_in_rest": 1,
-    "modified": 1792731500
+    "modified": 1793004704
 }

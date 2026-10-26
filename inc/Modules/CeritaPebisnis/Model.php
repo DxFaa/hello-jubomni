@@ -31,6 +31,7 @@ class Model {
 			'card_image'    => '',
 			'client_name'   => '',
 			'cta_link'      => '',
+			'video_url'     => '',
 			'industry_name' => '',
 			'industry_slug' => '',
 		);
@@ -109,6 +110,13 @@ class Model {
 		$data['custom_link'] = ! empty( $link_val ) ? esc_url( $link_val ) : '';
 		$data['cta_link']    = ! empty( $data['permalink'] ) ? $data['permalink'] : get_permalink( $post_id );
 
+		// Video URL (YouTube, Vimeo, or self-hosted MP4)
+		$video_val = $get_val(
+			isset( $field_keys['video_url'] ) ? $field_keys['video_url'] : '',
+			array( 'cp_video_url', 'video_url', 'youtube_url', 'video', 'link_video' )
+		);
+		$data['video_url'] = ! empty( $video_val ) ? esc_url( $video_val ) : '';
+
 		// 6. Industry Taxonomy ('industri')
 		$terms = get_the_terms( $post_id, 'industri' );
 		if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
@@ -157,6 +165,86 @@ class Model {
 			$data['client_person_role'] = esc_html( $person_role_val );
 		} else {
 			$data['client_person_role'] = ! empty( $data['client_name'] ) ? 'Owner ' . $data['client_name'] : ( ! empty( $data['industry_name'] ) ? $data['industry_name'] : 'Klien Jubelio' );
+		}
+
+		// 11. Location
+		$loc_val = $get_val( '', array( 'cp_lokasi', 'lokasi', 'lokasi_klien', 'client_location' ) );
+		$data['location'] = ! empty( $loc_val ) ? esc_html( $loc_val ) : 'Indonesia';
+
+		// 12. Custom Industry Override
+		$ind_custom = $get_val( '', array( 'cp_industri_custom', 'cp_industri', 'industri_custom' ) );
+		$data['industry_display'] = ! empty( $ind_custom ) ? esc_html( $ind_custom ) : ( ! empty( $data['industry_name'] ) ? $data['industry_name'] : 'Bisnis Retail' );
+
+		// 13. Products Used (Repeater)
+		$data['products_used'] = array();
+		if ( function_exists( 'get_field' ) ) {
+			$raw_prods = get_field( 'cp_produk_list', $post_id );
+			if ( ! empty( $raw_prods ) && is_array( $raw_prods ) ) {
+				foreach ( $raw_prods as $p ) {
+					$p_name = ! empty( $p['nama_produk'] ) ? trim( $p['nama_produk'] ) : '';
+					$p_link = ! empty( $p['link_produk'] ) ? trim( $p['link_produk'] ) : '#';
+					if ( ! empty( $p_name ) ) {
+						$data['products_used'][] = array(
+							'name' => $p_name,
+							'link' => $p_link,
+						);
+					}
+				}
+			}
+		}
+
+		// 14. Features Used (Repeater)
+		$data['features_used'] = array();
+		if ( function_exists( 'get_field' ) ) {
+			$raw_feats = get_field( 'cp_fitur_list', $post_id );
+			if ( ! empty( $raw_feats ) && is_array( $raw_feats ) ) {
+				foreach ( $raw_feats as $f ) {
+					$f_name = ! empty( $f['nama_fitur'] ) ? trim( $f['nama_fitur'] ) : '';
+					$f_link = ! empty( $f['link_fitur'] ) ? trim( $f['link_fitur'] ) : '#';
+					if ( ! empty( $f_name ) ) {
+						$data['features_used'][] = array(
+							'name' => $f_name,
+							'link' => $f_link,
+						);
+					}
+				}
+			}
+		}
+
+		// 15. Overview Text
+		$overview_val = $get_val( '', array( 'cp_overview_klien', 'cp_overview', 'overview_klien', 'cerita_lengkap' ) );
+		$data['overview'] = ! empty( $overview_val ) ? wp_kses_post( $overview_val ) : $data['description'];
+
+		// 16. Problems (Deskripsi & List)
+		$prob_desc = $get_val( '', array( 'cp_masalah_deskripsi', 'masalah_deskripsi', 'problem_description' ) );
+		$data['problem_desc'] = ! empty( $prob_desc ) ? wp_kses_post( $prob_desc ) : '';
+		$data['problem_list'] = array();
+		if ( function_exists( 'get_field' ) ) {
+			$raw_probs = get_field( 'cp_masalah_list', $post_id );
+			if ( ! empty( $raw_probs ) && is_array( $raw_probs ) ) {
+				foreach ( $raw_probs as $item ) {
+					$txt = is_array( $item ) && isset( $item['item'] ) ? trim( $item['item'] ) : ( is_string( $item ) ? trim( $item ) : '' );
+					if ( ! empty( $txt ) ) {
+						$data['problem_list'][] = esc_html( $txt );
+					}
+				}
+			}
+		}
+
+		// 17. Solutions (Deskripsi & List)
+		$sol_desc = $get_val( '', array( 'cp_solusi_deskripsi', 'solusi_deskripsi', 'solution_description' ) );
+		$data['solution_desc'] = ! empty( $sol_desc ) ? wp_kses_post( $sol_desc ) : '';
+		$data['solution_list'] = array();
+		if ( function_exists( 'get_field' ) ) {
+			$raw_sols = get_field( 'cp_solusi_list', $post_id );
+			if ( ! empty( $raw_sols ) && is_array( $raw_sols ) ) {
+				foreach ( $raw_sols as $item ) {
+					$txt = is_array( $item ) && isset( $item['item'] ) ? trim( $item['item'] ) : ( is_string( $item ) ? trim( $item ) : '' );
+					if ( ! empty( $txt ) ) {
+						$data['solution_list'][] = esc_html( $txt );
+					}
+				}
+			}
 		}
 
 		return $data;
