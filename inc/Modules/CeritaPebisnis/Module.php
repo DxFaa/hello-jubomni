@@ -18,6 +18,7 @@ use Jubelio\Modules\CeritaPebisnis\Widgets\TestimonialsWidget;
 use Jubelio\Modules\CeritaPebisnis\Widgets\SingleHeroWidget;
 use Jubelio\Modules\CeritaPebisnis\Widgets\SingleClientOverviewWidget;
 use Jubelio\Modules\CeritaPebisnis\Widgets\SingleQuoteWidget;
+use Jubelio\Modules\CeritaPebisnis\Widgets\SingleResultMetricsWidget;
 
 class Module {
 
@@ -38,5 +39,6 @@ class Module {
 		ElementorManager::add_widget( SingleHeroWidget::class );
 		ElementorManager::add_widget( SingleClientOverviewWidget::class );
 		ElementorManager::add_widget( SingleQuoteWidget::class );
+		ElementorManager::add_widget( SingleResultMetricsWidget::class );
 	}
 }

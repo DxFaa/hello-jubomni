@@ -455,12 +455,51 @@
 			}
 		});
 
-		document.addEventListener('submit', function () {
+		document.addEventListener('submit', function (e) {
 			populateFormInputs();
+			const form = e.target;
+			if (form && form.classList && form.classList.contains('wpcf7-form')) {
+				if (form.dataset.submitting === 'true') {
+					e.preventDefault();
+					e.stopImmediatePropagation();
+					return false;
+				}
+				form.dataset.submitting = 'true';
+				const submitBtn = form.querySelector('[type="submit"], button[type="submit"]');
+				if (submitBtn) {
+					submitBtn.style.pointerEvents = 'none';
+					submitBtn.style.opacity = '0.6';
+				}
+			}
 		}, true);
 
-		document.addEventListener('wpcf7beforesubmit', function () {
+		document.addEventListener('wpcf7beforesubmit', function (e) {
 			populateFormInputs();
+			const form = e.target;
+			if (form) {
+				form.dataset.submitting = 'true';
+				const submitBtn = form.querySelector('[type="submit"], button[type="submit"]');
+				if (submitBtn) {
+					submitBtn.disabled = true;
+					submitBtn.style.pointerEvents = 'none';
+					submitBtn.style.opacity = '0.6';
+				}
+			}
+		});
+
+		['wpcf7submit', 'wpcf7mailsent', 'wpcf7mailfailed', 'wpcf7invalid'].forEach(function (evt) {
+			document.addEventListener(evt, function (e) {
+				const form = e.target;
+				if (form) {
+					delete form.dataset.submitting;
+					const submitBtn = form.querySelector('[type="submit"], button[type="submit"]');
+					if (submitBtn) {
+						submitBtn.disabled = false;
+						submitBtn.style.pointerEvents = '';
+						submitBtn.style.opacity = '';
+					}
+				}
+			});
 		});
 
 		if (window.jQuery) {

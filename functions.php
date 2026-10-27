@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( '_S_VERSION' ) ) {
-	define( '_S_VERSION', '1.1.11' );
+	define( '_S_VERSION', '1.1.15' );
 }
 
 // 1. Register PSR-4 SPL Autoloader

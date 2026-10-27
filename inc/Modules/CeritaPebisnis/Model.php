@@ -247,6 +247,63 @@ class Model {
 			}
 		}
 
+		// 18. Result Metrics ("Hasil Nyata Transformasi")
+		$data['result_metrics'] = array();
+		if ( function_exists( 'get_field' ) ) {
+			$raw_metrics = get_field( 'cp_metrik_hasil_list', $post_id );
+			if ( empty( $raw_metrics ) ) {
+				$raw_metrics = get_field( 'cp_hasil_transformasi_list', $post_id );
+			}
+			if ( ! empty( $raw_metrics ) && is_array( $raw_metrics ) ) {
+				foreach ( $raw_metrics as $m ) {
+					$lbl = ! empty( $m['label_metrik'] ) ? trim( $m['label_metrik'] ) : ( ! empty( $m['label'] ) ? trim( $m['label'] ) : '' );
+					$val = ! empty( $m['nilai_metrik'] ) ? trim( $m['nilai_metrik'] ) : ( ! empty( $m['value'] ) ? trim( $m['value'] ) : '' );
+
+					$icon_url = '';
+					$icon_field = ! empty( $m['ikon_metrik'] ) ? $m['ikon_metrik'] : ( ! empty( $m['icon'] ) ? $m['icon'] : '' );
+					if ( ! empty( $icon_field ) ) {
+						if ( is_array( $icon_field ) && ! empty( $icon_field['url'] ) ) {
+							$icon_url = esc_url( $icon_field['url'] );
+						} elseif ( is_numeric( $icon_field ) ) {
+							$icon_url = wp_get_attachment_image_url( $icon_field, 'full' );
+						} elseif ( is_string( $icon_field ) ) {
+							$icon_url = esc_url( $icon_field );
+						}
+					}
+
+					if ( ! empty( $lbl ) || ! empty( $val ) ) {
+						$data['result_metrics'][] = array(
+							'label'    => esc_html( $lbl ),
+							'value'    => esc_html( $val ),
+							'icon_url' => $icon_url,
+						);
+					}
+				}
+			}
+		}
+
+		// Default fallback sample metrics if none set
+		if ( empty( $data['result_metrics'] ) ) {
+			$data['result_metrics'] = array(
+				array(
+					'label' => 'Stock Accuracy',
+					'value' => '96% → 97%',
+				),
+				array(
+					'label' => 'Picking Performance',
+					'value' => '>60%',
+				),
+				array(
+					'label' => 'Putaway Output',
+					'value' => '+68,95% /hari',
+				),
+				array(
+					'label' => 'Lebih Efisien',
+					'value' => '4x',
+				),
+			);
+		}
+
 		return $data;
 	}
 }

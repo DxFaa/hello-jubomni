@@ -2567,3 +2567,200 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	color: #606C75;
 	display: block;
 }
+
+.jubelio-result-metrics-section {
+	width: 100%;
+	padding: 0 !important;
+	margin: 0 !important;
+	box-sizing: border-box;
+}
+
+.jubelio-result-metrics-title {
+	text-align: center;
+	margin-bottom: 24px !important;
+	font-weight: 700;
+}
+
+.jubelio-result-metrics-grid {
+	--jubelio-metric-max-cols: 4;
+	--jubelio-metric-gap: 24px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--jubelio-metric-gap);
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.jubelio-result-metric-card {
+	flex: 1 1 calc((100% - (var(--jubelio-metric-max-cols) - 1) * var(--jubelio-metric-gap)) / var(--jubelio-metric-max-cols) - 0.5px);
+	background-color: #F5FAFF;
+	border: 1px solid #CDE8FF;
+	border-radius: 24px;
+	padding: 32px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 16px;
+	min-width: 0;
+	transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.jubelio-result-metric-icon-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #4B68EF;
+	flex-shrink: 0;
+}
+
+.jubelio-result-metric-icon-wrap svg {
+	width: 28px;
+	height: 28px;
+	display: block;
+	stroke: currentColor;
+	stroke-width: 2;
+}
+
+.jubelio-result-metric-icon-wrap img,
+.jubelio-result-metric-icon-img {
+	width: 28px;
+	height: 28px;
+	object-fit: contain;
+	display: block;
+}
+
+.jubelio-result-metric-content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+	width: 100%;
+}
+
+.jubelio-result-metric-label {
+	color: #163A50;
+	font-weight: 600;
+	margin: 0;
+	padding: 0;
+	line-height: 1.4;
+	font-size: 0.95rem;
+}
+
+.jubelio-result-metric-value {
+	color: #4B68EF;
+	font-weight: 700;
+	margin: 0;
+	padding: 0;
+	line-height: 1.2;
+	font-size: 1.5rem;
+}
+
+@media (max-width: 900px) {
+	.jubelio-result-metrics-grid {
+		--jubelio-metric-max-cols: 2;
+		--jubelio-metric-gap: 20px;
+	}
+
+	.jubelio-result-metric-card {
+		padding: 24px;
+		border-radius: 20px;
+	}
+}
+
+@media (max-width: 480px) {
+	.jubelio-result-metrics-grid {
+		--jubelio-metric-max-cols: 1;
+		--jubelio-metric-gap: 16px;
+	}
+
+	.jubelio-result-metric-card {
+		padding: 24px;
+		border-radius: 20px;
+	}
+}
+
+.demo_form [type="button"],
+.demo_form [type="reset"],
+.demo_form [type="submit"],
+.demo_form button {
+	width: 100% !important;
+}
+
+.demo_form .form-group span.wpcf7-form-control-wrap,
+.demo_form .form-group .form-control {
+	width: 100% !important;
+	max-width: 100% !important;
+	display: block !important;
+	box-sizing: border-box !important;
+}
+
+.demo_form {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	column-gap: 24px !important;
+	row-gap: 20px !important;
+	width: 100% !important;
+}
+
+.demo_form p {
+	display: contents !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.demo_form br {
+	display: none !important;
+}
+
+.demo_form .form-group {
+	grid-column: span 2 !important;
+	margin-bottom: 0 !important;
+	width: 100% !important;
+}
+
+.demo_form .form-group:has(input[type="tel"]),
+.demo_form .form-group:has(input[type="email"]) {
+	grid-column: span 1 !important;
+}
+
+.demo_form label {
+	display: block !important;
+	margin-bottom: 8px !important;
+	color: #5b6b7d !important;
+	font-size: 16px !important;
+}
+
+.demo_form label b::after {
+	content: " *" !important;
+	color: #e53e3e !important;
+}
+
+.demo_form .form-control::placeholder {
+	color: #92a0b3 !important;
+}
+
+.demo_form .form-group:last-child {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: flex-start !important;
+	gap: 6px !important;
+	margin-top: 6px !important;
+}
+
+@media (max-width: 768px) {
+	.demo_form .form-group:has(input[type="tel"]),
+	.demo_form .form-group:has(input[type="email"]) {
+		grid-column: span 2 !important;
+	}
+}
+
+.wpcf7-form.submitting [type="submit"],
+.wpcf7-form.submitting button,
+.demo_form.submitting [type="submit"],
+.demo_form.submitting button {
+	pointer-events: none !important;
+	opacity: 0.6 !important;
+	cursor: not-allowed !important;
+}

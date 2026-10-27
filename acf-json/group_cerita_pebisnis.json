@@ -503,6 +503,97 @@
                     "parent_repeater": "field_cp_solusi_list"
                 }
             ]
+        },
+        {
+            "key": "field_cp_metrik_hasil_list",
+            "label": "Hasil Nyata Transformasi (Metrik)",
+            "name": "cp_metrik_hasil_list",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Daftar metrik hasil transformasi (contoh: Stock Accuracy 96% → 97%, Picking Performance >60%)",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "+ Tambah Metrik",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_cp_metrik_label",
+                    "label": "Label Metrik",
+                    "name": "label_metrik",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "Stock Accuracy",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_metrik_hasil_list"
+                },
+                {
+                    "key": "field_cp_metrik_nilai",
+                    "label": "Nilai / Hasil Metrik",
+                    "name": "nilai_metrik",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "96% → 97%",
+                    "default_value": "",
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_cp_metrik_hasil_list"
+                },
+                {
+                    "key": "field_cp_metrik_ikon",
+                    "label": "Ikon Metrik (SVG / Gambar)",
+                    "name": "ikon_metrik",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Upload ikon SVG atau gambar (PNG, JPG, WebP). Kosongkan untuk memakai ikon default.",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": "svg,png,jpg,jpeg,webp",
+                    "parent_repeater": "field_cp_metrik_hasil_list"
+                }
+            ]
         }
     ],
     "location": [

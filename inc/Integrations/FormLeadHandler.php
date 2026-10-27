@@ -71,16 +71,19 @@ class FormLeadHandler {
 		// 2. CF7 Posted Data Shadow IDs & Mappings
 		add_filter( 'wpcf7_posted_data', array( __CLASS__, 'generate_shadow_ids' ) );
 
-		// 3. CF7 Webhook Dispatch to Bitrix24
+		// 3. Prevent duplicate submissions before CFDB7 or Mail processing
+		add_filter( 'wpcf7_validate', array( __CLASS__, 'prevent_duplicate_submission' ), 20, 2 );
+
+		// 4. CF7 Webhook Dispatch to Bitrix24
 		add_action( 'wpcf7_before_send_mail', array( __CLASS__, 'handle_form_submission' ), 10, 3 );
 
-		// 4. Custom Special Mail Tag for Download Links
+		// 5. Custom Special Mail Tag for Download Links
 		add_filter( 'wpcf7_special_mail_tags', array( __CLASS__, 'publikasi_file_mail_tag' ), 10, 3 );
 
-		// 5. Shortcode for Publication Thank You / Download Pages
+		// 6. Shortcode for Publication Thank You / Download Pages
 		add_shortcode( 'get_data_from_url_id', array( __CLASS__, 'shortcode_get_data_from_url_id' ) );
 
-		// 6. CFDB7 Database Optimization (strip large b24_trace string)
+		// 7. CFDB7 Database Optimization (strip large b24_trace string)
 		add_filter( 'cfdb7_before_save_data', array( __CLASS__, 'exclude_trace_from_cfdb7' ) );
 	}
 
@@ -300,6 +303,14 @@ class FormLeadHandler {
 	 * @param \WPCF7_Submission  $submission CF7 submission instance.
 	 */
 	public static function handle_form_submission( $contact_form, &$abort, $submission ) {
+		// 1. In-process idempotency guard (prevent duplicate execution within the same PHP lifecycle)
+		static $processed_submissions = array();
+		$submission_hash = spl_object_hash( $submission );
+		if ( isset( $processed_submissions[ $submission_hash ] ) ) {
+			return;
+		}
+		$processed_submissions[ $submission_hash ] = true;
+
 		$form_title = $contact_form->title();
 
 		if ( 'Daftar Jubelio' !== $form_title && 'Daftar Jubelio EN' !== $form_title && 'Download Publikasi' !== $form_title ) {
@@ -312,6 +323,19 @@ class FormLeadHandler {
 		$nama_lengkap = isset( $posted_data['NamaLengkap'] ) ? trim( $posted_data['NamaLengkap'] ) : 'Unknown Contact';
 		$phone        = isset( $posted_data['phone'] ) ? trim( $posted_data['phone'] ) : '';
 		$email        = isset( $posted_data['email'] ) ? trim( $posted_data['email'] ) : '';
+
+		// 2. Cross-request debounce guard (prevent rapid double-click submissions within 15 seconds)
+		if ( ! empty( $email ) || ! empty( $phone ) ) {
+			$clean_phone = preg_replace( '/\D/', '', $phone );
+			$dedup_key   = 'jubelio_b24_sub_' . md5( strtolower( $email ) . '|' . $clean_phone . '|' . $form_title );
+			if ( false !== get_transient( $dedup_key ) ) {
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					error_log( '[Jubelio Bitrix24] Duplicate submission blocked: ' . $email . ' / ' . $phone );
+				}
+				return;
+			}
+			set_transient( $dedup_key, time(), 15 );
+		}
 
 		$bitrix_orderan = isset( $posted_data['bitrix_orderan'] ) ? $posted_data['bitrix_orderan'] : '';
 		$ref_id        = isset( $posted_data['ref_id'] ) ? sanitize_text_field( $posted_data['ref_id'] ) : '';
@@ -482,6 +506,49 @@ class FormLeadHandler {
 				}
 				return '';
 		}
+	}
+
+	/**
+	 * Prevent duplicate CF7 submissions from double clicks or rapid retries.
+	 * Blocks duplicate processing at validation stage before CFDB7 or mail fires.
+	 *
+	 * @param \WPCF7_Validation $result Validation result object.
+	 * @param array             $tags Form tags.
+	 * @return \WPCF7_Validation
+	 */
+	public static function prevent_duplicate_submission( $result, $tags ) {
+		if ( ! is_object( $result ) || ! method_exists( $result, 'is_valid' ) || ! $result->is_valid() ) {
+			return $result;
+		}
+
+		if ( ! class_exists( 'WPCF7_Submission' ) ) {
+			return $result;
+		}
+
+		$submission = \WPCF7_Submission::get_instance();
+		if ( ! $submission ) {
+			return $result;
+		}
+
+		$posted_data = $submission->get_posted_data();
+		$email       = isset( $posted_data['email'] ) ? trim( $posted_data['email'] ) : '';
+		$phone       = isset( $posted_data['phone'] ) ? trim( $posted_data['phone'] ) : '';
+
+		if ( empty( $email ) && empty( $phone ) ) {
+			return $result;
+		}
+
+		$clean_phone = preg_replace( '/\D/', '', $phone );
+		$lock_key    = 'jubelio_cf7_sub_lock_' . md5( strtolower( $email ) . '|' . $clean_phone );
+
+		if ( false !== get_transient( $lock_key ) ) {
+			$result->invalidate( 'email', __( 'Formulir Anda sedang diproses, mohon tunggu sebentar.', 'hello-elementor-child' ) );
+			return $result;
+		}
+
+		set_transient( $lock_key, time(), 15 );
+
+		return $result;
 	}
 
 	/**
