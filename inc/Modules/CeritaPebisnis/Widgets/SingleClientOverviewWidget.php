@@ -300,9 +300,8 @@ class SingleClientOverviewWidget extends Widget_Base {
 			'custom_overview_text',
 			array(
 				'label'       => __( 'Paragraf Overview Klien (Kustom)', 'hello-elementor-child' ),
-				'type'        => Controls_Manager::TEXTAREA,
-				'rows'        => 3,
-				'default'     => 'Kisah inspiratif bagaimana klien berhasil mengoptimalkan operasional pergudangan, integrasi multi-channel, dan mempercepat pemrosesan ribuan pesanan harian bersama Jubelio.',
+				'type'        => Controls_Manager::WYSIWYG,
+				'default'     => '<p>Kisah inspiratif bagaimana klien berhasil mengoptimalkan operasional pergudangan, integrasi multi-channel, dan mempercepat pemrosesan ribuan pesanan harian bersama Jubelio.</p>',
 				'condition'   => array(
 					'show_profile_section' => 'yes',
 					'profile_data_source'  => 'custom',
@@ -505,9 +504,21 @@ class SingleClientOverviewWidget extends Widget_Base {
 			array(
 				'label'     => __( 'Background Kartu Profil Klien', 'hello-elementor-child' ),
 				'type'      => Controls_Manager::COLOR,
-				'default'   => '#F2F2F7',
+				'default'   => 'transparent',
 				'selectors' => array(
 					'{{WRAPPER}} .jubelio-client-spec-card' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'spec_card_border_color',
+			array(
+				'label'     => __( 'Warna Garis Pembatas Profil Klien', 'hello-elementor-child' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#CDE8FF',
+				'selectors' => array(
+					'{{WRAPPER}} .jubelio-client-spec-card' => 'border-color: {{VALUE}};',
 				),
 			)
 		);
@@ -553,7 +564,7 @@ class SingleClientOverviewWidget extends Widget_Base {
 					'size' => 24,
 				),
 				'selectors'  => array(
-					'{{WRAPPER}} .jubelio-client-spec-card, {{WRAPPER}} .jubelio-card-problem, {{WRAPPER}} .jubelio-card-solution' => 'border-radius: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .jubelio-card-problem, {{WRAPPER}} .jubelio-card-solution' => 'border-radius: {{SIZE}}{{UNIT}};',
 				),
 			)
 		);
@@ -652,7 +663,13 @@ class SingleClientOverviewWidget extends Widget_Base {
 		$is_custom_probsol = ( 'custom' === $settings['prob_sol_data_source'] );
 
 		// Problem Card
-		$prob_title = ! empty( $settings['problem_title'] ) ? $settings['problem_title'] : __( 'Masalah', 'hello-elementor-child' );
+		if ( ! empty( $post_data['title_problem'] ) ) {
+			$prob_title = $post_data['title_problem'];
+		} elseif ( ! empty( $settings['problem_title'] ) ) {
+			$prob_title = $settings['problem_title'];
+		} else {
+			$prob_title = __( 'Masalah', 'hello-elementor-child' );
+		}
 		$prob_desc  = '';
 		$prob_list  = array();
 		if ( $is_custom_probsol ) {
@@ -680,7 +697,13 @@ class SingleClientOverviewWidget extends Widget_Base {
 		}
 
 		// Solution Card
-		$sol_title = ! empty( $settings['solution_title'] ) ? $settings['solution_title'] : __( 'Solusi dari Jubelio', 'hello-elementor-child' );
+		if ( ! empty( $post_data['title_solution'] ) ) {
+			$sol_title = $post_data['title_solution'];
+		} elseif ( ! empty( $settings['solution_title'] ) ) {
+			$sol_title = $settings['solution_title'];
+		} else {
+			$sol_title = __( 'Solusi dari Jubelio', 'hello-elementor-child' );
+		}
 		$sol_desc  = '';
 		$sol_list  = array();
 		if ( $is_custom_probsol ) {
@@ -708,29 +731,20 @@ class SingleClientOverviewWidget extends Widget_Base {
 		}
 
 		$title_tag = ! empty( $settings['profile_title_tag'] ) ? esc_attr( $settings['profile_title_tag'] ) : 'h2';
+		$profile_title = ! empty( $post_data['title_profile'] ) ? $post_data['title_profile'] : ( ! empty( $settings['profile_section_title'] ) ? $settings['profile_section_title'] : '' );
 		?>
 		<div class="jubelio-client-overview-section">
 			<div class="jubelio-client-overview-inner">
 
 				<?php if ( 'yes' === $settings['show_profile_section'] ) : ?>
-					<?php if ( ! empty( $settings['profile_section_title'] ) ) : ?>
+					<?php if ( ! empty( $profile_title ) ) : ?>
 						<<?php echo $title_tag; ?> class="jubelio-client-profile-title">
-							<?php echo esc_html( $settings['profile_section_title'] ); ?>
+							<?php echo esc_html( $profile_title ); ?>
 						</<?php echo $title_tag; ?>>
 					<?php endif; ?>
 
 					<div class="jubelio-client-spec-card">
 						
-						<?php if ( ! empty( $logo_url ) ) : ?>
-							<div class="jubelio-spec-col jubelio-spec-col-logo">
-								<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $post_data['client_name'] ); ?>" class="jubelio-spec-logo-img" loading="lazy" decoding="async" />
-							</div>
-						<?php else : ?>
-							<div class="jubelio-spec-col jubelio-spec-col-logo">
-								<span class="jubelio-spec-logo-text"><?php echo esc_html( $post_data['client_name'] ); ?></span>
-							</div>
-						<?php endif; ?>
-
 						<div class="jubelio-spec-details">
 
 							<div class="jubelio-spec-col jubelio-spec-col-info">
@@ -793,11 +807,21 @@ class SingleClientOverviewWidget extends Widget_Base {
 
 						</div>
 
+						<?php if ( ! empty( $logo_url ) ) : ?>
+							<div class="jubelio-spec-col jubelio-spec-col-logo">
+								<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $post_data['client_name'] ); ?>" class="jubelio-spec-logo-img" loading="lazy" decoding="async" />
+							</div>
+						<?php else : ?>
+							<div class="jubelio-spec-col jubelio-spec-col-logo">
+								<span class="jubelio-spec-logo-text"><?php echo esc_html( $post_data['client_name'] ); ?></span>
+							</div>
+						<?php endif; ?>
+
 					</div>
 
 					<?php if ( ! empty( $overview ) ) : ?>
 						<div class="jubelio-client-overview-text">
-							<p><?php echo esc_html( $overview ); ?></p>
+							<?php echo wp_kses_post( wpautop( $overview ) ); ?>
 						</div>
 					<?php endif; ?>
 				<?php endif; ?>

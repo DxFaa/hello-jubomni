@@ -125,6 +125,33 @@ class SingleQuoteWidget extends Widget_Base {
 		);
 
 		$this->add_control(
+			'show_author_avatar',
+			array(
+				'label'        => __( 'Tampilkan Foto Profil / Avatar', 'hello-elementor-child' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Ya', 'hello-elementor-child' ),
+				'label_off'    => __( 'Tidak', 'hello-elementor-child' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			)
+		);
+
+		$this->add_control(
+			'custom_author_avatar',
+			array(
+				'label'     => __( 'Foto Profil Tokoh', 'hello-elementor-child' ),
+				'type'      => Controls_Manager::MEDIA,
+				'default'   => array(
+					'url' => '',
+				),
+				'condition' => array(
+					'data_source'        => 'custom',
+					'show_author_avatar' => 'yes',
+				),
+			)
+		);
+
+		$this->add_control(
 			'show_quotation_marks',
 			array(
 				'label'        => __( 'Tampilkan Tanda Petik (&ldquo; &rdquo;)', 'hello-elementor-child' ),
@@ -272,6 +299,90 @@ class SingleQuoteWidget extends Widget_Base {
 		);
 
 		$this->end_controls_section();
+
+		// ==================== STYLE: FOTO PROFIL / AVATAR ====================
+		$this->start_controls_section(
+			'section_style_avatar',
+			array(
+				'label'     => __( 'Foto Profil / Avatar', 'hello-elementor-child' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array(
+					'show_author_avatar' => 'yes',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'avatar_size',
+			array(
+				'label'      => __( 'Ukuran Foto (px)', 'hello-elementor-child' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array(
+						'min' => 32,
+						'max' => 140,
+					),
+				),
+				'default'    => array(
+					'unit' => 'px',
+					'size' => 56,
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .jubelio-single-quote-avatar' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'avatar_border_radius',
+			array(
+				'label'      => __( 'Radius Sudut (Bulat)', 'hello-elementor-child' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', '%' ),
+				'range'      => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 70,
+					),
+					'%'  => array(
+						'min' => 0,
+						'max' => 50,
+					),
+				),
+				'default'    => array(
+					'unit' => '%',
+					'size' => 50,
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .jubelio-single-quote-avatar' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'avatar_bottom_spacing',
+			array(
+				'label'      => __( 'Jarak ke Nama (px)', 'hello-elementor-child' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 40,
+					),
+				),
+				'default'    => array(
+					'unit' => 'px',
+					'size' => 12,
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .jubelio-single-quote-avatar-wrap' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
 	}
 
 	/**
@@ -310,6 +421,17 @@ class SingleQuoteWidget extends Widget_Base {
 			$author_role = ! empty( $post_data['client_person_role'] ) ? $post_data['client_person_role'] : '';
 		}
 
+		// 4. Resolve Author Avatar / Photo
+		$author_avatar = '';
+		$show_avatar   = ( 'yes' === $settings['show_author_avatar'] );
+		if ( $show_avatar ) {
+			if ( 'custom' === $settings['data_source'] && ! empty( $settings['custom_author_avatar']['url'] ) ) {
+				$author_avatar = $settings['custom_author_avatar']['url'];
+			} else {
+				$author_avatar = ! empty( $post_data['client_photo'] ) ? $post_data['client_photo'] : '';
+			}
+		}
+
 		$show_quotes = ( 'yes' === $settings['show_quotation_marks'] );
 		?>
 		<div class="jubelio-single-quote-section">
@@ -318,8 +440,13 @@ class SingleQuoteWidget extends Widget_Base {
 					<p class="jubelio-single-quote-text">
 						<?php if ( $show_quotes ) : ?>&ldquo;<?php endif; ?><?php echo esc_html( $quote_text ); ?><?php if ( $show_quotes ) : ?>&rdquo;<?php endif; ?>
 					</p>
-					<?php if ( ! empty( $author_name ) || ! empty( $author_role ) ) : ?>
+					<?php if ( ! empty( $author_name ) || ! empty( $author_role ) || ! empty( $author_avatar ) ) : ?>
 						<footer class="jubelio-single-quote-author">
+							<?php if ( ! empty( $author_avatar ) ) : ?>
+								<div class="jubelio-single-quote-avatar-wrap">
+									<img src="<?php echo esc_url( $author_avatar ); ?>" alt="<?php echo esc_attr( $author_name ); ?>" class="jubelio-single-quote-avatar" loading="lazy" />
+								</div>
+							<?php endif; ?>
 							<?php if ( ! empty( $author_name ) ) : ?>
 								<cite class="jubelio-single-quote-name"><?php echo esc_html( $author_name ); ?></cite>
 							<?php endif; ?>

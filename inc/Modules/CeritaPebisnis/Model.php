@@ -167,6 +167,18 @@ class Model {
 			$data['client_person_role'] = ! empty( $data['client_name'] ) ? 'Owner ' . $data['client_name'] : ( ! empty( $data['industry_name'] ) ? $data['industry_name'] : 'Klien Jubelio' );
 		}
 
+		// 10b. Client Person Photo / Avatar (Foto Tokoh / Narasumber)
+		$photo_val = $get_val( '', array( 'cp_foto_tokoh', 'foto_tokoh', 'cp_client_photo', 'client_photo', 'author_photo' ) );
+		if ( is_array( $photo_val ) && isset( $photo_val['url'] ) ) {
+			$data['client_photo'] = $photo_val['url'];
+		} elseif ( is_numeric( $photo_val ) ) {
+			$data['client_photo'] = wp_get_attachment_image_url( $photo_val, 'thumbnail' );
+		} elseif ( is_string( $photo_val ) && ! empty( $photo_val ) ) {
+			$data['client_photo'] = esc_url( $photo_val );
+		} else {
+			$data['client_photo'] = '';
+		}
+
 		// 11. Location
 		$loc_val = $get_val( '', array( 'cp_lokasi', 'lokasi', 'lokasi_klien', 'client_location' ) );
 		$data['location'] = ! empty( $loc_val ) ? esc_html( $loc_val ) : 'Indonesia';
@@ -303,6 +315,24 @@ class Model {
 				),
 			);
 		}
+
+		$title_prof = $get_val( '', array( 'cp_judul_profil_klien', 'judul_profil_klien', 'profile_title' ) );
+		$data['title_profile'] = ! empty( $title_prof ) ? esc_html( $title_prof ) : '';
+
+		$title_prob = $get_val( '', array( 'cp_judul_masalah', 'judul_masalah', 'problem_title' ) );
+		$data['title_problem'] = ! empty( $title_prob ) ? esc_html( $title_prob ) : '';
+
+		$title_sol = $get_val( '', array( 'cp_judul_solusi', 'judul_solusi', 'solution_title' ) );
+		$data['title_solution'] = ! empty( $title_sol ) ? esc_html( $title_sol ) : '';
+
+		$title_metr = $get_val( '', array( 'cp_judul_hasil_nyata', 'judul_hasil_nyata', 'metrics_title' ) );
+		$data['title_metrics'] = ! empty( $title_metr ) ? esc_html( $title_metr ) : '';
+
+		$cta_h = $get_val( '', array( 'cp_cta_headline', 'cta_headline' ) );
+		$data['cta_headline'] = ! empty( $cta_h ) ? esc_html( $cta_h ) : '';
+
+		$cta_d = $get_val( '', array( 'cp_cta_deskripsi', 'cta_deskripsi' ) );
+		$data['cta_description'] = ! empty( $cta_d ) ? wp_kses_post( $cta_d ) : '';
 
 		return $data;
 	}

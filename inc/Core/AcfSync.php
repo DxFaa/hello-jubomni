@@ -44,7 +44,7 @@ class AcfSync {
 	 * @return string|false Path or false to abort save.
 	 */
 	public static function prevent_empty_group_overwrite( $path, $field_group ) {
-		if ( empty( $field_group['fields'] ) ) {
+		if ( ! is_array( $field_group ) || empty( $field_group['fields'] ) ) {
 			return false;
 		}
 		return $path;

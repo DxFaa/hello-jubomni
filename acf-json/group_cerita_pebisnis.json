@@ -170,6 +170,31 @@
             "append": ""
         },
         {
+            "key": "field_cp_foto_tokoh",
+            "label": "Foto Profil Tokoh \/ Narasumber",
+            "name": "cp_foto_tokoh",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Foto profil narasumber atau manajemen bisnis (format JPG, PNG, atau WebP). Ditampilkan sebagai lingkaran kecil di atas nama tokoh pada section kutipan.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0,
+            "mime_types": "jpg,jpeg,png,webp"
+        },
+        {
             "key": "field_cp_link_konsultasi",
             "label": "Link Aksi (CTA)",
             "name": "cp_link_konsultasi",
@@ -361,8 +386,8 @@
             "label": "Paragraf Overview Cerita Klien",
             "name": "cp_overview_klien",
             "aria-label": "",
-            "type": "textarea",
-            "instructions": "Paragraf pengantar profil klien yang tampil di bawah kartu spesifikasi profil",
+            "type": "wysiwyg",
+            "instructions": "Overview atau pengantar cerita klien yang tampil di bawah kartu spesifikasi profil. Mendukung multiple paragraf, format teks, heading, atau link.",
             "required": 0,
             "conditional_logic": false,
             "wrapper": {
@@ -370,11 +395,11 @@
                 "class": "",
                 "id": ""
             },
-            "rows": 3,
-            "placeholder": "Kisah lengkap bagaimana brand mengelola operasional dan ekspansi bisnis bersama Jubelio...",
             "default_value": "",
-            "new_lines": "",
-            "maxlength": ""
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 0,
+            "delay": 0
         },
         {
             "key": "field_cp_masalah_deskripsi",
@@ -594,6 +619,126 @@
                     "parent_repeater": "field_cp_metrik_hasil_list"
                 }
             ]
+        },
+        {
+            "key": "field_cp_judul_profil_klien",
+            "label": "Judul Bagian Profil Klien (SEO / Kustom)",
+            "name": "cp_judul_profil_klien",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Judul untuk section Profil Klien. Kosongkan untuk menggunakan judul bawaan: 'Profil Klien'.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Profil Klien",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_judul_masalah",
+            "label": "Judul Bagian Masalah (SEO / Kustom)",
+            "name": "cp_judul_masalah",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Judul untuk kartu Masalah. Kosongkan untuk menggunakan judul bawaan: 'Masalah'.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Masalah",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_judul_solusi",
+            "label": "Judul Bagian Solusi (SEO / Kustom)",
+            "name": "cp_judul_solusi",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Judul untuk kartu Solusi. Kosongkan untuk menggunakan judul bawaan: 'Solusi dari Jubelio'.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Solusi dari Jubelio",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_judul_hasil_nyata",
+            "label": "Judul Bagian Hasil Nyata Transformasi (SEO / Kustom)",
+            "name": "cp_judul_hasil_nyata",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Judul untuk section Hasil Nyata Transformasi. Kosongkan untuk menggunakan judul bawaan: 'Hasil Nyata Transformasi'.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Hasil Nyata Transformasi",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_cta_headline",
+            "label": "Headline Section CTA",
+            "name": "cp_cta_headline",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Judul utama untuk section Call to Action (CTA) di bagian bawah halaman.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Kelola Bisnis Lebih Mudah Bersama Jubelio",
+            "default_value": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_cp_cta_deskripsi",
+            "label": "Deskripsi Section CTA",
+            "name": "cp_cta_deskripsi",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Teks deskripsi pendukung untuk section Call to Action (CTA).",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "placeholder": "Dapatkan kemudahan pengelolaan inventori, sinkronisasi stok otomatis, dan pencatatan laporan keuangan dalam satu sistem terintegrasi.",
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": ""
         }
     ],
     "location": [
@@ -614,5 +759,5 @@
     "active": true,
     "description": "Field kustom untuk halaman Cerita Pebisnis Jubelio",
     "show_in_rest": 1,
-    "modified": 1793004704
+    "modified": 1793177890
 }

@@ -2188,36 +2188,40 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	font-weight: 700;
 }
 
+:is(.elementor, .elementor-page, [class*="elementor-"], body) .jubelio-client-spec-card,
 .jubelio-client-spec-card {
-	background-color: #F2F2F7;
-	border-radius: 12px;
-	padding: 32px;
+	padding: 32px 0px;
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: flex-start;
 	gap: 48px;
 	width: 100%;
 	box-sizing: border-box;
 	justify-content: space-between;
+	border-bottom: 2px solid #CDE8FF;
+	border-top: 2px solid #CDE8FF;
+	background-color: transparent !important;
+	border-radius: 0 !important;
 }
 
 .jubelio-spec-col-logo {
-	flex: 1 1 220px;
+	flex: 0 0 auto;
 	min-width: 0;
 	max-width: 220px;
-	height: 72px;
+	height: auto;
+	min-height: 48px;
 	display: flex;
-	align-items: center;
-	justify-content: flex-start;
+	align-items: flex-start;
+	justify-content: flex-end;
 }
 
 .jubelio-spec-logo-img {
-	width: 100%;
-	height: 100%;
+	width: auto;
+	height: auto;
 	max-width: 220px;
-	max-height: 71px;
+	max-height: 72px;
 	object-fit: contain;
-	object-position: left center;
+	object-position: right top;
 	display: block;
 }
 
@@ -2229,6 +2233,7 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	line-height: 28px;
 	color: #163A50;
 	white-space: nowrap;
+	text-align: right;
 }
 
 .jubelio-spec-details {
@@ -2237,7 +2242,7 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	align-items: flex-start;
 	padding: 0;
 	gap: 48px;
-	flex: 0 0 auto;
+	flex: 1 1 auto;
 	box-sizing: border-box;
 }
 
@@ -2361,7 +2366,31 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 
 .jubelio-client-overview-text p {
 	color: #556987;
-	margin: 0;
+	margin: 0 0 16px 0;
+	line-height: 1.6;
+}
+
+.jubelio-client-overview-text p:last-child {
+	margin-bottom: 0;
+}
+
+.jubelio-client-overview-text :is(h3, h4, h5) {
+	color: #163A50;
+	margin-top: 20px;
+	margin-bottom: 8px;
+	font-weight: 700;
+}
+
+.jubelio-client-overview-text ul,
+.jubelio-client-overview-text ol {
+	color: #556987;
+	margin: 0 0 16px 20px;
+	padding: 0;
+}
+
+.jubelio-client-overview-text a {
+	color: #4B68EF;
+	text-decoration: underline;
 }
 
 .jubelio-prob-sol-grid {
@@ -2440,24 +2469,41 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	flex: 1;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+	:is(.elementor, .elementor-page, [class*="elementor-"], body) .jubelio-client-spec-card,
 	.jubelio-client-spec-card {
 		flex-direction: column;
 		align-items: flex-start;
-		gap: 32px;
-		padding: 32px;
-		border-radius: 24px;
+		gap: 28px;
+		padding: 28px 0px !important;
+		border-radius: 0 !important;
+		background-color: transparent !important;
 	}
 
 	.jubelio-spec-col-logo {
+		order: -1;
 		width: 100%;
+		max-width: 100%;
+		height: auto;
+		min-height: auto;
 		justify-content: flex-start;
+		margin-bottom: 4px;
+	}
+
+	.jubelio-spec-logo-img {
+		max-height: 48px;
+		max-width: 180px;
+		object-position: left center;
+	}
+
+	.jubelio-spec-logo-text {
+		text-align: left;
 	}
 
 	.jubelio-spec-details {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: 32px;
+		gap: 24px 32px;
 		width: 100%;
 	}
 
@@ -2482,11 +2528,22 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	}
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+	:is(.elementor, .elementor-page, [class*="elementor-"], body) .jubelio-client-spec-card,
 	.jubelio-client-spec-card {
-		padding: 24px;
-		gap: 24px;
-		border-radius: 20px;
+		padding: 20px 0px !important;
+		gap: 20px;
+		border-radius: 0 !important;
+		background-color: transparent !important;
+	}
+
+	.jubelio-spec-col-logo {
+		margin-bottom: 0px;
+	}
+
+	.jubelio-spec-logo-img {
+		max-height: 40px;
+		max-width: 150px;
 	}
 
 	.jubelio-spec-details {
@@ -2554,6 +2611,21 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	gap: 0px;
 	margin: 0 !important;
 	padding: 0 !important;
+}
+
+.jubelio-single-quote-avatar-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 12px;
+}
+
+.jubelio-single-quote-avatar {
+	width: 100px !important;
+	height: 100px !important;
+	border-radius: 50% !important;
+	object-fit: cover;
+	display: block;
 }
 
 .jubelio-single-quote-name {
@@ -2748,6 +2820,7 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 }
 
 @media (max-width: 768px) {
+
 	.demo_form .form-group:has(input[type="tel"]),
 	.demo_form .form-group:has(input[type="email"]) {
 		grid-column: span 2 !important;
