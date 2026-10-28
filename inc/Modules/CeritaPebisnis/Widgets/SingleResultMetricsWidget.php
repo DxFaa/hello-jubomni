@@ -498,9 +498,10 @@ class SingleResultMetricsWidget extends Widget_Base {
 			);
 		}
 
-		$title_tag = ! empty( $settings['title_tag'] ) ? esc_attr( $settings['title_tag'] ) : 'h2';
+		$allowed_tags  = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' );
+		$title_tag     = ( ! empty( $settings['title_tag'] ) && in_array( $settings['title_tag'], $allowed_tags, true ) ) ? $settings['title_tag'] : 'h2';
 		$section_title = ! empty( $post_data['title_metrics'] ) ? $post_data['title_metrics'] : ( ! empty( $settings['section_title'] ) ? $settings['section_title'] : '' );
-		$max_cols = ! empty( $settings['max_columns'] ) ? intval( $settings['max_columns'] ) : 4;
+		$max_cols      = ! empty( $settings['max_columns'] ) ? intval( $settings['max_columns'] ) : 4;
 		?>
 		<div class="jubelio-result-metrics-section">
 			<?php if ( ! empty( $section_title ) ) : ?>

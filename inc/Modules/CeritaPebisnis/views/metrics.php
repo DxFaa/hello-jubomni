@@ -16,7 +16,8 @@ $header_position  = ! empty( $settings['header_position'] ) ? $settings['header_
 $show_eyebrow     = ! isset( $settings['show_eyebrow'] ) || 'yes' === $settings['show_eyebrow'];
 $eyebrow_text     = ! empty( $settings['eyebrow_text'] ) ? $settings['eyebrow_text'] : __( 'What We Offer ↗', 'hello-elementor-child' );
 $title_text       = ! empty( $settings['title_text'] ) ? $settings['title_text'] : __( 'Dampak Nyata untuk Pertumbuhan Bisnis Bersama Jubelio', 'hello-elementor-child' );
-$title_tag        = ! empty( $settings['title_tag'] ) ? $settings['title_tag'] : 'h2';
+$allowed_tags     = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' );
+$title_tag        = ( ! empty( $settings['title_tag'] ) && in_array( $settings['title_tag'], $allowed_tags, true ) ) ? $settings['title_tag'] : 'h2';
 $desc_text        = ! empty( $settings['description_text'] ) ? $settings['description_text'] : __( 'Bersama Jubelio, berbagai bisnis telah merasakan peningkatan efisiensi operasional, penjualan, dan pertumbuhan yang signifikan.', 'hello-elementor-child' );
 $enable_counter   = ! isset( $settings['enable_counter'] ) || 'yes' === $settings['enable_counter'];
 $show_icons       = ! empty( $settings['show_card_icons'] ) && 'yes' === $settings['show_card_icons'];

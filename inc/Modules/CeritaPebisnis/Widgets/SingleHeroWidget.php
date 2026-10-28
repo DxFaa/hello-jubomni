@@ -665,7 +665,8 @@ class SingleHeroWidget extends Widget_Base {
 			$headline = __( 'Saat Ribuan Order Membutuhkan Gudang yang Lebih Siap', 'hello-elementor-child' );
 		}
 
-		$tag = ! empty( $settings['headline_tag'] ) ? esc_attr( $settings['headline_tag'] ) : 'h1';
+		$allowed_tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' );
+		$tag          = ( ! empty( $settings['headline_tag'] ) && in_array( $settings['headline_tag'], $allowed_tags, true ) ) ? $settings['headline_tag'] : 'h1';
 
 		// 2. Resolve Subheadline
 		$subheadline = '';

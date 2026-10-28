@@ -457,15 +457,15 @@ class FormLeadHandler {
 		}
 
 		$posted_data = $submission->get_posted_data();
-		$ref_id      = isset( $posted_data['ref_id'] ) ? intval( $posted_data['ref_id'] ) : 0;
+		$ref_id      = isset( $posted_data['ref_id'] ) ? absint( $posted_data['ref_id'] ) : 0;
 
 		if ( $ref_id && function_exists( 'get_field' ) ) {
 			$file_data = get_field( 'e-book_file', $ref_id );
 
 			if ( is_array( $file_data ) && isset( $file_data['url'] ) ) {
-				return $file_data['url'];
+				return esc_url_raw( $file_data['url'] );
 			} elseif ( is_string( $file_data ) && ! empty( $file_data ) ) {
-				return $file_data;
+				return esc_url_raw( $file_data );
 			}
 		}
 
@@ -484,25 +484,28 @@ class FormLeadHandler {
 			'field' => 'e-book_file',
 		), $atts );
 
-		$post_id = isset( $_GET[ $atts['param'] ] ) ? intval( $_GET[ $atts['param'] ] ) : 0;
+		$param   = sanitize_key( $atts['param'] );
+		$post_id = ( ! empty( $param ) && isset( $_GET[ $param ] ) ) ? absint( $_GET[ $param ] ) : 0;
 		if ( ! $post_id ) {
 			return '';
 		}
 
-		switch ( $atts['field'] ) {
+		$field = sanitize_key( $atts['field'] );
+
+		switch ( $field ) {
 			case 'title':
-				return get_the_title( $post_id );
+				return esc_html( get_the_title( $post_id ) );
 
 			case 'image':
-				return (string) get_the_post_thumbnail_url( $post_id, 'full' );
+				return esc_url( (string) get_the_post_thumbnail_url( $post_id, 'full' ) );
 
 			default:
 				if ( function_exists( 'get_field' ) ) {
-					$file_data = get_field( $atts['field'], $post_id );
+					$file_data = get_field( $field, $post_id );
 					if ( is_array( $file_data ) && isset( $file_data['url'] ) ) {
-						return $file_data['url'];
+						return esc_url( $file_data['url'] );
 					}
-					return (string) $file_data;
+					return esc_html( (string) $file_data );
 				}
 				return '';
 		}

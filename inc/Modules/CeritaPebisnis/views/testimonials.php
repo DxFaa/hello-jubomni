@@ -15,13 +15,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $show_header      = ! isset( $settings['show_header'] ) || 'yes' === $settings['show_header'];
 $title_text       = ! empty( $settings['title_text'] ) ? $settings['title_text'] : __( 'Kata Pelanggan Tentang Jubelio', 'hello-elementor-child' );
-$title_tag        = ! empty( $settings['title_tag'] ) ? $settings['title_tag'] : 'h2';
+$allowed_tags     = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' );
+$title_tag        = ( ! empty( $settings['title_tag'] ) && in_array( $settings['title_tag'], $allowed_tags, true ) ) ? $settings['title_tag'] : 'h2';
 $desc_text        = ! empty( $settings['description_text'] ) ? $settings['description_text'] : __( 'Simak langsung pengalaman mereka dalam menggunakan Jubelio untuk mengembangkan bisnis.', 'hello-elementor-child' );
 $show_action_link = ! empty( $settings['show_action_link'] ) && 'yes' === $settings['show_action_link'];
 $action_text      = ! empty( $settings['action_link_text'] ) ? $settings['action_link_text'] : __( 'Lihat Semua Cerita Pebisnis →', 'hello-elementor-child' );
 $action_url       = ! empty( $settings['action_link_url']['url'] ) ? esc_url( $settings['action_link_url']['url'] ) : home_url( '/cerita-pebisnis/' );
 $action_external  = ! empty( $settings['action_link_url']['is_external'] ) ? ' target="_blank"' : '';
-$action_nofollow  = ! empty( $settings['action_link_url']['nofollow'] ) ? ' rel="nofollow"' : '';
+
+$rel_parts = array();
+if ( ! empty( $settings['action_link_url']['is_external'] ) ) {
+	$rel_parts[] = 'noopener';
+	$rel_parts[] = 'noreferrer';
+}
+if ( ! empty( $settings['action_link_url']['nofollow'] ) ) {
+	$rel_parts[] = 'nofollow';
+}
+$action_rel = ! empty( $rel_parts ) ? ' rel="' . esc_attr( implode( ' ', array_unique( $rel_parts ) ) ) . '"' : '';
 
 $show_navigation  = ! isset( $settings['show_navigation'] ) || 'yes' === $settings['show_navigation'];
 $show_pagination  = ! isset( $settings['show_pagination'] ) || 'yes' === $settings['show_pagination'];
@@ -44,7 +54,7 @@ $show_pagination  = ! isset( $settings['show_pagination'] ) || 'yes' === $settin
 
 			<?php if ( $show_action_link && ! empty( $action_text ) ) : ?>
 				<div class="jubelio-testimonials-action-wrap">
-					<a href="<?php echo $action_url; ?>" class="jubelio-testimonials-action-link"<?php echo $action_external . $action_nofollow; ?>>
+					<a href="<?php echo $action_url; ?>" class="jubelio-testimonials-action-link"<?php echo $action_external . $action_rel; ?>>
 						<span><?php echo esc_html( $action_text ); ?></span>
 					</a>
 				</div>

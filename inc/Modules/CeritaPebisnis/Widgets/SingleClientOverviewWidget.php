@@ -730,7 +730,8 @@ class SingleClientOverviewWidget extends Widget_Base {
 			);
 		}
 
-		$title_tag = ! empty( $settings['profile_title_tag'] ) ? esc_attr( $settings['profile_title_tag'] ) : 'h2';
+		$allowed_tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' );
+		$title_tag    = ( ! empty( $settings['profile_title_tag'] ) && in_array( $settings['profile_title_tag'], $allowed_tags, true ) ) ? $settings['profile_title_tag'] : 'h2';
 		$profile_title = ! empty( $post_data['title_profile'] ) ? $post_data['title_profile'] : ( ! empty( $settings['profile_section_title'] ) ? $settings['profile_section_title'] : '' );
 		?>
 		<div class="jubelio-client-overview-section">

@@ -51,7 +51,7 @@ class LegacyShortcodes {
 					foreach ( $fitur_list_jubelio as $list ) {
 						if ( is_array( $list ) || is_object( $list ) ) {
 							foreach ( $list as $item ) {
-								echo '<li class="item_wjubelio">' . ( isset( $item['list_title'] ) ? $item['list_title'] : '' ) . '</li>';
+								echo '<li class="item_wjubelio">' . ( isset( $item['list_title'] ) ? esc_html( $item['list_title'] ) : '' ) . '</li>';
 							}
 						}
 					}
@@ -64,7 +64,7 @@ class LegacyShortcodes {
 					foreach ( $fitur_list_jubelio as $list ) {
 						if ( is_array( $list ) || is_object( $list ) ) {
 							foreach ( $list as $item ) {
-								echo '<li class="item_notjubelio">' . ( isset( $item['list_title_notjubelio'] ) ? $item['list_title_notjubelio'] : '' ) . '</li>';
+								echo '<li class="item_notjubelio">' . ( isset( $item['list_title_notjubelio'] ) ? esc_html( $item['list_title_notjubelio'] ) : '' ) . '</li>';
 							}
 						}
 					}
@@ -95,7 +95,7 @@ class LegacyShortcodes {
 					}
 
 					echo '<li>
-							<a href="#tab-' . esc_attr( $key ) . '">' . $list_fitur['title_list_item_fitur_unggulan'] . $ai_badge . ' <span>' . $list_fitur['description_list_item_fitur_unggulan'] . '</span></a>
+							<a href="#tab-' . esc_attr( $key ) . '">' . esc_html( $list_fitur['title_list_item_fitur_unggulan'] ) . $ai_badge . ' <span>' . esc_html( $list_fitur['description_list_item_fitur_unggulan'] ) . '</span></a>
 						  </li>';
 				}
 				echo '</ul>';
@@ -460,7 +460,7 @@ class LegacyShortcodes {
 					foreach ( $list as $item ) {
 						echo '<div class="partner_item">';
 						if ( 'yes' === $partner_link_page ) {
-							echo '<a href="' . esc_url( $item['fulfillment_partner_link'] ) . '" target="_blank">';
+							echo '<a href="' . esc_url( $item['fulfillment_partner_link'] ) . '" target="_blank" rel="noopener noreferrer">';
 						}
 						echo '<img src="' . esc_url( $item['fulfillment_partner_logo'] ) . '" alt="Jubelio">';
 						if ( 'yes' === $partner_link_page ) {
@@ -481,7 +481,7 @@ class LegacyShortcodes {
 					foreach ( $list as $item ) {
 						echo '<div class="partner_item">';
 						if ( 'yes' === $partner_link_page ) {
-							echo '<a href="' . esc_url( $item['jubelio_shipment_partner_link'] ) . '" target="_blank">';
+							echo '<a href="' . esc_url( $item['jubelio_shipment_partner_link'] ) . '" target="_blank" rel="noopener noreferrer">';
 						}
 						echo '<img src="' . esc_url( $item['jubelio_shipment_partner_logo'] ) . '" alt="Jubelio">';
 						if ( 'yes' === $partner_link_page ) {
@@ -502,7 +502,7 @@ class LegacyShortcodes {
 					foreach ( $list as $item ) {
 						echo '<div class="partner_item">';
 						if ( 'yes' === $partner_link_page ) {
-							echo '<a href="' . esc_url( $item['financing_partner_logo_link'] ) . '" target="_blank">';
+							echo '<a href="' . esc_url( $item['financing_partner_logo_link'] ) . '" target="_blank" rel="noopener noreferrer">';
 						}
 						echo '<img src="' . esc_url( $item['financing_partner_logo'] ) . '" alt="Jubelio">';
 						if ( 'yes' === $partner_link_page ) {
@@ -523,7 +523,7 @@ class LegacyShortcodes {
 					foreach ( $list as $item ) {
 						echo '<div class="partner_item">';
 						if ( 'yes' === $partner_link_page ) {
-							echo '<a href="' . esc_url( $item['enabler_partner_logo_link'] ) . '" target="_blank">';
+							echo '<a href="' . esc_url( $item['enabler_partner_logo_link'] ) . '" target="_blank" rel="noopener noreferrer">';
 						}
 						echo '<img src="' . esc_url( $item['enabler_partner_logo'] ) . '" alt="Jubelio">';
 						if ( 'yes' === $partner_link_page ) {
@@ -544,7 +544,7 @@ class LegacyShortcodes {
 					foreach ( $list as $item ) {
 						echo '<div class="partner_item">';
 						if ( 'yes' === $partner_link_page ) {
-							echo '<a href="' . esc_url( $item['sistem_erp_partner_logo_link'] ) . '" target="_blank">';
+							echo '<a href="' . esc_url( $item['sistem_erp_partner_logo_link'] ) . '" target="_blank" rel="noopener noreferrer">';
 						}
 						echo '<img src="' . esc_url( $item['sistem_erp_partner_logo'] ) . '" alt="Jubelio">';
 						if ( 'yes' === $partner_link_page ) {
@@ -562,7 +562,7 @@ class LegacyShortcodes {
 
 	public static function get_pdf() {
 		if ( isset( $_GET['pdf_id'] ) ) {
-			$pdfid         = sanitize_text_field( $_GET['pdf_id'] );
+			$pdfid         = absint( $_GET['pdf_id'] );
 			$pdf_file      = function_exists( 'get_field' ) ? get_field( 'e-book_file', $pdfid ) : '';
 			$post_title    = get_the_title( $pdfid );
 			$thumbnail_url = get_the_post_thumbnail_url( $pdfid, 'full' );
@@ -576,7 +576,7 @@ class LegacyShortcodes {
 				echo '<div class="pdf_title"><h3>' . esc_html( $post_title ) . '</h3></div>';
 			}
 			if ( $pdf_file ) {
-				echo '<div class="pdf_button"><a href="' . esc_url( $pdf_file ) . '" target="_blank">Download</a></div>';
+				echo '<div class="pdf_button"><a href="' . esc_url( $pdf_file ) . '" target="_blank" rel="noopener noreferrer">Download</a></div>';
 			} else {
 				echo '<div class="pdf_button"><p>PDF Tidak ditemukan.</p></div>';
 			}
