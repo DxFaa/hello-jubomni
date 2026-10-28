@@ -31,7 +31,6 @@ class LegacyShortcodes {
 		add_shortcode( 'group_partner_list', array( __CLASS__, 'group_partner_list' ) );
 		add_shortcode( 'get_pdf', array( __CLASS__, 'get_pdf' ) );
 		add_shortcode( 'current_post_id', array( __CLASS__, 'current_post_id' ) );
-		add_filter( 'the_content', array( __CLASS__, 'strip_unused_shortcodes' ) );
 	}
 
 	public static function dynamic_list( $atts ) {

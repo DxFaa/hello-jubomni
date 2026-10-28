@@ -194,15 +194,18 @@ class SingleResultMetricsWidget extends Widget_Base {
 		$this->add_responsive_control(
 			'max_columns',
 			array(
-				'label'   => __( 'Maksimal Kolom (Desktop)', 'hello-elementor-child' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => '4',
-				'options' => array(
+				'label'          => __( 'Maksimal Kolom', 'hello-elementor-child' ),
+				'type'           => Controls_Manager::SELECT,
+				'default'        => '4',
+				'tablet_default' => '1',
+				'mobile_default' => '1',
+				'options'        => array(
+					'1' => '1 Kolom',
 					'2' => '2 Kolom',
 					'3' => '3 Kolom',
 					'4' => '4 Kolom',
 				),
-				'selectors' => array(
+				'selectors'      => array(
 					'{{WRAPPER}} .jubelio-result-metrics-grid' => '--jubelio-metric-max-cols: {{VALUE}};',
 				),
 			)

@@ -57,6 +57,12 @@ class ElementorManager {
 	 * Register widgets in Elementor 3.5+
 	 */
 	public static function register_widgets( $widgets_manager ) {
+		static $registered = false;
+		if ( $registered ) {
+			return;
+		}
+		$registered = true;
+
 		foreach ( self::$widgets as $class_name ) {
 			if ( class_exists( $class_name ) ) {
 				$widgets_manager->register( new $class_name() );
@@ -68,6 +74,12 @@ class ElementorManager {
 	 * Register widgets in legacy Elementor (< 3.5)
 	 */
 	public static function register_widgets_legacy( $widgets_manager ) {
+		static $registered = false;
+		if ( $registered || did_action( 'elementor/widgets/register' ) ) {
+			return;
+		}
+		$registered = true;
+
 		foreach ( self::$widgets as $class_name ) {
 			if ( class_exists( $class_name ) ) {
 				$widgets_manager->register_widget_type( new $class_name() );

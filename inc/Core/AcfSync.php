@@ -24,16 +24,30 @@ class AcfSync {
 		// 1. JSON Save & Load filters
 		add_filter( 'acf/settings/save_json', array( __CLASS__, 'save_point' ) );
 		add_filter( 'acf/settings/load_json', array( __CLASS__, 'load_point' ) );
+		add_filter( 'acf/settings/save_json/key=group_cerita_pebisnis', array( __CLASS__, 'prevent_empty_group_overwrite' ), 10, 2 );
 
 		// 2. Local Fallback Registration on acf/init (guarantees fields are active on edit screens)
 		add_action( 'acf/init', array( __CLASS__, 'register_local_fallback' ), 20 );
 
-		// 3. Admin auto-sync into database for GUI editing
+		// 3. Admin manual force-sync handler (only on explicit user request)
 		if ( is_admin() ) {
-			add_action( 'admin_init', array( __CLASS__, 'auto_sync_to_db' ) );
 			add_action( 'admin_action_jubelio_force_acf_sync', array( __CLASS__, 'force_sync_handler' ) );
 			add_action( 'admin_notices', array( __CLASS__, 'admin_sync_notice' ) );
 		}
+	}
+
+	/**
+	 * Guard: Prevent saving/overwriting group_cerita_pebisnis.json if fields array is empty
+	 *
+	 * @param string $path Default save path.
+	 * @param array  $field_group Field group definition.
+	 * @return string|false Path or false to abort save.
+	 */
+	public static function prevent_empty_group_overwrite( $path, $field_group ) {
+		if ( empty( $field_group['fields'] ) ) {
+			return false;
+		}
+		return $path;
 	}
 
 	/**
