@@ -317,19 +317,19 @@ class Model {
 		}
 
 		$title_prof = $get_val( '', array( 'cp_judul_profil_klien', 'judul_profil_klien', 'profile_title' ) );
-		$data['title_profile'] = ! empty( $title_prof ) ? esc_html( $title_prof ) : '';
+		$data['title_profile'] = ! empty( $title_prof ) ? esc_html( $title_prof ) : __( 'Profil Klien', 'hello-elementor-child' );
 
 		$title_prob = $get_val( '', array( 'cp_judul_masalah', 'judul_masalah', 'problem_title' ) );
-		$data['title_problem'] = ! empty( $title_prob ) ? esc_html( $title_prob ) : '';
+		$data['title_problem'] = ! empty( $title_prob ) ? esc_html( $title_prob ) : __( 'Masalah', 'hello-elementor-child' );
 
 		$title_sol = $get_val( '', array( 'cp_judul_solusi', 'judul_solusi', 'solution_title' ) );
-		$data['title_solution'] = ! empty( $title_sol ) ? esc_html( $title_sol ) : '';
+		$data['title_solution'] = ! empty( $title_sol ) ? esc_html( $title_sol ) : __( 'Solusi dari Jubelio', 'hello-elementor-child' );
 
 		$title_metr = $get_val( '', array( 'cp_judul_hasil_nyata', 'judul_hasil_nyata', 'metrics_title' ) );
-		$data['title_metrics'] = ! empty( $title_metr ) ? esc_html( $title_metr ) : '';
+		$data['title_metrics'] = ! empty( $title_metr ) ? esc_html( $title_metr ) : __( 'Hasil Nyata Transformasi', 'hello-elementor-child' );
 
 		$cta_h = $get_val( '', array( 'cp_cta_headline', 'cta_headline' ) );
-		$data['cta_headline'] = ! empty( $cta_h ) ? esc_html( $cta_h ) : '';
+		$data['cta_headline'] = ! empty( $cta_h ) ? esc_html( $cta_h ) : __( 'Atasi Tantangan Bisnis dengan Sistem yang Terintegrasi', 'hello-elementor-child' );
 
 		$cta_d = $get_val( '', array( 'cp_cta_deskripsi', 'cta_deskripsi' ) );
 		$data['cta_description'] = ! empty( $cta_d ) ? wp_kses_post( $cta_d ) : '';

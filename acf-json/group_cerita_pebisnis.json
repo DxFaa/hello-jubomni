@@ -573,7 +573,7 @@
                 },
                 {
                     "key": "field_cp_metrik_nilai",
-                    "label": "Nilai / Hasil Metrik",
+                    "label": "Nilai \/ Hasil Metrik",
                     "name": "nilai_metrik",
                     "aria-label": "",
                     "type": "text",
@@ -594,7 +594,7 @@
                 },
                 {
                     "key": "field_cp_metrik_ikon",
-                    "label": "Ikon Metrik (SVG / Gambar)",
+                    "label": "Ikon Metrik (SVG \/ Gambar)",
                     "name": "ikon_metrik",
                     "aria-label": "",
                     "type": "image",
@@ -622,7 +622,7 @@
         },
         {
             "key": "field_cp_judul_profil_klien",
-            "label": "Judul Bagian Profil Klien (SEO / Kustom)",
+            "label": "Judul Bagian Profil Klien (SEO \/ Kustom)",
             "name": "cp_judul_profil_klien",
             "aria-label": "",
             "type": "text",
@@ -642,7 +642,7 @@
         },
         {
             "key": "field_cp_judul_masalah",
-            "label": "Judul Bagian Masalah (SEO / Kustom)",
+            "label": "Judul Bagian Masalah (SEO \/ Kustom)",
             "name": "cp_judul_masalah",
             "aria-label": "",
             "type": "text",
@@ -662,7 +662,7 @@
         },
         {
             "key": "field_cp_judul_solusi",
-            "label": "Judul Bagian Solusi (SEO / Kustom)",
+            "label": "Judul Bagian Solusi (SEO \/ Kustom)",
             "name": "cp_judul_solusi",
             "aria-label": "",
             "type": "text",
@@ -682,7 +682,7 @@
         },
         {
             "key": "field_cp_judul_hasil_nyata",
-            "label": "Judul Bagian Hasil Nyata Transformasi (SEO / Kustom)",
+            "label": "Judul Bagian Hasil Nyata Transformasi (SEO \/ Kustom)",
             "name": "cp_judul_hasil_nyata",
             "aria-label": "",
             "type": "text",
@@ -708,15 +708,16 @@
             "type": "text",
             "instructions": "Judul utama untuk section Call to Action (CTA) di bagian bawah halaman.",
             "required": 0,
-            "conditional_logic": false,
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
                 "id": ""
             },
-            "placeholder": "Kelola Bisnis Lebih Mudah Bersama Jubelio",
-            "default_value": "",
+            "default_value": "Atasi Tantangan Bisnis dengan Sistem yang Terintegrasi",
+            "translations": "copy_once",
             "maxlength": "",
+            "placeholder": "Kelola Bisnis Lebih Mudah Bersama Jubelio",
             "prepend": "",
             "append": ""
         },
@@ -728,17 +729,18 @@
             "type": "textarea",
             "instructions": "Teks deskripsi pendukung untuk section Call to Action (CTA).",
             "required": 0,
-            "conditional_logic": false,
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
                 "id": ""
             },
+            "default_value": "Atasi Tantangan Bisnis dengan Sistem yang Terintegrasi",
+            "translations": "copy_once",
+            "maxlength": "",
             "rows": 3,
             "placeholder": "Dapatkan kemudahan pengelolaan inventori, sinkronisasi stok otomatis, dan pencatatan laporan keuangan dalam satu sistem terintegrasi.",
-            "default_value": "",
-            "new_lines": "",
-            "maxlength": ""
+            "new_lines": ""
         }
     ],
     "location": [
@@ -759,5 +761,5 @@
     "active": true,
     "description": "Field kustom untuk halaman Cerita Pebisnis Jubelio",
     "show_in_rest": 1,
-    "modified": 1793177890
+    "modified": 1793184490
 }

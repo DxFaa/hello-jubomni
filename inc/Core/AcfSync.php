@@ -24,12 +24,15 @@ class AcfSync {
 		// 1. JSON Save & Load filters
 		add_filter( 'acf/settings/save_json', array( __CLASS__, 'save_point' ) );
 		add_filter( 'acf/settings/load_json', array( __CLASS__, 'load_point' ) );
-		add_filter( 'acf/settings/save_json/key=group_cerita_pebisnis', array( __CLASS__, 'prevent_empty_group_overwrite' ), 10, 2 );
+		add_filter( 'acf/prepare_field_group_for_export', array( __CLASS__, 'safeguard_field_group_json_export' ) );
 
-		// 2. Local Fallback Registration on acf/init (guarantees fields are active on edit screens)
+		// 2. Fallback to ACF field default_value when empty on frontend & Elementor dynamic tags
+		add_filter( 'acf/format_value', array( __CLASS__, 'fallback_to_default_value' ), 10, 3 );
+
+		// 3. Local Fallback Registration on acf/init (frontend only, so WP Admin editor is never conflicted)
 		add_action( 'acf/init', array( __CLASS__, 'register_local_fallback' ), 20 );
 
-		// 3. Admin manual force-sync handler (only on explicit user request)
+		// 4. Admin manual force-sync handler (only on explicit user request)
 		if ( is_admin() ) {
 			add_action( 'admin_action_jubelio_force_acf_sync', array( __CLASS__, 'force_sync_handler' ) );
 			add_action( 'admin_notices', array( __CLASS__, 'admin_sync_notice' ) );
@@ -37,17 +40,45 @@ class AcfSync {
 	}
 
 	/**
-	 * Guard: Prevent saving/overwriting group_cerita_pebisnis.json if fields array is empty
+	 * Automatically fallback to the field's configured default_value when empty.
+	 * Solves the issue where an emptied post field returns "" instead of its default in Elementor dynamic tags.
 	 *
-	 * @param string $path Default save path.
-	 * @param array  $field_group Field group definition.
-	 * @return string|false Path or false to abort save.
+	 * @param mixed      $value Formatted value.
+	 * @param int|string $post_id Post ID.
+	 * @param array      $field Field definition array.
+	 * @return mixed
 	 */
-	public static function prevent_empty_group_overwrite( $path, $field_group ) {
-		if ( ! is_array( $field_group ) || empty( $field_group['fields'] ) ) {
-			return false;
+	public static function fallback_to_default_value( $value, $post_id, $field ) {
+		if ( ( null === $value || '' === $value ) && isset( $field['default_value'] ) && '' !== $field['default_value'] ) {
+			return $field['default_value'];
 		}
-		return $path;
+
+		return $value;
+	}
+
+	/**
+	 * Guard: Prevent saving group_cerita_pebisnis to JSON with an empty fields array.
+	 * If fields are empty for any reason, restores existing fields from disk.
+	 *
+	 * @param array $field_group Field group definition.
+	 * @return array Protected field group.
+	 */
+	public static function safeguard_field_group_json_export( $field_group ) {
+		if ( ! is_array( $field_group ) || empty( $field_group['key'] ) || 'group_cerita_pebisnis' !== $field_group['key'] ) {
+			return $field_group;
+		}
+
+		if ( empty( $field_group['fields'] ) || ! is_array( $field_group['fields'] ) ) {
+			$file = get_stylesheet_directory() . '/acf-json/group_cerita_pebisnis.json';
+			if ( file_exists( $file ) ) {
+				$existing = json_decode( file_get_contents( $file ), true );
+				if ( ! empty( $existing['fields'] ) && is_array( $existing['fields'] ) ) {
+					$field_group['fields'] = $existing['fields'];
+				}
+			}
+		}
+
+		return $field_group;
 	}
 
 	/**
@@ -80,10 +111,14 @@ class AcfSync {
 	}
 
 	/**
-	 * Register local field group as fallback so fields are guaranteed to be active
+	 * Register local field group as fallback on frontend so fields are guaranteed to be active
 	 */
 	public static function register_local_fallback() {
-		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		if ( is_admin() || ! function_exists( 'acf_add_local_field_group' ) ) {
+			return;
+		}
+
+		if ( function_exists( 'acf_get_field_group' ) && acf_get_field_group( 'group_cerita_pebisnis' ) ) {
 			return;
 		}
 
