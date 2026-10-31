@@ -1,18 +1,7 @@
-/**
- * Jubelio Lead & Traffic Attribution Tracker
- *
- * Captures UTM parameters, organic traffic, AI search referrals,
- * decorates outbound registration links, and tracks Bitrix24 traces.
- *
- * Security: Anti-hijack link verification, safe storage guards, and URL sanitization.
- *
- * @package Jubelio
- */
-
 (function () {
 	'use strict';
 
-	const CAMPAIGN_TIMEOUT = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+	const CAMPAIGN_TIMEOUT = 30 * 24 * 60 * 60 * 1000;
 
 	// Safe localStorage helpers (prevents crashes in Private / Incognito mode & prototype tampering)
 	const safeStorage = {
@@ -66,7 +55,6 @@
 		'cmpgn-popupkeuangan': 'merdeka26popupkeuangan'
 	};
 
-	// Standard Contact Form 7 input to localStorage key mapping (original structure)
 	const cf7Inputs = {
 		'utm_source': 'lead_source',
 		'utm_medium': 'lead_medium',
@@ -78,10 +66,7 @@
 		'first_url': 'lead_first_url'
 	};
 
-	/**
-	 * Anti-hijack validator for outbound Jubelio auth URLs
-	 * Prevents open redirect & phishing attacks via startsWith bypasses
-	 */
+	// Prevents open redirect & phishing attacks via startsWith bypasses
 	function isSafeJubelioAuthLink(anchor) {
 		if (!anchor || anchor.tagName.toLowerCase() !== 'a' || !anchor.href) {
 			return false;
@@ -99,9 +84,6 @@
 		}
 	}
 
-	/**
-	 * Anti-hijack validator for official WhatsApp click URLs
-	 */
 	function isSafeWhatsAppLink(anchor) {
 		if (!anchor || anchor.tagName.toLowerCase() !== 'a' || !anchor.href) {
 			return false;
@@ -123,9 +105,6 @@
 		}
 	}
 
-	/**
-	 * Sanitize URL to prevent javascript: or data: URI execution
-	 */
 	function sanitizeUrl(urlStr) {
 		if (!urlStr || typeof urlStr !== 'string') return '';
 		const trimmed = urlStr.trim();
@@ -202,9 +181,6 @@
 		safeStorage.set('b24_crm_guest_utm', JSON.stringify(b24UtmData));
 	}
 
-	/**
-	 * Populate CF7 form inputs safely from localStorage
-	 */
 	function populateFormInputs() {
 		for (const [inputName, lsKey] of Object.entries(cf7Inputs)) {
 			const inputs = document.querySelectorAll(`input[name="${inputName}"]`);
@@ -328,7 +304,6 @@
 
 		syncToBitrix();
 
-		// Bind interaction handlers
 		['mouseover', 'mousedown', 'touchstart', 'click', 'auxclick'].forEach(eventType => {
 			document.body.addEventListener(eventType, function (e) {
 				const interactable = e.target.closest('a, button');
@@ -357,7 +332,6 @@
 
 				syncToBitrix();
 
-				// WhatsApp Conversion Click Interceptor (Protected against URL hijacking)
 				if (eventType === 'click' || eventType === 'auxclick' || (eventType === 'mousedown' && e.button === 2)) {
 					if (isSafeWhatsAppLink(interactable)) {
 						const sendBitrixTrace = function () {
@@ -404,7 +378,6 @@
 					}
 				}
 
-				// Outbound Jubelio Auth Link Decorator (Strictly protected against open redirect & phishing hijack)
 				if (isSafeJubelioAuthLink(interactable)) {
 					try {
 						const urlObj = new URL(interactable.href);
@@ -448,7 +421,6 @@
 		setTimeout(populateFormInputs, 1000);
 		setTimeout(populateFormInputs, 2000);
 
-		// Event listeners to guarantee form inputs are populated before submission
 		document.addEventListener('focusin', function (e) {
 			if (e.target && e.target.closest && e.target.closest('form')) {
 				populateFormInputs();
@@ -564,7 +536,6 @@
 		setTimeout(catchBitrixTrace, 1500);
 	}
 
-	// Initialize on DOM Ready
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', function () {
 			initAttribution();

@@ -22,15 +22,6 @@
 	<?php if ( 'active' == affwp_get_affiliate_status( affwp_get_affiliate_id() ) ) : ?>
 
 		<?php
-		/**
-		 * Fires at the top of the affiliate dashboard.
-		 *
-		 * @since 0.2
-		 * @since 1.8.2 Added the `$active_tab` parameter.
-		 *
-		 * @param int|false $affiliate_id ID for the current affiliate.
-		 * @param string    $active_tab   Slug for the currently-active tab.
-		 */
 		do_action( 'affwp_affiliate_dashboard_top', affwp_get_affiliate_id(), $active_tab );
 		?>
 
@@ -41,15 +32,6 @@
 		<?php endif; ?>
 
 		<?php
-		/**
-		 * Fires inside the affiliate dashboard above the tabbed interface.
-		 *
-		 * @since 0.2
-		 * @since 1.8.2 Added the `$active_tab` parameter.
-		 *
-		 * @param int|false $affiliate_id ID for the current affiliate.
-		 * @param string    $active_tab   Slug for the currently-active tab.
-		 */
 		do_action( 'affwp_affiliate_dashboard_notices', affwp_get_affiliate_id(), $active_tab );
 		?>
 
@@ -68,15 +50,6 @@
 				<?php endforeach;
 			}
 
-			/**
-			 * Fires immediately after core Affiliate Area tabs are output,
-			 * but before the 'Log Out' tab is output (if enabled).
-			 *
-			 * @since 1.0
-			 *
-			 * @param int    $affiliate_id ID of the current affiliate.
-			 * @param string $active_tab   Slug of the active tab.
-			 */
 			do_action( 'affwp_affiliate_dashboard_tabs', affwp_get_affiliate_id(), $active_tab );
 			?>
 
@@ -95,15 +68,6 @@
 		?>
 
 		<?php
-		/**
-		 * Fires at the bottom of the affiliate dashboard.
-		 *
-		 * @since 0.2
-		 * @since 1.8.2 Added the `$active_tab` parameter.
-		 *
-		 * @param int|false $affiliate_id ID for the current affiliate.
-		 * @param string    $active_tab   Slug for the currently-active tab.
-		 */
 		do_action( 'affwp_affiliate_dashboard_bottom', affwp_get_affiliate_id(), $active_tab );
 		?>
 

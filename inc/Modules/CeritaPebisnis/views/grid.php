@@ -1,15 +1,4 @@
 <?php
-/**
- * View Partial: Cerita Pebisnis Section Grid & Touch Slider
- *
- * @package Jubelio
- * @var array  $items Array of normalized card items.
- * @var array  $industries Array of industry slug => name pairs.
- * @var array  $settings Widget settings.
- * @var array  $swiper_config Swiper config array.
- * @var string $layout_type 'slider' or 'grid'.
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

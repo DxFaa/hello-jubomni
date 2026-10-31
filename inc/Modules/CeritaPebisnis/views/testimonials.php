@@ -1,14 +1,4 @@
 <?php
-/**
- * View Partial: Cerita Pebisnis Testimonials (Kata Pelanggan Tentang Jubelio)
- * Interactive Centered Slider with Dynamic Bullets & Side Peeking Cards
- *
- * @package Jubelio
- * @var array $items List of normalized testimonial card items.
- * @var array $settings Widget settings.
- * @var array $swiper_config Swiper JSON configuration array.
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -88,7 +78,6 @@ $show_pagination  = ! isset( $settings['show_pagination'] ) || 'yes' === $settin
 						<div class="swiper-slide jubelio-testimonial-slide">
 							<a href="<?php echo esc_url( $target_link ); ?>" class="jubelio-testimonial-card" aria-label="<?php echo esc_attr( $author_name . ' - ' . $client_name ); ?>">
 
-								<?php /* Left Media Column: Client Photo with Overlapping Logo Badge */ ?>
 								<div class="jubelio-testimonial-media">
 									<?php if ( ! empty( $img_url ) ) : ?>
 										<img src="<?php echo esc_url( $img_url ); ?>" alt="<?php echo esc_attr( $author_name ); ?>" class="jubelio-testimonial-photo" loading="lazy" decoding="async" />
@@ -113,7 +102,6 @@ $show_pagination  = ! isset( $settings['show_pagination'] ) || 'yes' === $settin
 									<?php endif; ?>
 								</div>
 
-								<?php /* Right Content Column: Quote and Author Info */ ?>
 								<div class="jubelio-testimonial-content">
 									<?php if ( ! empty( $quote_text ) ) : ?>
 										<blockquote class="jubelio-testimonial-quote">

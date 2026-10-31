@@ -6,11 +6,6 @@ affiliate_wp()->login->print_errors();
 
 <form id="affwp-login-form" class="affwp-form" action="" method="post">
 	<?php
-	/**
-	 * Fires at the top of the affiliate login form template
-	 *
-	 * @since 1.0
-	 */
 	do_action( 'affwp_affiliate_login_form_top' );
 	?>
 
@@ -18,11 +13,6 @@ affiliate_wp()->login->print_errors();
 		<legend><?php _e( 'Log into your account', 'affiliate-wp' ); ?></legend>
 
 		<?php
-		/**
-		 * Fires immediately prior to the affiliate login form template fields.
-		 *
-		 * @since 1.0
-		 */
 		do_action( 'affwp_login_fields_before' );
 		?>
 
@@ -51,21 +41,11 @@ affiliate_wp()->login->print_errors();
 		</p>
 
 		<?php
-		/**
-		 * Fires immediately after the affiliate login form template fields.
-		 *
-		 * @since 1.0
-		 */
 		do_action( 'affwp_login_fields_after' );
 		?>
 	</fieldset>
 
 	<?php
-	/**
-	 * Fires at the bottom of the affiliate login form template (inside the form element).
-	 *
-	 * @since 1.0
-	 */
 	do_action( 'affwp_affiliate_login_form_bottom' );
 	?>
 </form>

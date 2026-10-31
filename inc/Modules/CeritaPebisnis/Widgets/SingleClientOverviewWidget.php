@@ -1,15 +1,4 @@
 <?php
-/**
- * Elementor Widget: Cerita Pebisnis Single Post Client Profile & Problem-Solution Section
- *
- * Displays:
- * 1. "Profil Klien" Heading
- * 2. Spec Box: Brand Logo, Lokasi, Industri, Produk Jubelio yang Digunakan (dynamic links), Fitur yang Digunakan (dynamic links)
- * 3. Overview Paragraph
- * 4. 2-Column Problem & Solution Cards (Masalah with red X items, Solusi with green checkmark items)
- *
- * @package Jubelio
- */
 
 namespace Jubelio\Modules\CeritaPebisnis\Widgets;
 
@@ -54,12 +43,8 @@ class SingleClientOverviewWidget extends Widget_Base {
 		return array( 'jubelio-cerita-pebisnis' );
 	}
 
-	/**
-	 * Register Widget Controls
-	 */
 	protected function register_controls() {
 
-		// ==================== SECTION: PROFIL KLIEN ====================
 		$this->start_controls_section(
 			'section_profile_content',
 			array(
@@ -192,7 +177,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			)
 		);
 
-		// Produk Digunakan Repeater
 		$prod_repeater = new Repeater();
 		$prod_repeater->add_control(
 			'product_name',
@@ -244,7 +228,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			)
 		);
 
-		// Fitur Digunakan Repeater
 		$feat_repeater = new Repeater();
 		$feat_repeater->add_control(
 			'feature_name',
@@ -311,7 +294,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: MASALAH & SOLUSI ====================
 		$this->start_controls_section(
 			'section_problem_solution_content',
 			array(
@@ -348,7 +330,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			)
 		);
 
-		// --- KARTU MASALAH ---
 		$this->add_control(
 			'heading_problem_card',
 			array(
@@ -418,7 +399,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			)
 		);
 
-		// --- KARTU SOLUSI ---
 		$this->add_control(
 			'heading_solution_card',
 			array(
@@ -490,7 +470,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: SECTION STYLES ====================
 		$this->start_controls_section(
 			'section_style_cards',
 			array(
@@ -591,18 +570,13 @@ class SingleClientOverviewWidget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/**
-	 * Render Widget Output
-	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		$post_id  = get_the_ID();
 		$post_data = Model::get( $post_id );
 
-		// 1. Resolve Profile Data
 		$is_custom_profile = ( 'custom' === $settings['profile_data_source'] );
 
-		// Logo & Aspect-Ratio Optical Sizing
 		$logo_url    = '';
 		$logo_width  = 0;
 		$logo_height = 0;
@@ -637,7 +611,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			}
 		}
 
-		// Location
 		$location = '';
 		if ( $is_custom_profile && ! empty( $settings['custom_location_value'] ) ) {
 			$location = $settings['custom_location_value'];
@@ -645,7 +618,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			$location = ! empty( $post_data['location'] ) ? $post_data['location'] : 'Indonesia';
 		}
 
-		// Industry
 		$industry = '';
 		if ( $is_custom_profile && ! empty( $settings['custom_industry_value'] ) ) {
 			$industry = $settings['custom_industry_value'];
@@ -653,7 +625,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			$industry = ! empty( $post_data['industry_display'] ) ? $post_data['industry_display'] : ( ! empty( $post_data['industry_name'] ) ? $post_data['industry_name'] : 'Bisnis Retail' );
 		}
 
-		// Products Used
 		$products = array();
 		if ( $is_custom_profile && ! empty( $settings['custom_products_list'] ) ) {
 			foreach ( $settings['custom_products_list'] as $item ) {
@@ -667,7 +638,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 		} elseif ( ! empty( $post_data['products_used'] ) ) {
 			$products = $post_data['products_used'];
 		} else {
-			// Fallback sample products
 			$products = array(
 				array( 'name' => 'Jubelio Omnichannel', 'link' => '/omnichannel/' ),
 				array( 'name' => 'Jubelio POS', 'link' => '/pos/' ),
@@ -675,7 +645,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			);
 		}
 
-		// Features Used
 		$features = array();
 		if ( $is_custom_profile && ! empty( $settings['custom_features_list'] ) ) {
 			foreach ( $settings['custom_features_list'] as $item ) {
@@ -689,7 +658,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 		} elseif ( ! empty( $post_data['features_used'] ) ) {
 			$features = $post_data['features_used'];
 		} else {
-			// Fallback sample features
 			$features = array(
 				array( 'name' => 'Inventory', 'link' => '/fitur/inventory/' ),
 				array( 'name' => 'Gudang (WMS)', 'link' => '/fitur/gudang-wms/' ),
@@ -697,7 +665,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			);
 		}
 
-		// Overview Text
 		$overview = '';
 		if ( $is_custom_profile && ! empty( $settings['custom_overview_text'] ) ) {
 			$overview = $settings['custom_overview_text'];
@@ -705,10 +672,8 @@ class SingleClientOverviewWidget extends Widget_Base {
 			$overview = ! empty( $post_data['overview'] ) ? $post_data['overview'] : ( ! empty( $post_data['description'] ) ? $post_data['description'] : '' );
 		}
 
-		// 2. Resolve Problems & Solutions Data
 		$is_custom_probsol = ( 'custom' === $settings['prob_sol_data_source'] );
 
-		// Problem Card
 		if ( ! empty( $post_data['title_problem'] ) ) {
 			$prob_title = $post_data['title_problem'];
 		} elseif ( ! empty( $settings['problem_title'] ) ) {
@@ -742,7 +707,6 @@ class SingleClientOverviewWidget extends Widget_Base {
 			);
 		}
 
-		// Solution Card
 		if ( ! empty( $post_data['title_solution'] ) ) {
 			$sol_title = $post_data['title_solution'];
 		} elseif ( ! empty( $settings['solution_title'] ) ) {

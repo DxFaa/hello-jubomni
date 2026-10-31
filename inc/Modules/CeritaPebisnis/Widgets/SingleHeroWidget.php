@@ -1,15 +1,4 @@
 <?php
-/**
- * Elementor Widget: Cerita Pebisnis Single Post Hero Video Section
- *
- * Displays:
- * 1. SEO-friendly H1 Headline (Dynamic from post / ACF or custom)
- * 2. Subheadline / Lead summary
- * 3. High-performance LCP-optimized Video Card (eager high-priority thumbnail placeholder with inline play button)
- * 4. Button linking back to the Cerita Pebisnis archive (/cerita-pebisnis/)
- *
- * @package Jubelio
- */
 
 namespace Jubelio\Modules\CeritaPebisnis\Widgets;
 
@@ -54,12 +43,8 @@ class SingleHeroWidget extends Widget_Base {
 		return array( 'jubelio-cerita-pebisnis' );
 	}
 
-	/**
-	 * Register Widget Controls
-	 */
 	protected function register_controls() {
 
-		// ==================== SECTION: HEADLINE & SUBHEADLINE ====================
 		$this->start_controls_section(
 			'section_header_content',
 			array(
@@ -139,7 +124,6 @@ class SingleHeroWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: VIDEO & THUMBNAIL (LCP OPTIMIZED) ====================
 		$this->start_controls_section(
 			'section_video_content',
 			array(
@@ -240,7 +224,6 @@ class SingleHeroWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: NAVIGATION BUTTON (/cerita-pebisnis/) ====================
 		$this->start_controls_section(
 			'section_nav_button',
 			array(
@@ -307,7 +290,6 @@ class SingleHeroWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: SECTION & CONTAINER ====================
 		$this->start_controls_section(
 			'section_style_container',
 			array(
@@ -337,7 +319,6 @@ class SingleHeroWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: HEADLINE ====================
 		$this->start_controls_section(
 			'section_style_headline',
 			array(
@@ -389,7 +370,6 @@ class SingleHeroWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: SUBHEADLINE ====================
 		$this->start_controls_section(
 			'section_style_subheadline',
 			array(
@@ -441,7 +421,6 @@ class SingleHeroWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: VIDEO BOX & PLAY BUTTON ====================
 		$this->start_controls_section(
 			'section_style_video_box',
 			array(
@@ -556,7 +535,6 @@ class SingleHeroWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: NAVIGATION BUTTON ====================
 		$this->start_controls_section(
 			'section_style_nav_btn',
 			array(
@@ -625,9 +603,6 @@ class SingleHeroWidget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/**
-	 * Extract YouTube Video ID from any URL format
-	 */
 	protected function extract_youtube_id( $url ) {
 		if ( empty( $url ) ) {
 			return false;
@@ -641,14 +616,10 @@ class SingleHeroWidget extends Widget_Base {
 		return false;
 	}
 
-	/**
-	 * Render Widget Output
-	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		$post_id  = get_the_ID();
 
-		// 1. Resolve Headline
 		$headline = '';
 		if ( 'custom' === $settings['headline_source'] && ! empty( $settings['custom_headline'] ) ) {
 			$headline = $settings['custom_headline'];
@@ -668,7 +639,6 @@ class SingleHeroWidget extends Widget_Base {
 		$allowed_tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p' );
 		$tag          = ( ! empty( $settings['headline_tag'] ) && in_array( $settings['headline_tag'], $allowed_tags, true ) ) ? $settings['headline_tag'] : 'h1';
 
-		// 2. Resolve Subheadline
 		$subheadline = '';
 		if ( 'custom' === $settings['subheadline_source'] && ! empty( $settings['custom_subheadline'] ) ) {
 			$subheadline = $settings['custom_subheadline'];
@@ -681,7 +651,6 @@ class SingleHeroWidget extends Widget_Base {
 			}
 		}
 
-		// 3. Resolve Video URL
 		$video_url = '';
 		if ( 'custom' === $settings['video_source'] && ! empty( $settings['custom_video_url'] ) ) {
 			$video_url = $settings['custom_video_url'];
@@ -699,16 +668,13 @@ class SingleHeroWidget extends Widget_Base {
 
 		$yt_id = $this->extract_youtube_id( $video_url );
 
-		// 4. Resolve Thumbnail / Placeholder Image (Core Web Vitals & LCP Optimized)
 		$thumbnail_url = '';
 		if ( 'custom' === $settings['thumbnail_source'] && ! empty( $settings['custom_thumbnail']['url'] ) ) {
 			$thumbnail_url = $settings['custom_thumbnail']['url'];
 		} else {
-			// Priority 1: Featured Image
 			if ( has_post_thumbnail( $post_id ) ) {
 				$thumbnail_url = get_the_post_thumbnail_url( $post_id, 'full' );
 			}
-			// Priority 2: ACF Foto Toko
 			if ( empty( $thumbnail_url ) && function_exists( 'get_field' ) ) {
 				$foto = get_field( 'cp_foto_toko', $post_id );
 				if ( is_array( $foto ) && isset( $foto['url'] ) ) {
@@ -717,13 +683,11 @@ class SingleHeroWidget extends Widget_Base {
 					$thumbnail_url = $foto;
 				}
 			}
-			// Priority 3: Auto-fetch YouTube Maxres thumbnail
 			if ( empty( $thumbnail_url ) && $yt_id ) {
 				$thumbnail_url = 'https://i.ytimg.com/vi/' . $yt_id . '/maxresdefault.jpg';
 			}
 		}
 
-		// Fallback placeholder image
 		if ( empty( $thumbnail_url ) ) {
 			$thumbnail_url = get_stylesheet_directory_uri() . '/assets/img/hero-video-placeholder.jpg';
 		}

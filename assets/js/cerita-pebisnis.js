@@ -1,14 +1,6 @@
-/**
- * Jubelio - Cerita Pebisnis Interactive Script
- * Handles Unified Segmented Pill Filtering, Swiper Touch Slider & Dynamic Bullets Pagination
- */
-
 (function($) {
 	'use strict';
 
-	/**
-	 * Initialize Cerita Pebisnis Slider & Unified Pill Filters
-	 */
 	function initCeritaPebisnis($scope) {
 		var $sections = $scope ? $scope.find('.jubelio-cerita-grid-section') : $('.jubelio-cerita-grid-section');
 
@@ -19,7 +11,6 @@
 			var isSlider = (layoutType === 'slider') && $swiperEl.length;
 			var swiperInstance = null;
 
-			// Cached DOM slide elements for fast, non-destructive filtering
 			var $swiperWrapper = isSlider ? $swiperEl.find('.swiper-wrapper') : null;
 			var allSlidesArray = [];
 			if (isSlider && $swiperWrapper && $swiperWrapper.length) {
@@ -28,7 +19,6 @@
 				});
 			}
 
-			// 1. Initialize Swiper Touch Slider with Dynamic Bullets Pagination
 			if (isSlider && typeof Swiper !== 'undefined') {
 				var configAttr = $swiperEl.attr('data-swiper-config');
 				var customConfig = {};
@@ -40,7 +30,6 @@
 					customConfig = {};
 				}
 
-				// Find navigation buttons scoped to this widget instance
 				var $nextBtn = $section.find('.jubelio-slider-next');
 				var $prevBtn = $section.find('.jubelio-slider-prev');
 				var $pagination = $section.find('.jubelio-swiper-pagination');
@@ -81,7 +70,6 @@
 
 				var swiperOptions = $.extend(true, swiperDefaultOptions, customConfig);
 
-				// Universally connect both desktop and mobile navigation buttons
 				// Guard with !swiperInstance.animating to ensure exactly ONE card slides per click
 				$nextBtn.off('click.jubelioNav').on('click.jubelioNav', function(e) {
 					e.preventDefault();
@@ -96,14 +84,12 @@
 					}
 				});
 
-				// Destroy previous instance if re-initializing in Elementor editor
 				if ($swiperEl[0].swiper) {
 					$swiperEl[0].swiper.destroy(true, true);
 				}
 
 				swiperInstance = new Swiper($swiperEl[0], swiperOptions);
 
-				// Sync custom button disabled states
 				function syncNavButtons() {
 					if (!swiperInstance) return;
 					var isBeg = swiperInstance.isBeginning;
@@ -137,7 +123,6 @@
 				}
 			}
 
-			// 2. Unified Segmented Pill Filter Interaction (Single Active Pill State)
 			var $pillBtns = $section.find('.jubelio-filter-pill-btn');
 			var $slides = isSlider ? $section.find('.swiper-slide') : $section.find('.jubelio-grid-card');
 
@@ -146,12 +131,10 @@
 				var $btn = $(this);
 				var filter = $btn.attr('data-filter');
 
-				// Strictly only ONE active button; all others return to default state
 				$pillBtns.removeClass('active').attr('aria-selected', 'false');
 				$btn.addClass('active').attr('aria-selected', 'true');
 
 				if (isSlider && swiperInstance && allSlidesArray.length) {
-					// Clean non-destructive slide filtering for Swiper
 					$swiperWrapper.empty();
 					for (var i = 0; i < allSlidesArray.length; i++) {
 						var slideEl = allSlidesArray[i];
@@ -161,12 +144,10 @@
 						}
 					}
 
-					// Recalculate slider track, dynamic bullets pagination, and reset to slide 1
 					swiperInstance.update();
 					swiperInstance.slideTo(0, 300);
 					syncNavButtons();
 				} else if (!isSlider) {
-					// Classic Grid Filter with Load More synchronization
 					var $gridContainer = $section.find('.jubelio-grid-cards-container');
 					var isLoadMore = $gridContainer.attr('data-load-more') === 'yes';
 					var initialLimit = parseInt($gridContainer.attr('data-initial'), 10) || 6;
@@ -191,7 +172,6 @@
 						}
 					});
 
-					// Update Load More button visibility for classic grid
 					if (isLoadMore) {
 						if (matchCount > initialLimit) {
 							$loadMoreWrap.fadeIn(200);
@@ -202,7 +182,6 @@
 				}
 			});
 
-			// 3. Load More Click Event (Classic Grid Only)
 			var $loadMoreBtn = $section.find('.jubelio-grid-load-more-btn');
 
 			$loadMoreBtn.off('click').on('click', function(e) {
@@ -245,9 +224,6 @@
 		});
 	}
 
-	/**
-	 * Initialize Metrics Cards Interactive Count-Up Animation
-	 */
 	function initMetricsSection($scope) {
 		var $sections = $scope ? $scope.find('.jubelio-metrics-section') : $('.jubelio-metrics-section');
 
@@ -344,7 +320,6 @@
 				});
 			}
 
-			// Trigger on Viewport Entry with IntersectionObserver
 			if ('IntersectionObserver' in window) {
 				var observer = new IntersectionObserver(function(entries) {
 					entries.forEach(function(entry) {
@@ -364,9 +339,6 @@
 		});
 	}
 
-	/**
-	 * Initialize Cerita Pebisnis Testimonials Centered Slider & Dynamic Bullets
-	 */
 	function initTestimonialsSection($scope) {
 		var $sections = $scope ? $scope.find('.jubelio-testimonials-section') : $('.jubelio-testimonials-section');
 
@@ -391,7 +363,6 @@
 			var isDynamicBullets = (customConfig.dynamicPagination !== false);
 			var slideCount = $swiperEl.find('.swiper-slide').length;
 
-			// Loop is supported when there are at least 3 slides
 			var canLoop = (slideCount >= 3);
 
 			var swiperOptions = {
@@ -439,14 +410,12 @@
 				};
 			}
 
-			// Destroy previous instance in Elementor editor
 			if ($swiperEl[0].swiper) {
 				$swiperEl[0].swiper.destroy(true, true);
 			}
 
 			var swiperInstance = new Swiper($swiperEl[0], swiperOptions);
 
-			// Synchronize button disabled states when loop is disabled
 			function syncNavButtons() {
 				if (!swiperInstance || canLoop) return;
 				var isBeg = swiperInstance.isBeginning;
@@ -455,7 +424,6 @@
 				$nextBtn.prop('disabled', isEnd).toggleClass('swiper-button-disabled', isEnd);
 			}
 
-			// Exactly ONE card slides per click
 			$nextBtn.off('click.jubelioTestimonialNav').on('click.jubelioTestimonialNav', function(e) {
 				e.preventDefault();
 				if (swiperInstance && !swiperInstance.animating && !$(this).prop('disabled') && !$(this).hasClass('swiper-button-disabled')) {
@@ -477,10 +445,6 @@
 		});
 	}
 
-	/**
-	 * Initialize Cerita Pebisnis Single Post Hero Video Section
-	 * High-performance LCP & Core Web Vitals inline embed player
-	 */
 	function initSingleHeroSection($scope) {
 		var $sections = $scope ? $scope.find('.jubelio-single-hero-section') : $('.jubelio-single-hero-section');
 
@@ -548,7 +512,6 @@
 				$videoBox.addClass('is-playing');
 			}
 
-			// Play on clicking button or video container
 			$playBtn.off('click.jubelioPlay').on('click.jubelioPlay', function(e) {
 				e.preventDefault();
 				e.stopPropagation();
@@ -564,10 +527,7 @@
 		});
 	}
 
-	/**
-	 * Initialize Client Overview Dynamic Logo Optical Scaling
-	 * Ensures 1:1 square & portrait logos scale up proportionally relative to landscape logos
-	 */
+	// Scale 1:1 and portrait client logos optically so their visual area matches landscape logos.
 	function initClientOverviewSection($scope) {
 		var $sections = $scope ? $scope.find('.jubelio-client-overview-section') : $('.jubelio-client-overview-section');
 
@@ -604,7 +564,6 @@
 		});
 	}
 
-	// Document Ready
 	$(document).ready(function() {
 		initCeritaPebisnis();
 		initMetricsSection();
@@ -613,7 +572,6 @@
 		initClientOverviewSection();
 	});
 
-	// Elementor Live Editor Support
 	$(window).on('elementor/frontend/init', function() {
 		if (window.elementorFrontend && elementorFrontend.hooks) {
 			elementorFrontend.hooks.addAction('frontend/element_ready/jubelio_cerita_pebisnis_grid.default', function($scope) {

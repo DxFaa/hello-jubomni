@@ -1,10 +1,4 @@
 <?php
-/**
- * Post Type and Taxonomy Registration: Cerita Pebisnis
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Modules\CeritaPebisnis;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +12,6 @@ class PostType {
 	}
 
 	public static function register() {
-		// Register 'industri' taxonomy if not already registered by ACF Pro
 		if ( ! taxonomy_exists( 'industri' ) ) {
 			register_taxonomy(
 				'industri',
@@ -45,7 +38,6 @@ class PostType {
 			);
 		}
 
-		// Register 'cerita-pebisnis' post type if not already registered by ACF Pro
 		if ( ! post_type_exists( 'cerita-pebisnis' ) ) {
 			register_post_type(
 				'cerita-pebisnis',

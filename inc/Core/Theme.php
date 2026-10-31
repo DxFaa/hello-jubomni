@@ -1,10 +1,4 @@
 <?php
-/**
- * Master Theme Bootstrapper / Kernel
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,17 +17,12 @@ use Jubelio\Modules\Ebook\PostType as EbookPostType;
 
 class Theme {
 
-	/**
-	 * Boot all core services and feature modules
-	 */
 	public static function init() {
-		// 1. Core Services & Performance
 		AcfSync::init();
 		Enqueue::init();
 		AdminCleanup::init();
 		Performance::init();
 
-		// 2. Integrations
 		ContactForm7::init();
 		Tracking::init();
 		Bitrix24::init();
@@ -41,10 +30,8 @@ class Theme {
 		ElementorQueries::init();
 		ElementorManager::init();
 
-		// 3. Shortcodes
 		LegacyShortcodes::init();
 
-		// 4. Feature Modules (Vertical Slices)
 		CeritaPebisnisModule::init();
 		EbookPostType::init();
 	}

@@ -46,11 +46,6 @@ if ( is_user_logged_in() ) {
 
 <form id="affwp-register-form" class="affwp-form" action="" method="post">
 	<?php
-	/**
-	 * Fires at the top of the affiliate registration templates' form (inside the form element).
-	 *
-	 * @since 1.0
-	 */
 	do_action( 'affwp_affiliate_register_form_top' );
 	?>
 
@@ -58,11 +53,6 @@ if ( is_user_logged_in() ) {
 		<legend><?php _e( 'Register a new affiliate account', 'affiliate-wp' ); ?></legend>
 
 		<?php
-		/**
-		 * Fires just before the affiliate registration templates' form fields.
-		 *
-		 * @since 1.0
-		 */
 		do_action( 'affwp_register_fields_before' );
 		?>
 
@@ -111,11 +101,6 @@ if ( is_user_logged_in() ) {
 		<?php endif; ?>
 
 		<?php
-		/**
-		 * Fires just before the terms of service field within the affiliate registration form template.
-		 *
-		 * @since 1.0
-		 */
 		do_action( 'affwp_register_fields_before_tos' );
 		?>
 
@@ -139,11 +124,6 @@ if ( is_user_logged_in() ) {
 		<?php endif; ?>
 
 		<?php
-		/**
-		 * Fires inside of the affiliate registration form template (inside the form element, prior to the submit button).
-		 *
-		 * @since 1.0
-		 */
 		do_action( 'affwp_register_fields_before_submit' );
 		?>
 
@@ -192,21 +172,11 @@ if ( is_user_logged_in() ) {
 		</p>
 
 		<?php
-		/**
-		 * Fires inside of the affiliate registration form template (inside the form element, after the submit button).
-		 *
-		 * @since 1.0
-		 */
 		do_action( 'affwp_register_fields_after' );
 		?>
 	</fieldset>
 
 	<?php
-	/**
-	 * Fires at the bottom of the affiliate registration form template (inside the form element).
-	 *
-	 * @since 1.0
-	 */
 	do_action( 'affwp_affiliate_register_form_bottom' );
 	?>
 </form>

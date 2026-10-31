@@ -1,21 +1,4 @@
 <?php
-/**
- * Elementor Widget: Cerita Pebisnis Single Post Quote / Testimonial Section
- *
- * Displays:
- * 1. Centered client quote in quotation marks (dynamic from ACF / post data with custom override)
- * 2. Author/Spokesperson Name (e.g. Hansa Artupas)
- * 3. Author/Spokesperson Role / Company (e.g. Owner Cuit BabyWear)
- *
- * Consistent with design system:
- * - Clean text-centered quote layout (no card box, no border-radius, no padding, transparent background)
- * - Zero added outer container padding (sits flush in Elementor containers)
- * - 24px default gap between quote text and author info
- * - No custom font styles or sizing overrides (inherits Elementor Kit typography)
- * - Zero HTML comment output
- *
- * @package Jubelio
- */
 
 namespace Jubelio\Modules\CeritaPebisnis\Widgets;
 
@@ -57,12 +40,8 @@ class SingleQuoteWidget extends Widget_Base {
 		return array( 'jubelio-cerita-pebisnis' );
 	}
 
-	/**
-	 * Register Widget Controls
-	 */
 	protected function register_controls() {
 
-		// ==================== CONTENT: QUOTE ====================
 		$this->start_controls_section(
 			'section_content_quote',
 			array(
@@ -220,7 +199,6 @@ class SingleQuoteWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: TATA LETAK & JARAK ====================
 		$this->start_controls_section(
 			'section_style_layout',
 			array(
@@ -253,7 +231,6 @@ class SingleQuoteWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: WARNA TEKS ====================
 		$this->start_controls_section(
 			'section_style_colors',
 			array(
@@ -300,7 +277,6 @@ class SingleQuoteWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE: FOTO PROFIL / AVATAR ====================
 		$this->start_controls_section(
 			'section_style_avatar',
 			array(
@@ -385,15 +361,11 @@ class SingleQuoteWidget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/**
-	 * Render Widget Output
-	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		$post_id  = get_the_ID();
 		$post_data = Model::get( $post_id );
 
-		// 1. Resolve Quote Text
 		$quote_text = '';
 		if ( 'custom' === $settings['data_source'] && ! empty( $settings['custom_quote_text'] ) ) {
 			$quote_text = $settings['custom_quote_text'];
@@ -405,7 +377,6 @@ class SingleQuoteWidget extends Widget_Base {
 			$quote_text = __( 'Dengan sistem Jubelio yang terintegrasi otomatis, pengelolaan operasional ribuan pesanan per hari menjadi jauh lebih cepat dan akurat tanpa perlu khawatir stok selisih lagi.', 'hello-elementor-child' );
 		}
 
-		// 2. Resolve Author Name
 		$author_name = '';
 		if ( 'custom' === $settings['data_source'] && ! empty( $settings['custom_author_name'] ) ) {
 			$author_name = $settings['custom_author_name'];
@@ -413,7 +384,6 @@ class SingleQuoteWidget extends Widget_Base {
 			$author_name = ! empty( $post_data['client_person_name'] ) ? $post_data['client_person_name'] : $post_data['client_name'];
 		}
 
-		// 3. Resolve Author Role / Company
 		$author_role = '';
 		if ( 'custom' === $settings['data_source'] && ! empty( $settings['custom_author_role'] ) ) {
 			$author_role = $settings['custom_author_role'];
@@ -421,7 +391,6 @@ class SingleQuoteWidget extends Widget_Base {
 			$author_role = ! empty( $post_data['client_person_role'] ) ? $post_data['client_person_role'] : '';
 		}
 
-		// 4. Resolve Author Avatar / Photo
 		$author_avatar = '';
 		$show_avatar   = ( 'yes' === $settings['show_author_avatar'] );
 		if ( $show_avatar ) {

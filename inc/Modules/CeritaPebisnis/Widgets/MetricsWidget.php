@@ -1,10 +1,4 @@
 <?php
-/**
- * Elementor Widget: Cerita Pebisnis Metrics Section (Angka yang Bicara)
- * Supports Curved Fan Arc Layout (matching Reference Image) & Classic 2-Column Split
- *
- * @package Jubelio
- */
 
 namespace Jubelio\Modules\CeritaPebisnis\Widgets;
 
@@ -49,12 +43,8 @@ class MetricsWidget extends Widget_Base {
 		return array( 'jubelio-cerita-pebisnis' );
 	}
 
-	/**
-	 * Register Widget Controls
-	 */
 	protected function register_controls() {
 
-		// ==================== SECTION: LAYOUT & STRUKTUR ====================
 		$this->start_controls_section(
 			'section_layout_settings',
 			array(
@@ -107,7 +97,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: HEADER COPY ====================
 		$this->start_controls_section(
 			'section_header_content',
 			array(
@@ -181,7 +170,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: METRICS CARDS REPEATER ====================
 		$this->start_controls_section(
 			'section_metrics_list',
 			array(
@@ -342,7 +330,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: HEADER ====================
 		$this->start_controls_section(
 			'section_style_header',
 			array(
@@ -415,7 +402,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: OUTER GLASS CONTAINER ====================
 		$this->start_controls_section(
 			'section_style_glass_container',
 			array(
@@ -488,7 +474,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: KARTU METRIK & HOVER COLOR ====================
 		$this->start_controls_section(
 			'section_style_cards',
 			array(
@@ -499,7 +484,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->start_controls_tabs( 'tabs_cards_style' );
 
-		// Tab Normal
 		$this->start_controls_tab(
 			'tab_cards_normal',
 			array(
@@ -559,7 +543,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_tab();
 
-		// Tab Hover (Change Color on Hover!)
 		$this->start_controls_tab(
 			'tab_cards_hover',
 			array(
@@ -643,7 +626,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: ANGKA & LABEL ====================
 		$this->start_controls_section(
 			'section_style_numbers',
 			array(
@@ -695,7 +677,6 @@ class MetricsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: IKON ====================
 		$this->start_controls_section(
 			'section_style_icons',
 			array(
@@ -735,9 +716,6 @@ class MetricsWidget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/**
-	 * Render Widget HTML
-	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		include dirname( __DIR__ ) . '/views/metrics.php';

@@ -1,10 +1,4 @@
 <?php
-/**
- * Contact Form 7 Dynamic Hierarchies & Select2
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Integrations;
 
 if ( ! defined( 'ABSPATH' ) ) {

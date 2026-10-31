@@ -1,10 +1,4 @@
 <?php
-/**
- * Elementor Widget: Cerita Pebisnis Cards Grid (Filterable by Industri)
- * Matches Jubelio Wireframe Section: "PILIH BERDASARKAN INDUSTRI"
- *
- * @package Jubelio
- */
 
 namespace Jubelio\Modules\CeritaPebisnis\Widgets;
 
@@ -49,9 +43,6 @@ class GridWidget extends Widget_Base {
 		return array( 'jubelio-cerita-pebisnis' );
 	}
 
-	/**
-	 * Get industry terms for dropdown control
-	 */
 	protected function get_industry_options() {
 		$options = array( '' => __( 'Semua Industri', 'hello-elementor-child' ) );
 		$terms   = get_terms( array(
@@ -66,12 +57,8 @@ class GridWidget extends Widget_Base {
 		return $options;
 	}
 
-	/**
-	 * Register Widget Controls
-	 */
 	protected function register_controls() {
 
-		// ==================== SECTION: HEADER & FILTER ====================
 		$this->start_controls_section(
 			'section_header_filter',
 			array(
@@ -172,7 +159,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: QUERY ====================
 		$this->start_controls_section(
 			'section_query',
 			array(
@@ -233,7 +219,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: LAYOUT & SLIDER NAVBAR ====================
 		$this->start_controls_section(
 			'section_layout_slider',
 			array(
@@ -333,7 +318,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: GRID & CARD CONTENT ====================
 		$this->start_controls_section(
 			'section_card_elements',
 			array(
@@ -491,7 +475,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: ACF FIELD MAPPING ====================
 		$this->start_controls_section(
 			'section_acf_keys',
 			array(
@@ -555,8 +538,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: EYEBROW & TABS ====================
-		// ==================== STYLE TAB: EYEBROW & UNIFIED PILLS ====================
 		$this->start_controls_section(
 			'section_style_header',
 			array(
@@ -734,7 +715,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: SLIDER NAVBAR & CONTROLS ====================
 		$this->start_controls_section(
 			'section_style_slider_nav',
 			array(
@@ -856,7 +836,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: KARTU (CARD) ====================
 		$this->start_controls_section(
 			'section_style_card',
 			array(
@@ -907,7 +886,6 @@ class GridWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: TYPOGRAPHY & COLORS ====================
 		$this->start_controls_section(
 			'section_style_typography',
 			array(
@@ -1038,15 +1016,11 @@ class GridWidget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/**
-	 * Direct Native Render with View Delegation
-	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
 		$layout_type = ! empty( $settings['layout_type'] ) ? $settings['layout_type'] : 'slider';
 
-		// Query Args: In slider mode or when Load More is enabled, query all posts (-1)
 		$is_load_more      = ( 'grid' === $layout_type ) && ( ! isset( $settings['enable_load_more'] ) || 'yes' === $settings['enable_load_more'] );
 		$posts_count       = isset( $settings['posts_per_page'] ) ? intval( $settings['posts_per_page'] ) : 6;
 		$posts_query_limit = ( 'slider' === $layout_type || $is_load_more || -1 === $posts_count || 0 === $posts_count ) ? -1 : $posts_count;
@@ -1075,7 +1049,6 @@ class GridWidget extends Widget_Base {
 		$items             = array();
 		$industries        = array();
 
-		// Check if Elementor editor, preview mode, or fallback is enabled
 		$is_editor    = \Elementor\Plugin::$instance->editor->is_edit_mode();
 		$is_preview   = is_preview() || ( isset( \Elementor\Plugin::$instance->preview ) && \Elementor\Plugin::$instance->preview->is_preview_mode() );
 		$allow_sample = ( 'yes' === $settings['preview_sample_data'] );
@@ -1090,7 +1063,6 @@ class GridWidget extends Widget_Base {
 				return;
 			}
 		} else {
-			// Field mapping config
 			$field_keys = array(
 				'headline'     => $settings['field_headline'],
 				'company_logo' => $settings['field_company_logo'],
@@ -1106,7 +1078,6 @@ class GridWidget extends Widget_Base {
 				$post_id   = get_the_ID();
 				$item_data = Model::get( $post_id, $field_keys );
 
-				// CTA Link Resolution: by default redirect to post permalink
 				if ( 'custom_url' === $cta_target && ! empty( $settings['custom_cta_url'] ) ) {
 					$item_data['cta_link'] = esc_url( $settings['custom_cta_url'] );
 				} elseif ( 'custom_field' === $cta_target && ! empty( $item_data['custom_link'] ) ) {
@@ -1123,7 +1094,6 @@ class GridWidget extends Widget_Base {
 			}
 			wp_reset_postdata();
 
-			// Query all available terms from 'industri' taxonomy
 			$all_terms = get_terms( array(
 				'taxonomy'   => 'industri',
 				'hide_empty' => false,
@@ -1135,12 +1105,10 @@ class GridWidget extends Widget_Base {
 			}
 		}
 
-		// Ensure $industries is never empty so the pill bar always renders
 		if ( empty( $industries ) ) {
 			$industries = $this->get_sample_industries();
 		}
 
-		// Layout and navigation guaranteed defaults
 		$layout_type        = ! empty( $settings['layout_type'] ) ? $settings['layout_type'] : 'slider';
 		$show_navigation    = ! isset( $settings['show_navigation'] ) || 'yes' === $settings['show_navigation'];
 		$show_pagination    = ! isset( $settings['show_pagination'] ) || 'yes' === $settings['show_pagination'];
@@ -1150,22 +1118,13 @@ class GridWidget extends Widget_Base {
 			'dynamicPagination' => $dynamic_pagination,
 		);
 
-		// Delegate HTML rendering to the view template partial
 		include dirname( __DIR__ ) . '/views/grid.php';
 	}
 
-	/**
-	 * Provide realistic wireframe sample data when 0 posts exist
-	 * Matches Jubelio Client Success Stories: Cuit Baby Wear, Clowny, Rodeo Junior, Aerostreet, Somethinc, Kopi Kenangan
-	 *
-	 * @param array $settings Widget settings.
-	 * @return array Array of sample items.
-	 */
 	protected function get_sample_items( $settings ) {
 		$cta_target = ! empty( $settings['cta_link_target'] ) ? $settings['cta_link_target'] : 'permalink';
 		$global_cta = ! empty( $settings['custom_cta_url'] ) ? esc_url( $settings['custom_cta_url'] ) : '';
 
-		// Dynamic link resolver: checks if actual post exists by slug, otherwise builds standard post URL
 		$resolve_link = function( $slug ) use ( $cta_target, $global_cta ) {
 			if ( 'custom_url' === $cta_target && ! empty( $global_cta ) ) {
 				return $global_cta;
@@ -1256,11 +1215,6 @@ class GridWidget extends Widget_Base {
 		);
 	}
 
-	/**
-	 * Provide sample industry terms for filter tabs in preview mode
-	 *
-	 * @return array Slugs and labels.
-	 */
 	protected function get_sample_industries() {
 		return array(
 			'fashion'           => __( 'Fashion', 'hello-elementor-child' ),

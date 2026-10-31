@@ -1,14 +1,4 @@
 <?php
-/**
- * ACF Pro Local JSON Synchronization & Auto-Import
- *
- * Saves and loads ACF field groups, post types, and taxonomies to/from `acf-json/`.
- * Automatically synchronizes JSON definitions into the WordPress database so they
- * appear immediately in the ACF Pro GUI under Field Groups, Post Types, and Taxonomies.
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,37 +7,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class AcfSync {
 
-	/**
-	 * Register ACF JSON hooks and database sync
-	 */
 	public static function init() {
-		// 1. JSON Save & Load filters
 		add_filter( 'acf/settings/save_json', array( __CLASS__, 'save_point' ) );
 		add_filter( 'acf/settings/load_json', array( __CLASS__, 'load_point' ) );
 		add_filter( 'acf/prepare_field_group_for_export', array( __CLASS__, 'safeguard_field_group_json_export' ) );
 
-		// 2. Fallback to ACF field default_value when empty on frontend & Elementor dynamic tags
 		add_filter( 'acf/format_value', array( __CLASS__, 'fallback_to_default_value' ), 10, 3 );
 
-		// 3. Local Fallback Registration on acf/init (frontend only, so WP Admin editor is never conflicted)
+		// Frontend-only fallback so WP Admin field group editor is never conflicted.
 		add_action( 'acf/init', array( __CLASS__, 'register_local_fallback' ), 20 );
 
-		// 4. Admin manual force-sync handler (only on explicit user request)
 		if ( is_admin() ) {
 			add_action( 'admin_action_jubelio_force_acf_sync', array( __CLASS__, 'force_sync_handler' ) );
 			add_action( 'admin_notices', array( __CLASS__, 'admin_sync_notice' ) );
 		}
 	}
 
-	/**
-	 * Automatically fallback to the field's configured default_value when empty.
-	 * Solves the issue where an emptied post field returns "" instead of its default in Elementor dynamic tags.
-	 *
-	 * @param mixed      $value Formatted value.
-	 * @param int|string $post_id Post ID.
-	 * @param array      $field Field definition array.
-	 * @return mixed
-	 */
+	// Emptied post fields return "" instead of their default in Elementor dynamic tags.
 	public static function fallback_to_default_value( $value, $post_id, $field ) {
 		if ( ( null === $value || '' === $value ) && isset( $field['default_value'] ) && '' !== $field['default_value'] ) {
 			return $field['default_value'];
@@ -56,13 +32,7 @@ class AcfSync {
 		return $value;
 	}
 
-	/**
-	 * Guard: Prevent saving group_cerita_pebisnis to JSON with an empty fields array.
-	 * If fields are empty for any reason, restores existing fields from disk.
-	 *
-	 * @param array $field_group Field group definition.
-	 * @return array Protected field group.
-	 */
+	// Prevent saving group_cerita_pebisnis to JSON with an empty fields array by restoring from disk.
 	public static function safeguard_field_group_json_export( $field_group ) {
 		if ( ! is_array( $field_group ) || empty( $field_group['key'] ) || 'group_cerita_pebisnis' !== $field_group['key'] ) {
 			return $field_group;
@@ -81,22 +51,10 @@ class AcfSync {
 		return $field_group;
 	}
 
-	/**
-	 * Point ACF Save to theme's acf-json directory
-	 *
-	 * @param string $path Default save path.
-	 * @return string Custom save path.
-	 */
 	public static function save_point( $path ) {
 		return get_stylesheet_directory() . '/acf-json';
 	}
 
-	/**
-	 * Append theme's acf-json directory to ACF load paths without removing defaults
-	 *
-	 * @param array $paths Default load paths.
-	 * @return array Updated load paths.
-	 */
 	public static function load_point( $paths ) {
 		$theme_path = get_stylesheet_directory() . '/acf-json';
 		if ( is_array( $paths ) ) {
@@ -110,9 +68,6 @@ class AcfSync {
 		return $paths;
 	}
 
-	/**
-	 * Register local field group as fallback on frontend so fields are guaranteed to be active
-	 */
 	public static function register_local_fallback() {
 		if ( is_admin() || ! function_exists( 'acf_add_local_field_group' ) ) {
 			return;
@@ -132,13 +87,6 @@ class AcfSync {
 		}
 	}
 
-	/**
-	 * Automatically import JSON files into WordPress database if not yet stored in DB.
-	 * This makes them immediately visible and editable in ACF Pro under:
-	 * - ACF > Field Groups
-	 * - ACF > Post Types
-	 * - ACF > Taxonomies
-	 */
 	public static function auto_sync_to_db() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -149,7 +97,6 @@ class AcfSync {
 			return;
 		}
 
-		// 1. Sync Field Group: group_cerita_pebisnis
 		if ( function_exists( 'acf_import_field_group' ) ) {
 			$existing_group = get_posts( array(
 				'post_type'      => 'acf-field-group',
@@ -180,7 +127,6 @@ class AcfSync {
 			}
 		}
 
-		// 2. Sync Post Type: post_type_cerita_pebisnis (ACF Pro 6.1+)
 		if ( function_exists( 'acf_import_post_type' ) ) {
 			$existing_cpt = get_posts( array(
 				'post_type'      => 'acf-post-type',
@@ -200,7 +146,6 @@ class AcfSync {
 			}
 		}
 
-		// 3. Sync Taxonomy: taxonomy_industri (ACF Pro 6.1+)
 		if ( function_exists( 'acf_import_taxonomy' ) ) {
 			$existing_tax = get_posts( array(
 				'post_type'      => 'acf-taxonomy',
@@ -221,9 +166,6 @@ class AcfSync {
 		}
 	}
 
-	/**
-	 * Force re-sync handler for manual admin trigger
-	 */
 	public static function force_sync_handler() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Unauthorized user.', 'hello-elementor-child' ) );
@@ -233,7 +175,6 @@ class AcfSync {
 
 		$dir = get_stylesheet_directory() . '/acf-json';
 
-		// Re-import Field Group
 		if ( function_exists( 'acf_import_field_group' ) && file_exists( $dir . '/group_cerita_pebisnis.json' ) ) {
 			$data = json_decode( file_get_contents( $dir . '/group_cerita_pebisnis.json' ), true );
 			if ( ! empty( $data ) ) {
@@ -241,7 +182,6 @@ class AcfSync {
 			}
 		}
 
-		// Re-import Post Type
 		if ( function_exists( 'acf_import_post_type' ) && file_exists( $dir . '/post_type_cerita_pebisnis.json' ) ) {
 			$data = json_decode( file_get_contents( $dir . '/post_type_cerita_pebisnis.json' ), true );
 			if ( ! empty( $data ) ) {
@@ -249,7 +189,6 @@ class AcfSync {
 			}
 		}
 
-		// Re-import Taxonomy
 		if ( function_exists( 'acf_import_taxonomy' ) && file_exists( $dir . '/taxonomy_industri.json' ) ) {
 			$data = json_decode( file_get_contents( $dir . '/taxonomy_industri.json' ), true );
 			if ( ! empty( $data ) ) {
@@ -264,9 +203,6 @@ class AcfSync {
 		exit;
 	}
 
-	/**
-	 * Admin notice when manual sync completes
-	 */
 	public static function admin_sync_notice() {
 		if ( isset( $_GET['acf_synced'] ) && '1' === $_GET['acf_synced'] ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' .

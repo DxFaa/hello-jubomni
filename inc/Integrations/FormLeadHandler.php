@@ -1,13 +1,4 @@
 <?php
-/**
- * Contact Form 7 Lead & Publication Submission Handlers
- *
- * Handles custom dynamic tags, Bitrix24 CRM integration, category & location lookups,
- * ACF publication file downloads, and CFDB7 database optimization.
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Integrations;
 
 use WPCF7_Submission;
@@ -18,11 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FormLeadHandler {
 
-	/**
-	 * Order volume mapping to Bitrix24 enum IDs
-	 *
-	 * @var array
-	 */
 	const ORDERAN_MAP = array(
 		'<100'          => '1860',
 		'100-499'       => '1862',
@@ -35,11 +21,6 @@ class FormLeadHandler {
 		'>60.000'       => '1876',
 	);
 
-	/**
-	 * Discovery source mapping to Bitrix24 enum IDs
-	 *
-	 * @var array
-	 */
 	const SUMBER_TAHU_MAP = array(
 		'Sosial Media'      => '9360',
 		'Rekomendasi Teman' => '9362',
@@ -48,11 +29,6 @@ class FormLeadHandler {
 		'Lainnya'           => '9368',
 	);
 
-	/**
-	 * Product interest mapping to Bitrix24 enum IDs
-	 *
-	 * @var array
-	 */
 	const PRODUK_MAP = array(
 		'Omnichannel' => '15058',
 		'POS'         => '15060',
@@ -61,35 +37,16 @@ class FormLeadHandler {
 		'Shipment'    => '15066',
 	);
 
-	/**
-	 * Register all CF7 & submission hooks
-	 */
 	public static function init() {
-		// 1. Dynamic CF7 Form Tags
 		add_action( 'wpcf7_init', array( __CLASS__, 'register_form_tags' ) );
-
-		// 2. CF7 Posted Data Shadow IDs & Mappings
 		add_filter( 'wpcf7_posted_data', array( __CLASS__, 'generate_shadow_ids' ) );
-
-		// 3. Prevent duplicate submissions before CFDB7 or Mail processing
 		add_filter( 'wpcf7_validate', array( __CLASS__, 'prevent_duplicate_submission' ), 20, 2 );
-
-		// 4. CF7 Webhook Dispatch to Bitrix24
 		add_action( 'wpcf7_before_send_mail', array( __CLASS__, 'handle_form_submission' ), 10, 3 );
-
-		// 5. Custom Special Mail Tag for Download Links
 		add_filter( 'wpcf7_special_mail_tags', array( __CLASS__, 'publikasi_file_mail_tag' ), 10, 3 );
-
-		// 6. Shortcode for Publication Thank You / Download Pages
 		add_shortcode( 'get_data_from_url_id', array( __CLASS__, 'shortcode_get_data_from_url_id' ) );
-
-		// 7. CFDB7 Database Optimization (strip large b24_trace string)
 		add_filter( 'cfdb7_before_save_data', array( __CLASS__, 'exclude_trace_from_cfdb7' ) );
 	}
 
-	/**
-	 * Register custom CF7 form tags: [dynamic_source_url] and [dynamic_param]
-	 */
 	public static function register_form_tags() {
 		if ( function_exists( 'wpcf7_add_form_tag' ) ) {
 			wpcf7_add_form_tag( 'dynamic_source_url', array( __CLASS__, 'render_source_url_tag' ), array( 'name-attr' => true ) );
@@ -97,12 +54,6 @@ class FormLeadHandler {
 		}
 	}
 
-	/**
-	 * Render [dynamic_source_url] form tag
-	 *
-	 * @param array $tag Tag attributes.
-	 * @return string HTML hidden input.
-	 */
 	public static function render_source_url_tag( $tag ) {
 		$name = isset( $tag['name'] ) ? $tag['name'] : ( isset( $tag->name ) ? $tag->name : '' );
 		if ( empty( $name ) ) {
@@ -153,12 +104,6 @@ class FormLeadHandler {
 		);
 	}
 
-	/**
-	 * Render [dynamic_param] form tag from query string
-	 *
-	 * @param array $tag Tag attributes.
-	 * @return string HTML hidden input.
-	 */
 	public static function render_dynamic_param_tag( $tag ) {
 		$name = isset( $tag['name'] ) ? $tag['name'] : ( isset( $tag->name ) ? $tag->name : '' );
 		if ( empty( $name ) ) {
@@ -177,12 +122,6 @@ class FormLeadHandler {
 		);
 	}
 
-	/**
-	 * Map human-readable form selections to Bitrix24 IDs
-	 *
-	 * @param array $posted_data Submitted CF7 data.
-	 * @return array Augmented data with shadow Bitrix fields.
-	 */
 	public static function generate_shadow_ids( $posted_data ) {
 		if ( ! class_exists( 'WPCF7_Submission' ) ) {
 			return $posted_data;
@@ -196,19 +135,16 @@ class FormLeadHandler {
 		$contact_form = $submission->get_contact_form();
 		$form_title   = $contact_form ? $contact_form->title() : '';
 
-		// 1. Orderan mapping (Daftar Jubelio & Download Publikasi)
 		if ( isset( $posted_data['Orderan'] ) ) {
 			$ord_val      = $posted_data['Orderan'];
 			$orderan_text = is_array( $ord_val ) ? ( isset( $ord_val[0] ) ? $ord_val[0] : '' ) : $ord_val;
 			$posted_data['bitrix_orderan'] = isset( self::ORDERAN_MAP[ $orderan_text ] ) ? self::ORDERAN_MAP[ $orderan_text ] : '';
 		}
 
-		// Only continue for Daftar Jubelio forms
 		if ( 'Daftar Jubelio' !== $form_title && 'Daftar Jubelio EN' !== $form_title ) {
 			return $posted_data;
 		}
 
-		// 2. Category mapping (using 1-year transient cache)
 		if ( isset( $posted_data['select-category'] ) ) {
 			$cat_val  = $posted_data['select-category'];
 			$cat_text = is_array( $cat_val ) ? ( isset( $cat_val[0] ) ? $cat_val[0] : '' ) : $cat_val;
@@ -235,7 +171,6 @@ class FormLeadHandler {
 			$posted_data['bitrix_kategori'] = isset( $cat_map[ $cat_text ] ) ? $cat_map[ $cat_text ] : '';
 		}
 
-		// 3. Location mapping (using 1-year transient cache)
 		if ( isset( $posted_data['select-location'] ) ) {
 			$loc_val  = $posted_data['select-location'];
 			$loc_text = is_array( $loc_val ) ? ( isset( $loc_val[0] ) ? $loc_val[0] : '' ) : $loc_val;
@@ -265,13 +200,6 @@ class FormLeadHandler {
 		return $posted_data;
 	}
 
-	/**
-	 * Detect locale (ID vs EN) based on referral post or Polylang
-	 *
-	 * @param string $ref_id Referral post ID.
-	 * @param string $form_title Contact form title.
-	 * @return string 'ID' or 'EN'
-	 */
 	public static function resolve_locale( $ref_id, $form_title = '' ) {
 		$locale_val = 'ID';
 
@@ -295,15 +223,8 @@ class FormLeadHandler {
 		return $locale_val;
 	}
 
-	/**
-	 * Process form submission and dispatch to Bitrix24 CRM
-	 *
-	 * @param \WPCF7_ContactForm $contact_form CF7 form instance.
-	 * @param bool               $abort Abort flag.
-	 * @param \WPCF7_Submission  $submission CF7 submission instance.
-	 */
 	public static function handle_form_submission( $contact_form, &$abort, $submission ) {
-		// 1. In-process idempotency guard (prevent duplicate execution within the same PHP lifecycle)
+		// Prevent duplicate execution within the same PHP lifecycle.
 		static $processed_submissions = array();
 		$submission_hash = spl_object_hash( $submission );
 		if ( isset( $processed_submissions[ $submission_hash ] ) ) {
@@ -324,7 +245,7 @@ class FormLeadHandler {
 		$phone        = isset( $posted_data['phone'] ) ? trim( $posted_data['phone'] ) : '';
 		$email        = isset( $posted_data['email'] ) ? trim( $posted_data['email'] ) : '';
 
-		// 2. Cross-request debounce guard (prevent rapid double-click submissions within 15 seconds)
+		// Debounce rapid double-click submissions within 15 seconds.
 		if ( ! empty( $email ) || ! empty( $phone ) ) {
 			$clean_phone = preg_replace( '/\D/', '', $phone );
 			$dedup_key   = 'jubelio_b24_sub_' . md5( strtolower( $email ) . '|' . $clean_phone . '|' . $form_title );
@@ -341,12 +262,11 @@ class FormLeadHandler {
 		$ref_id        = isset( $posted_data['ref_id'] ) ? sanitize_text_field( $posted_data['ref_id'] ) : '';
 		$referral_link = isset( $posted_data['ref_url'] ) ? sanitize_text_field( $posted_data['ref_url'] ) : 'Direct or Unknown';
 
-		// Clean up any legacy or escaped DirectorUnknown strings
 		if ( empty( $referral_link ) || 'http://DirectorUnknown' === $referral_link || false !== strpos( $referral_link, 'DirectorUnknown' ) ) {
 			$referral_link = 'Direct or Unknown';
 		}
 
-		// Security: Validate URL to prevent protocol hijacking (javascript:) and open redirects
+		// Validate URL to prevent protocol hijacking (javascript:) and open redirects.
 		if ( 'Direct or Unknown' !== $referral_link ) {
 			$validated_url = wp_http_validate_url( $referral_link );
 			$referral_link = $validated_url ? esc_url_raw( $validated_url ) : 'Direct or Unknown';
@@ -357,7 +277,6 @@ class FormLeadHandler {
 
 		$locale_val = self::resolve_locale( $ref_id, $form_title );
 
-		// Standard UTM tracking fields
 		$utm_source   = isset( $posted_data['utm_source'] ) ? sanitize_text_field( $posted_data['utm_source'] ) : '';
 		$utm_medium   = isset( $posted_data['utm_medium'] ) ? sanitize_text_field( $posted_data['utm_medium'] ) : '';
 		$utm_campaign = isset( $posted_data['utm_campaign'] ) ? sanitize_text_field( $posted_data['utm_campaign'] ) : '';
@@ -369,10 +288,8 @@ class FormLeadHandler {
 			$bitrix_source_id = 'UC_E1DI25';
 		}
 
-		// 1. Create or match company in Bitrix24
 		$company_id = Bitrix24::add_company( $nama_toko, $phone, $email );
 
-		// 2. Prepare Lead fields
 		$lead_fields = array(
 			'TITLE'             => $nama_toko . ' - ' . $nama_lengkap,
 			'NAME'              => $nama_lengkap,
@@ -403,7 +320,6 @@ class FormLeadHandler {
 			$lead_fields['COMPANY_ID'] = $company_id;
 		}
 
-		// Extra fields for Daftar Jubelio
 		if ( 'Daftar Jubelio' === $form_title || 'Daftar Jubelio EN' === $form_title ) {
 			$bitrix_provinsi = isset( $posted_data['bitrix_provinsi'] ) ? $posted_data['bitrix_provinsi'] : '';
 			$bitrix_kategori = isset( $posted_data['bitrix_kategori'] ) ? $posted_data['bitrix_kategori'] : '';
@@ -433,20 +349,9 @@ class FormLeadHandler {
 			$lead_fields['UF_CRM_1771557606'] = $bitrix_darimana_tahu;
 		}
 
-		// 3. Create Lead in Bitrix24
 		Bitrix24::add_lead( $lead_fields );
 	}
 
-	/**
-	 * CF7 special mail tag: [publikasi_file_url]
-	 *
-	 * Replaces tag in email notifications with the ACF e-book_file URL from the referral post.
-	 *
-	 * @param string $output Default output.
-	 * @param string $name Tag name.
-	 * @param bool   $html Whether HTML is enabled.
-	 * @return string File download URL.
-	 */
 	public static function publikasi_file_mail_tag( $output, $name, $html ) {
 		if ( 'publikasi_file_url' !== $name ) {
 			return $output;
@@ -477,12 +382,6 @@ class FormLeadHandler {
 		return '#';
 	}
 
-	/**
-	 * Shortcode [get_data_from_url_id param="ref_id" field="e-book_file"]
-	 *
-	 * @param array $atts Shortcode attributes.
-	 * @return string Resolved data from referral post.
-	 */
 	public static function shortcode_get_data_from_url_id( $atts ) {
 		$atts = shortcode_atts( array(
 			'param' => 'ref_id',
@@ -516,14 +415,7 @@ class FormLeadHandler {
 		}
 	}
 
-	/**
-	 * Prevent duplicate CF7 submissions from double clicks or rapid retries.
-	 * Blocks duplicate processing at validation stage before CFDB7 or mail fires.
-	 *
-	 * @param \WPCF7_Validation $result Validation result object.
-	 * @param array             $tags Form tags.
-	 * @return \WPCF7_Validation
-	 */
+	// Blocks duplicate processing at validation stage before CFDB7 or mail fires.
 	public static function prevent_duplicate_submission( $result, $tags ) {
 		if ( ! is_object( $result ) || ! method_exists( $result, 'is_valid' ) || ! $result->is_valid() ) {
 			return $result;
@@ -559,12 +451,7 @@ class FormLeadHandler {
 		return $result;
 	}
 
-	/**
-	 * Strip b24_trace from Contact Form DB 7 storage to avoid database bloat
-	 *
-	 * @param array $form_data Form data before database save.
-	 * @return array Form data without b24_trace.
-	 */
+	// Strip b24_trace from Contact Form DB 7 storage to avoid database bloat.
 	public static function exclude_trace_from_cfdb7( $form_data ) {
 		if ( isset( $form_data['b24_trace'] ) ) {
 			unset( $form_data['b24_trace'] );

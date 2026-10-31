@@ -1,10 +1,4 @@
 <?php
-/**
- * Legacy Shortcodes Registry
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Shortcodes;
 
 if ( ! defined( 'ABSPATH' ) ) {

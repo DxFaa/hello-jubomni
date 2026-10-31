@@ -1,10 +1,4 @@
 <?php
-/**
- * Elementor Custom Queries
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Integrations;
 
 if ( ! defined( 'ABSPATH' ) ) {

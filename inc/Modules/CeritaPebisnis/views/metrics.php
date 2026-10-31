@@ -1,12 +1,4 @@
 <?php
-/**
- * View Partial: Cerita Pebisnis Section Metrics (Angka yang Bicara)
- * Supports Curved Fan Arc Layout (matching Reference Image) & Classic 2-Column Split
- *
- * @package Jubelio
- * @var array $settings Widget settings.
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -24,13 +16,9 @@ $show_icons       = ! empty( $settings['show_card_icons'] ) && 'yes' === $settin
 $metrics_items    = ! empty( $settings['metrics_list'] ) && is_array( $settings['metrics_list'] ) ? $settings['metrics_list'] : array();
 $total_items      = count( $metrics_items );
 
-/**
- * Render Vector SVG Charts matching Reference Image (Anchored at Bottom of Cards)
- */
 $render_chart = function( $item, $index ) {
 	$chart_type = ! empty( $item['chart_type'] ) ? $item['chart_type'] : '';
 
-	// Fallback sequence if not specified
 	if ( empty( $chart_type ) ) {
 		$fallbacks  = array( 'bar_chart', 'arch_wave', 'ticks_bar', 'spline_wave', 'growth_area', 'dual_sparkline' );
 		$chart_type = isset( $fallbacks[ $index % count( $fallbacks ) ] ) ? $fallbacks[ $index % count( $fallbacks ) ] : 'bar_chart';
@@ -45,7 +33,6 @@ $render_chart = function( $item, $index ) {
 
 	switch ( $chart_type ) {
 		case 'bar_chart':
-			// 5 Bars matching Card 1 in reference image
 			?>
 			<svg viewBox="0 0 204 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="jubelio-chart-svg chart-bars" aria-hidden="true">
 				<rect x="8" y="36" width="28" height="28" rx="4" fill="#FEE2E2" />
@@ -58,7 +45,6 @@ $render_chart = function( $item, $index ) {
 			break;
 
 		case 'arch_wave':
-			// Fan of radiating lines forming an arch curve matching Card 2 in reference image
 			$grad_id = 'archBlueGrad-' . esc_attr( $index );
 			?>
 			<svg viewBox="0 0 204 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="jubelio-chart-svg chart-arch" aria-hidden="true">
@@ -87,7 +73,6 @@ $render_chart = function( $item, $index ) {
 			break;
 
 		case 'ticks_bar':
-			// Equalizer ticks matching Card 3 in reference image (gray on left, purple on right)
 			?>
 			<svg viewBox="0 0 204 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="jubelio-chart-svg chart-ticks" aria-hidden="true">
 				<?php
@@ -114,7 +99,6 @@ $render_chart = function( $item, $index ) {
 			break;
 
 		case 'spline_wave':
-			// Glowing Spline Sine Curve matching Card 4 in reference image
 			$filter_id = 'glow-orange-' . esc_attr( $index );
 			?>
 			<svg viewBox="0 0 204 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="jubelio-chart-svg chart-spline" aria-hidden="true">
@@ -133,7 +117,6 @@ $render_chart = function( $item, $index ) {
 			break;
 
 		case 'growth_area':
-			// Upward Growth Area Wave (Emerald Green)
 			$grad_id = 'emeraldGrad-' . esc_attr( $index );
 			?>
 			<svg viewBox="0 0 204 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="jubelio-chart-svg chart-growth" aria-hidden="true">
@@ -151,7 +134,6 @@ $render_chart = function( $item, $index ) {
 
 		case 'dual_sparkline':
 		default:
-			// Dual trend curves (Indigo & Cyan)
 			?>
 			<svg viewBox="0 0 204 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="jubelio-chart-svg chart-sparkline" aria-hidden="true">
 				<path d="M 10 44 C 40 52 80 28 120 34 C 160 40 180 18 198 12" stroke="#4F46E5" stroke-width="2.4" stroke-linecap="round" fill="none" />
@@ -162,9 +144,6 @@ $render_chart = function( $item, $index ) {
 	}
 };
 
-/**
- * Render Built-in SVG Icons matching Jubelio Wireframe Design (for Arc & Split mode)
- */
 $render_metric_icon = function( $item ) {
 	$icon_type = ! empty( $item['metric_icon'] ) ? $item['metric_icon'] : 'storefront';
 
@@ -263,14 +242,11 @@ $render_metric_icon = function( $item ) {
 			</div>
 		<?php endif; ?>
 
-		<?php /* Outer Container with Glass-Style / Gradient Border Effect */ ?>
 		<div class="jubelio-metrics-glass-outer">
 			<div class="jubelio-metrics-glass-backdrop">
 
-				<?php /* Solid Inner Container Wrapping All Cards */ ?>
 				<div class="jubelio-metrics-solid-container">
 
-					<?php /* 3 Columns x 2 Rows Desktop Grid Layout */ ?>
 					<div class="jubelio-metrics-grid-3col">
 						<?php if ( ! empty( $metrics_items ) ) : ?>
 							<?php foreach ( $metrics_items as $index => $item ) :
@@ -280,14 +256,12 @@ $render_metric_icon = function( $item ) {
 							?>
 								<div class="jubelio-metric-card-box elementor-repeater-item-<?php echo esc_attr( $card_id ); ?>">
 									<div class="jubelio-metric-card-top">
-										<?php /* Top: Number Metrics (<h3> tag) */ ?>
 										<h3 class="jubelio-metric-number">
 											<span class="jubelio-metric-number-val" data-raw="<?php echo esc_attr( $val ); ?>">
 												<?php echo esc_html( $val ); ?>
 											</span>
 										</h3>
 
-										<?php /* Middle: Description Text (<h4> tag) */ ?>
 										<?php if ( ! empty( $label ) ) : ?>
 											<h4 class="jubelio-metric-desc">
 												<?php echo esc_html( $label ); ?>
@@ -295,7 +269,6 @@ $render_metric_icon = function( $item ) {
 										<?php endif; ?>
 									</div>
 
-									<?php /* Bottom: Image / Chart Anchored at Bottom */ ?>
 									<div class="jubelio-metric-chart-wrap">
 										<?php $render_chart( $item, $index ); ?>
 									</div>
@@ -332,7 +305,6 @@ $render_metric_icon = function( $item ) {
 				</div>
 			<?php endif; ?>
 
-			<?php /* Top Curved Fan Arc of Cards */ ?>
 			<div class="jubelio-metrics-arc-wrap">
 				<?php if ( ! empty( $metrics_items ) ) : ?>
 					<?php
@@ -340,7 +312,6 @@ $render_metric_icon = function( $item ) {
 						$val   = ! empty( $item['metric_value'] ) ? trim( $item['metric_value'] ) : '';
 						$label = ! empty( $item['metric_label'] ) ? trim( $item['metric_label'] ) : '';
 
-						// Symmetrical fan arc mathematical formulation
 						$offset     = $index - ( ( $total_items - 1 ) / 2 );
 						$max_deg    = ( $total_items <= 4 ) ? 10.5 : 13.5;
 						$deg_step   = ( $total_items > 1 ) ? ( $max_deg * 2 / ( $total_items - 1 ) ) : 0;

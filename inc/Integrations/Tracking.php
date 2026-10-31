@@ -1,10 +1,4 @@
 <?php
-/**
- * Tracking Overrides & Schema Injection
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Integrations;
 
 if ( ! defined( 'ABSPATH' ) ) {

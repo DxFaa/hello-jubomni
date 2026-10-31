@@ -1,10 +1,4 @@
 <?php
-/**
- * Post Type: E-book
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Modules\Ebook;
 
 if ( ! defined( 'ABSPATH' ) ) {

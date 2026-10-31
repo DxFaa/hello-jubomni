@@ -1,11 +1,4 @@
 <?php
-/**
- * Demo Data Seeder for Cerita Pebisnis
- * Matches Jubelio Wireframe: Cuit Baby Wear, Clowny, Rodeo Junior
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Modules\CeritaPebisnis;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,9 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Seeder {
 
-	/**
-	 * Initialize seeder hooks
-	 */
 	public static function init() {
 		if ( ! is_admin() ) {
 			return;
@@ -26,9 +16,6 @@ class Seeder {
 		add_action( 'admin_post_jubelio_seed_cerita_pebisnis', array( __CLASS__, 'handle_seed_request' ) );
 	}
 
-	/**
-	 * Display admin notice on Cerita Pebisnis screen when 0 posts exist
-	 */
 	public static function display_admin_notice() {
 		global $pagenow, $post_type;
 
@@ -36,7 +23,6 @@ class Seeder {
 			return;
 		}
 
-		// Success notice after seeding
 		if ( isset( $_GET['seeded'] ) && '1' === $_GET['seeded'] ) {
 			?>
 			<div class="notice notice-success is-dismissible" style="padding: 12px 18px; border-left-color: #4B68EF;">
@@ -48,7 +34,6 @@ class Seeder {
 			return;
 		}
 
-		// Check count of published posts
 		$counts = wp_count_posts( 'cerita-pebisnis' );
 		$published = isset( $counts->publish ) ? intval( $counts->publish ) : 0;
 
@@ -80,9 +65,6 @@ class Seeder {
 		}
 	}
 
-	/**
-	 * Handle seed action triggered from admin notice
-	 */
 	public static function handle_seed_request() {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_die( esc_html__( 'Unauthorized user.', 'hello-elementor-child' ) );
@@ -98,11 +80,7 @@ class Seeder {
 		exit;
 	}
 
-	/**
-	 * Seed demo data into WordPress
-	 */
 	public static function seed() {
-		// 1. Ensure Taxonomy terms exist
 		$terms = array(
 			'Pakaian Bayi & Anak' => 'pakaian-bayi-anak',
 			'Fashion'             => 'fashion',
@@ -122,7 +100,6 @@ class Seeder {
 			}
 		}
 
-		// 2. Demo Posts matching Wireframe
 		$posts = array(
 			array(
 				'title'       => 'Cuit Baby Wear',
@@ -160,7 +137,6 @@ class Seeder {
 		);
 
 		foreach ( $posts as $p ) {
-			// Check if post already exists by slug
 			$existing_post = get_page_by_path( $p['slug'], OBJECT, 'cerita-pebisnis' );
 			if ( $existing_post ) {
 				$existing_id = $existing_post->ID;
@@ -187,12 +163,10 @@ class Seeder {
 			) );
 
 			if ( ! empty( $post_id ) && ! is_wp_error( $post_id ) ) {
-				// Assign taxonomy
 				if ( isset( $term_ids[ $p['industry'] ] ) ) {
 					wp_set_object_terms( $post_id, array( intval( $term_ids[ $p['industry'] ] ) ), 'industri' );
 				}
 
-				// Populate ACF Fields & post meta
 				if ( function_exists( 'update_field' ) ) {
 					update_field( 'field_cp_headline', $p['headline'], $post_id );
 					update_field( 'field_cp_deskripsi', $p['desc'], $post_id );
@@ -202,7 +176,6 @@ class Seeder {
 					update_field( 'field_cp_client_role', $p['client_role'], $post_id );
 				}
 
-				// Fallback standard post meta (both cp_ prefix and legacy)
 				update_post_meta( $post_id, 'cp_headline', sanitize_text_field( $p['headline'] ) );
 				update_post_meta( $post_id, 'cp_deskripsi', sanitize_textarea_field( $p['desc'] ) );
 				update_post_meta( $post_id, 'cp_link_konsultasi', esc_url_raw( $p['cta_link'] ) );

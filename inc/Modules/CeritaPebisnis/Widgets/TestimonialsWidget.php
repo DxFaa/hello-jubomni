@@ -1,10 +1,4 @@
 <?php
-/**
- * Elementor Widget: Cerita Pebisnis Testimonials (Kata Pelanggan)
- * Touch Slider with Dynamic Pagination & Centered Active Card
- *
- * @package Jubelio
- */
 
 namespace Jubelio\Modules\CeritaPebisnis\Widgets;
 
@@ -50,9 +44,6 @@ class TestimonialsWidget extends Widget_Base {
 		return array( 'jubelio-cerita-pebisnis' );
 	}
 
-	/**
-	 * Retrieve list of all published Cerita Pebisnis posts for multi-select control
-	 */
 	protected function get_posts_options() {
 		$options = array();
 		$posts   = get_posts( array(
@@ -72,12 +63,8 @@ class TestimonialsWidget extends Widget_Base {
 		return $options;
 	}
 
-	/**
-	 * Register Widget Controls
-	 */
 	protected function register_controls() {
 
-		// ==================== SECTION: HEADER COPY ====================
 		$this->start_controls_section(
 			'section_header_content',
 			array(
@@ -194,7 +181,6 @@ class TestimonialsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: DATA SOURCE & SELECTION ====================
 		$this->start_controls_section(
 			'section_data_source',
 			array(
@@ -281,7 +267,6 @@ class TestimonialsWidget extends Widget_Base {
 			)
 		);
 
-		// Manual Repeater Items
 		$repeater = new Repeater();
 
 		$repeater->add_control(
@@ -379,7 +364,6 @@ class TestimonialsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== SECTION: SLIDER & NAVIGATION ====================
 		$this->start_controls_section(
 			'section_slider_settings',
 			array(
@@ -456,7 +440,6 @@ class TestimonialsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: HEADER ====================
 		$this->start_controls_section(
 			'section_style_header',
 			array(
@@ -529,7 +512,6 @@ class TestimonialsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: TESTIMONIAL CARDS ====================
 		$this->start_controls_section(
 			'section_style_cards',
 			array(
@@ -606,7 +588,6 @@ class TestimonialsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: KUTIPAN & NARASUMBER ====================
 		$this->start_controls_section(
 			'section_style_quote',
 			array(
@@ -679,7 +660,6 @@ class TestimonialsWidget extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// ==================== STYLE TAB: TOMBOL & PAGINASI ====================
 		$this->start_controls_section(
 			'section_style_nav',
 			array(
@@ -765,9 +745,6 @@ class TestimonialsWidget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/**
-	 * Render Widget HTML
-	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		$source   = ! empty( $settings['content_source'] ) ? $settings['content_source'] : 'default_query';
@@ -789,7 +766,6 @@ class TestimonialsWidget extends Widget_Base {
 				}
 			}
 		} else {
-			// Query from CPT Cerita Pebisnis
 			$limit      = ! empty( $settings['posts_limit'] ) ? intval( $settings['posts_limit'] ) : 6;
 			$query_args = array(
 				'post_type'      => 'cerita-pebisnis',
@@ -818,12 +794,10 @@ class TestimonialsWidget extends Widget_Base {
 			}
 		}
 
-		// Fallback sample data if empty
 		if ( empty( $items ) && ( ! isset( $settings['preview_sample_data'] ) || 'yes' === $settings['preview_sample_data'] ) ) {
 			$items = $this->get_sample_items();
 		}
 
-		// Swiper Config
 		$swiper_config = array(
 			'dynamicPagination' => ( ! isset( $settings['dynamic_pagination'] ) || 'yes' === $settings['dynamic_pagination'] ),
 			'autoplay'          => ( ! empty( $settings['autoplay'] ) && 'yes' === $settings['autoplay'] ),
@@ -833,9 +807,6 @@ class TestimonialsWidget extends Widget_Base {
 		include dirname( __DIR__ ) . '/views/testimonials.php';
 	}
 
-	/**
-	 * Wireframe Sample Data matching Reference Image
-	 */
 	protected function get_sample_items() {
 		return array(
 			array(

@@ -1,10 +1,4 @@
 <?php
-/**
- * Admin Clean-up, Roles, Comments & Security Tweaks
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,11 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class AdminCleanup {
 
-	/**
-	 * Register hooks
-	 */
 	public static function init() {
-		// Frontend & Global
 		add_filter( 'comments_open', '__return_false', 20 );
 		add_filter( 'pings_open', '__return_false', 20 );
 		add_filter( 'comments_array', '__return_empty_array', 10 );
@@ -26,7 +16,6 @@ class AdminCleanup {
 		add_filter( 'option_blogname', array( __CLASS__, 'fallback_blogname' ) );
 		add_action( 'wp_head', array( __CLASS__, 'bing_verification_meta' ) );
 
-		// Admin & Dashboard only (Zero overhead on frontend)
 		if ( is_admin() ) {
 			add_action( 'init', array( __CLASS__, 'register_developer_role' ) );
 			add_action( 'admin_init', array( __CLASS__, 'cleanup_comments_admin' ) );

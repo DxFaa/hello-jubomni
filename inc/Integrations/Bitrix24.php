@@ -1,16 +1,4 @@
 <?php
-/**
- * Bitrix24 CRM REST Client & Secure Credential Store
- *
- * Provides safe storage for Bitrix24 webhook endpoints, supporting:
- * 1. Constants in wp-config.php (highest priority, immune to git leaks)
- * 2. Environment variables ($_ENV / getenv)
- * 3. WordPress Database Options (wp_options, managed via wp-admin)
- * 4. Filter hooks
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Integrations;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,15 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Bitrix24 {
 
-	/**
-	 * Default fallback endpoint URLs (stored in DB options on first run, NOT committed to git)
-	 */
 	const DEFAULT_COMPANY_ENDPOINT = 'https://jubelio.bitrix24.id/rest/1502/517r7nei9bwsf4j0/crm.company.add.json';
 	const DEFAULT_LEAD_ENDPOINT    = 'https://jubelio.bitrix24.id/rest/1502/sb5ht1x3v7ewgnpt/crm.lead.add.json';
 
-	/**
-	 * Initialize service and admin settings
-	 */
 	public static function init() {
 		self::seed_options();
 
@@ -36,9 +18,6 @@ class Bitrix24 {
 		}
 	}
 
-	/**
-	 * Seed default options in the database if empty
-	 */
 	protected static function seed_options() {
 		if ( false === get_option( 'jubelio_bitrix_company_endpoint' ) ) {
 			add_option( 'jubelio_bitrix_company_endpoint', self::DEFAULT_COMPANY_ENDPOINT, '', 'no' );
@@ -48,9 +27,6 @@ class Bitrix24 {
 		}
 	}
 
-	/**
-	 * Register secure settings in WP Admin (Settings > General or Settings > Jubelio Bitrix)
-	 */
 	public static function register_admin_settings() {
 		register_setting( 'general', 'jubelio_bitrix_company_endpoint', array(
 			'type'              => 'string',
@@ -110,68 +86,42 @@ class Bitrix24 {
 		}
 	}
 
-	/**
-	 * Get Bitrix24 Company Add endpoint securely
-	 *
-	 * @return string Webhook URL
-	 */
 	public static function get_company_endpoint() {
-		// 1. wp-config.php constant
 		if ( defined( 'JUBELIO_BITRIX_COMPANY_ENDPOINT' ) && ! empty( constant( 'JUBELIO_BITRIX_COMPANY_ENDPOINT' ) ) ) {
 			return constant( 'JUBELIO_BITRIX_COMPANY_ENDPOINT' );
 		}
 
-		// 2. Environment variable
 		$env = getenv( 'JUBELIO_BITRIX_COMPANY_ENDPOINT' );
 		if ( ! empty( $env ) ) {
 			return $env;
 		}
 
-		// 3. Database Option
 		$option = get_option( 'jubelio_bitrix_company_endpoint' );
 		if ( ! empty( $option ) && 'APIKEY' !== $option ) {
 			return $option;
 		}
 
-		// 4. Filter hook fallback
 		return apply_filters( 'jubelio_bitrix_company_endpoint', '' );
 	}
 
-	/**
-	 * Get Bitrix24 Lead Add endpoint securely
-	 *
-	 * @return string Webhook URL
-	 */
 	public static function get_lead_endpoint() {
-		// 1. wp-config.php constant
 		if ( defined( 'JUBELIO_BITRIX_LEAD_ENDPOINT' ) && ! empty( constant( 'JUBELIO_BITRIX_LEAD_ENDPOINT' ) ) ) {
 			return constant( 'JUBELIO_BITRIX_LEAD_ENDPOINT' );
 		}
 
-		// 2. Environment variable
 		$env = getenv( 'JUBELIO_BITRIX_LEAD_ENDPOINT' );
 		if ( ! empty( $env ) ) {
 			return $env;
 		}
 
-		// 3. Database Option
 		$option = get_option( 'jubelio_bitrix_lead_endpoint' );
 		if ( ! empty( $option ) && 'APIKEY' !== $option ) {
 			return $option;
 		}
 
-		// 4. Filter hook fallback
 		return apply_filters( 'jubelio_bitrix_lead_endpoint', '' );
 	}
 
-	/**
-	 * Create or link Company in Bitrix24
-	 *
-	 * @param string $company_name Company / Store title.
-	 * @param string $phone Phone number.
-	 * @param string $email Email address.
-	 * @return int|null Company ID if created, or null.
-	 */
 	public static function add_company( $company_name, $phone = '', $email = '' ) {
 		$endpoint = self::get_company_endpoint();
 		if ( empty( $endpoint ) || 'APIKEY' === $endpoint ) {
@@ -210,12 +160,6 @@ class Bitrix24 {
 		return null;
 	}
 
-	/**
-	 * Create Lead in Bitrix24
-	 *
-	 * @param array $lead_fields Key-value lead fields.
-	 * @return int|null Lead ID if created, or null.
-	 */
 	public static function add_lead( array $lead_fields ) {
 		$endpoint = self::get_lead_endpoint();
 		if ( empty( $endpoint ) || 'APIKEY' === $endpoint ) {

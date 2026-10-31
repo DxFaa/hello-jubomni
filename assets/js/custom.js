@@ -1,11 +1,9 @@
 jQuery(document).ready( function() { 
 	slider_marketplace();
 	slider_vendor();
-// 	toggle_more_less();
 	toggle_button_fitur();
 	fitur_custom_tabs();
 	jubelio_accordion();
-	//contact_form_redirect();
 	jubelio_brand_slider();
 	whatsapp_popup();
 	slider_testimonial();
@@ -52,7 +50,6 @@ function toggle_more_less() {
 function slider_vendor() {
 	if( jQuery('.testimonial_tab').length > 0 )
 	{
-		// Ensure the slider is initialized before adding data-slide attributes
       	jQuery('.testimonial_tab .pp-advanced-tabs-content-wrapper').on('init', function(event, slick){
         	jQuery('.testimonial_tab .pp-advanced-tabs-wrapper .pp-advanced-tabs-title').each(function(index) {
 			  jQuery(this).attr('data-slide', index);
@@ -70,23 +67,18 @@ function slider_vendor() {
 		  fade: true,
 		  autoplaySpeed: 5000,
 		  adaptiveHeight: true,
-// 		  asNavFor: '.pp-advanced-tabs-wrapper',
 		});
 	
-		 // Add click event to tabs
 		jQuery('.pp-advanced-tabs-title').on('click', function() {
 		  var slideIndex = jQuery(this).data('slide');
 		  jQuery('.testimonial_tab .pp-advanced-tabs-content-wrapper').slick('slickGoTo', slideIndex);
 		});
 		
-		// Sync active class for tabs
 		jQuery('.testimonial_tab .pp-advanced-tabs-content-wrapper').on('afterChange', function(event, slick, currentSlide, nextSlide){
 		   var get_index = jQuery('.slick-slide.slick-current.slick-active').attr('data-slick-index');
 		  jQuery('.testimonial_tab .pp-advanced-tabs-wrapper').find(".pp-advanced-tabs-title").removeClass("pp-tab-active");
 		  jQuery('.testimonial_tab .pp-advanced-tabs-wrapper .pp-advanced-tabs-title[data-slide="' + get_index + '"]').addClass("pp-tab-active");
 		});
-		
-// 		jQuery('.testimonial_tab .pp-advanced-tabs-wrapper .pp-advanced-tabs-title').first().addClass('pp-tab-active');
 	}
 }
 
@@ -223,7 +215,6 @@ function fitur_custom_tabs()
 			jQuery(".info").html("Tab <strong>" + tab.id + "</strong> activated!");
 		  },
 		  activateState: function (e, state) {
-			//console.log(state);
 			jQuery(".info").html(
 			  "Switched from <strong>" +
 				state.oldState +

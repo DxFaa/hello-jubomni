@@ -12,9 +12,6 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, featured-images, rtl-language-support, threaded-comments, translation-ready
 */
 
-/*
-    Add your custom styles here
-*/
 h1,h2,h3,h4,h5,h6
 {
 	margin-bottom:0 !Important
@@ -363,9 +360,9 @@ ul.list_item_notjubelio, ul.list_item_wjubelio
 	width: 12%
 }
 .partner_list.affiliate_list{
-   display: grid; /* 1 */
-  grid-template-columns: repeat(auto-fill, 25%); /* 2 */
-  justify-content: space-between; /* 4 */
+   display: grid;
+  grid-template-columns: repeat(auto-fill, 25%);
+  justify-content: space-between;
 }
 .info_program_list
 {
@@ -414,10 +411,10 @@ ul.list_item_notjubelio, ul.list_item_wjubelio
 {
 	margin-left:0;
 	padding-left:0;
-	display: grid; /* 1 */
-	grid-template-columns: repeat(auto-fill, 320px); /* 2 */
-	grid-gap: 1rem; /* 3 */
-	justify-content: space-between; /* 4 */
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 320px);
+	grid-gap: 1rem;
+	justify-content: space-between;
 }
 
 .why_box_list ul li{
@@ -637,8 +634,6 @@ input[type=file]::file-selector-button:hover {
 }
 .testimonial_tab .pp-advanced-tabs-content
 {
-/* 	box-shadow: 0px 12px 20px rgba(22, 58, 80, 0.1); */
-
 }
 .pp-card-slider
 {
@@ -789,9 +784,6 @@ body.single-post #wa, body.blog #wa, body.archive #wa
 	display: none;
 }
 
-
-
-/* .swiper-button-prev, .swiper-rtl .swiper-button-next */
 @media screen and (max-width: 1024px) {
 	.content_wrapper{
 		padding-left: 56px;
@@ -952,7 +944,6 @@ body.single-post #wa, body.blog #wa, body.archive #wa
 	}
 	.partner_list.dynamic .partner_item img
 	{
-/* 		max-width: 150px; */
 	}
 	.other_feature_list.three_column .other_item {
 		width: 100%;
@@ -1031,7 +1022,6 @@ body.single-post #wa, body.blog #wa, body.archive #wa
 		display: block;
 	}
 	.testimonial_tab .pp-advanced-tabs-content {
-/* 		overflow: hidden;  */
 		transition: height 0.3s; 
 	}
 }
@@ -1052,7 +1042,6 @@ body.single-post #wa, body.blog #wa, body.archive #wa
 }
 
 .testimonial_tab .pp-advanced-tabs-wrapper {
-/* 	display: flex !important */
 }
 
 .ebook-section a.elementor-post__read-more {
@@ -1081,29 +1070,29 @@ body.single-post #wa, body.blog #wa, body.archive #wa
     position: relative;
     width: 100%;
     max-width: 800px;
-    border-top: 2px solid #163A50; /* The horizontal line */
+    border-top: 2px solid #163A50;
 }
 
 .pointer-item {
     position: relative;
     text-align: center;
-    flex: 1; /* Equal spacing between pointers */
+    flex: 1;
 }
 
 .pointer-circle {
     width: 20px;
     height: 20px;
-    background: #606C75; /* Circle color */
+    background: #606C75;
     border-radius: 50%;
     position: absolute;
-    top: -12px; /* Position the circle above the line */
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
     border: 2px solid #606C75;
 }
 
 .pointer-item p {
-    margin-top: 20px; /* Space between the circle and text */
+    margin-top: 20px;
     font-size: 14px;
     padding-left: 20px;
     padding-right: 20px;
@@ -1124,7 +1113,6 @@ body.single-post #wa, body.blog #wa, body.archive #wa
     color: #fff;
 }
 
-/** AFFILIATE STYLES **/
 .affiliates-dashboard-section-links .section-link-item{
 	padding: 13px;
 }

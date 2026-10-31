@@ -1,10 +1,4 @@
 <?php
-/**
- * Data Model / Transformer: Cerita Pebisnis
- *
- * @package Jubelio
- */
-
 namespace Jubelio\Modules\CeritaPebisnis;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,13 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Model {
 
-	/**
-	 * Extract and normalize data for a Cerita Pebisnis post
-	 *
-	 * @param int   $post_id Post ID.
-	 * @param array $field_keys Optional custom field mappings.
-	 * @return array Normalized post data.
-	 */
 	public static function get( $post_id, $field_keys = array() ) {
 		$data = array(
 			'id'            => $post_id,
@@ -36,7 +23,6 @@ class Model {
 			'industry_slug' => '',
 		);
 
-		// Helper to resolve ACF field with fallback key list
 		$get_val = function( $custom_key, $fallback_keys ) use ( $post_id ) {
 			if ( ! empty( $custom_key ) && function_exists( 'get_field' ) ) {
 				$val = get_field( $custom_key, $post_id );
@@ -55,14 +41,12 @@ class Model {
 			return null;
 		};
 
-		// 1. Headline / Solution (e.g. "Optimalkan Stok dari Banyak Channel")
 		$headline_val = $get_val(
 			isset( $field_keys['headline'] ) ? $field_keys['headline'] : '',
 			array( 'cp_headline', 'headline', 'subjudul', 'highlight', 'solusi', 'tagline', 'ringkasan_solusi' )
 		);
 		$data['headline'] = ! empty( $headline_val ) ? esc_html( $headline_val ) : '';
 
-		// 2. Description (excerpt or content or ACF)
 		$desc_val = $get_val(
 			isset( $field_keys['description'] ) ? $field_keys['description'] : '',
 			array( 'cp_deskripsi', 'deskripsi', 'description', 'cerita_singkat', 'short_description', 'ringkasan' )
@@ -74,7 +58,6 @@ class Model {
 			$data['description'] = ! empty( $excerpt ) ? $excerpt : wp_trim_words( get_post_field( 'post_content', $post_id ), 26 );
 		}
 
-		// 3. Company Logo (array, id, or url) + intrinsic dimensions for aspect-ratio scaling
 		$data['company_logo_width']  = 0;
 		$data['company_logo_height'] = 0;
 		$logo_val = $get_val(
@@ -105,7 +88,6 @@ class Model {
 			$data['company_logo'] = $logo_val;
 		}
 
-		// 4. Card Main Image (Store / Warehouse photo)
 		$img_val = $get_val(
 			isset( $field_keys['card_image'] ) ? $field_keys['card_image'] : '',
 			array( 'cp_foto_toko', 'foto_toko', 'store_image', 'card_image', 'gambar_utama', 'foto_gudang' )
@@ -120,7 +102,6 @@ class Model {
 			$data['card_image'] = get_the_post_thumbnail_url( $post_id, 'large' );
 		}
 
-		// 5. CTA Link URL (defaults to the post's own URL; custom_link preserved if ACF field is set)
 		$link_val = $get_val(
 			isset( $field_keys['cta_link'] ) ? $field_keys['cta_link'] : '',
 			array( 'cp_link_konsultasi', 'link_konsultasi', 'cta_link', 'url_konsultasi', 'link_cerita' )
@@ -128,14 +109,12 @@ class Model {
 		$data['custom_link'] = ! empty( $link_val ) ? esc_url( $link_val ) : '';
 		$data['cta_link']    = ! empty( $data['permalink'] ) ? $data['permalink'] : get_permalink( $post_id );
 
-		// Video URL (YouTube, Vimeo, or self-hosted MP4)
 		$video_val = $get_val(
 			isset( $field_keys['video_url'] ) ? $field_keys['video_url'] : '',
 			array( 'cp_video_url', 'video_url', 'youtube_url', 'video', 'link_video' )
 		);
 		$data['video_url'] = ! empty( $video_val ) ? esc_url( $video_val ) : '';
 
-		// 6. Industry Taxonomy ('industri')
 		$terms = get_the_terms( $post_id, 'industri' );
 		if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
 			$data['industry_name'] = $terms[0]->name;
@@ -148,14 +127,12 @@ class Model {
 			}
 		}
 
-		// 7. Client Name / Brand Name
 		$name_val = $get_val(
 			isset( $field_keys['client_name'] ) ? $field_keys['client_name'] : '',
 			array( 'nama_bisnis', 'nama_toko', 'client_name', 'nama_klien', 'brand_name' )
 		);
 		$data['client_name'] = ! empty( $name_val ) ? esc_html( $name_val ) : $data['title'];
 
-		// 8. Client Quote (Kutipan Langsung)
 		$quote_val = $get_val(
 			isset( $field_keys['quote'] ) ? $field_keys['quote'] : '',
 			array( 'cp_quote', 'quote', 'kutipan', 'testimoni', 'client_quote', 'testimonial_quote' )
@@ -163,18 +140,15 @@ class Model {
 		if ( ! empty( $quote_val ) ) {
 			$data['quote'] = is_string( $quote_val ) ? trim( $quote_val ) : '';
 		} else {
-			// Fallback to description
 			$data['quote'] = ! empty( $data['description'] ) ? wp_strip_all_tags( $data['description'] ) : '';
 		}
 
-		// 9. Client Person / Spokesperson Name (e.g. Hansa Artupas)
 		$person_name_val = $get_val(
 			isset( $field_keys['client_person_name'] ) ? $field_keys['client_person_name'] : '',
 			array( 'cp_client_name', 'client_person_name', 'nama_tokoh', 'narasumber', 'person_name' )
 		);
 		$data['client_person_name'] = ! empty( $person_name_val ) ? esc_html( $person_name_val ) : $data['client_name'];
 
-		// 10. Client Person Role / Business Title (e.g. Owner Cuit BabyWear)
 		$person_role_val = $get_val(
 			isset( $field_keys['client_person_role'] ) ? $field_keys['client_person_role'] : '',
 			array( 'cp_client_role', 'client_person_role', 'jabatan', 'role', 'posisi' )
@@ -185,7 +159,6 @@ class Model {
 			$data['client_person_role'] = ! empty( $data['client_name'] ) ? 'Owner ' . $data['client_name'] : ( ! empty( $data['industry_name'] ) ? $data['industry_name'] : 'Klien Jubelio' );
 		}
 
-		// 10b. Client Person Photo / Avatar (Foto Tokoh / Narasumber)
 		$photo_val = $get_val( '', array( 'cp_foto_tokoh', 'foto_tokoh', 'cp_client_photo', 'client_photo', 'author_photo' ) );
 		if ( is_array( $photo_val ) && isset( $photo_val['url'] ) ) {
 			$data['client_photo'] = $photo_val['url'];
@@ -197,15 +170,12 @@ class Model {
 			$data['client_photo'] = '';
 		}
 
-		// 11. Location
 		$loc_val = $get_val( '', array( 'cp_lokasi', 'lokasi', 'lokasi_klien', 'client_location' ) );
 		$data['location'] = ! empty( $loc_val ) ? esc_html( $loc_val ) : 'Indonesia';
 
-		// 12. Custom Industry Override
 		$ind_custom = $get_val( '', array( 'cp_industri_custom', 'cp_industri', 'industri_custom' ) );
 		$data['industry_display'] = ! empty( $ind_custom ) ? esc_html( $ind_custom ) : ( ! empty( $data['industry_name'] ) ? $data['industry_name'] : 'Bisnis Retail' );
 
-		// 13. Products Used (Repeater)
 		$data['products_used'] = array();
 		if ( function_exists( 'get_field' ) ) {
 			$raw_prods = get_field( 'cp_produk_list', $post_id );
@@ -223,7 +193,6 @@ class Model {
 			}
 		}
 
-		// 14. Features Used (Repeater)
 		$data['features_used'] = array();
 		if ( function_exists( 'get_field' ) ) {
 			$raw_feats = get_field( 'cp_fitur_list', $post_id );
@@ -241,11 +210,9 @@ class Model {
 			}
 		}
 
-		// 15. Overview Text
 		$overview_val = $get_val( '', array( 'cp_overview_klien', 'cp_overview', 'overview_klien', 'cerita_lengkap' ) );
 		$data['overview'] = ! empty( $overview_val ) ? wp_kses_post( $overview_val ) : $data['description'];
 
-		// 16. Problems (Deskripsi & List)
 		$prob_desc = $get_val( '', array( 'cp_masalah_deskripsi', 'masalah_deskripsi', 'problem_description' ) );
 		$data['problem_desc'] = ! empty( $prob_desc ) ? wp_kses_post( $prob_desc ) : '';
 		$data['problem_list'] = array();
@@ -261,7 +228,6 @@ class Model {
 			}
 		}
 
-		// 17. Solutions (Deskripsi & List)
 		$sol_desc = $get_val( '', array( 'cp_solusi_deskripsi', 'solusi_deskripsi', 'solution_description' ) );
 		$data['solution_desc'] = ! empty( $sol_desc ) ? wp_kses_post( $sol_desc ) : '';
 		$data['solution_list'] = array();
@@ -277,7 +243,6 @@ class Model {
 			}
 		}
 
-		// 18. Result Metrics ("Hasil Nyata Transformasi")
 		$data['result_metrics'] = array();
 		if ( function_exists( 'get_field' ) ) {
 			$raw_metrics = get_field( 'cp_metrik_hasil_list', $post_id );
@@ -312,7 +277,6 @@ class Model {
 			}
 		}
 
-		// Default fallback sample metrics if none set
 		if ( empty( $data['result_metrics'] ) ) {
 			$data['result_metrics'] = array(
 				array(

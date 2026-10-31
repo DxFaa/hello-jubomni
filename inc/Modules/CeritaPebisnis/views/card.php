@@ -1,12 +1,4 @@
 <?php
-/**
- * View Partial: Single Cerita Pebisnis Card
- *
- * @package Jubelio
- * @var array $item Normalized card data from Model.
- * @var array $settings Widget settings.
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
