@@ -17,8 +17,116 @@ class Enqueue {
 	 * Register hooks
 	 */
 	public static function init() {
+		add_action( 'init', array( __CLASS__, 'maybe_flush_caches_on_update' ), 20 );
+		add_action( 'after_switch_theme', array( __CLASS__, 'flush_all_caches' ) );
+		add_action( 'upgrader_process_complete', array( __CLASS__, 'flush_all_caches' ) );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_frontend' ), 20 );
 		add_filter( 'script_loader_tag', array( __CLASS__, 'add_script_attributes' ), 10, 2 );
+	}
+
+	/**
+	 * Resolve dynamic cache-busting version for a theme asset using filemtime()
+	 * so any CSS/JS update automatically invalidates browser & CDN caches.
+	 *
+	 * @param string $relative_path Path relative to child theme directory (e.g. '/assets/css/cerita-pebisnis.css').
+	 * @return string Version string.
+	 */
+	public static function get_asset_version( $relative_path ) {
+		$base_ver  = defined( '_S_VERSION' ) ? _S_VERSION : wp_get_theme()->get( 'Version' );
+		$full_path = get_stylesheet_directory() . $relative_path;
+
+		if ( file_exists( $full_path ) ) {
+			$mtime = @filemtime( $full_path );
+			if ( $mtime ) {
+				return $base_ver . '.' . $mtime;
+			}
+		}
+
+		return $base_ver;
+	}
+
+	/**
+	 * Detect when theme CSS/JS files have changed (e.g. after theme ZIP upload/import)
+	 * and automatically purge Elementor & page/minification caches once per update.
+	 */
+	public static function maybe_flush_caches_on_update() {
+		$dir = get_stylesheet_directory();
+		$tracked_files = array(
+			'/style.css',
+			'/assets/css/cerita-pebisnis.css',
+			'/assets/js/cerita-pebisnis.js',
+			'/assets/js/custom.js',
+			'/assets/js/lead-tracker.js',
+		);
+
+		$fingerprint_parts = array( defined( '_S_VERSION' ) ? _S_VERSION : '1.0.0' );
+		foreach ( $tracked_files as $rel ) {
+			$path = $dir . $rel;
+			if ( file_exists( $path ) ) {
+				$fingerprint_parts[] = $rel . ':' . (int) @filemtime( $path ) . ':' . (int) @filesize( $path );
+			}
+		}
+
+		$current_hash = md5( implode( '|', $fingerprint_parts ) );
+		$saved_hash   = get_option( 'jubelio_assets_version_hash', '' );
+
+		if ( $current_hash !== $saved_hash ) {
+			update_option( 'jubelio_assets_version_hash', $current_hash, true );
+			self::flush_all_caches();
+		}
+	}
+
+	/**
+	 * Flush Elementor generated CSS and common WordPress page/minification caches.
+	 */
+	public static function flush_all_caches() {
+		// 1. Elementor CSS & files cache
+		if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->files_manager ) ) {
+			\Elementor\Plugin::$instance->files_manager->clear_cache();
+		}
+
+		// 2. WordPress Object Cache
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+
+		// 3. WP Rocket (Page cache & Minified CSS/JS)
+		if ( function_exists( 'rocket_clean_domain' ) ) {
+			rocket_clean_domain();
+		}
+		if ( function_exists( 'rocket_clean_minify' ) ) {
+			rocket_clean_minify();
+		}
+
+		// 4. LiteSpeed Cache
+		if ( has_action( 'litespeed_purge_all' ) ) {
+			do_action( 'litespeed_purge_all' );
+		}
+
+		// 5. Autoptimize
+		if ( class_exists( 'autoptimizeCache' ) && method_exists( 'autoptimizeCache', 'clearall' ) ) {
+			\autoptimizeCache::clearall();
+		}
+
+		// 6. W3 Total Cache
+		if ( function_exists( 'w3tc_flush_all' ) ) {
+			w3tc_flush_all();
+		}
+
+		// 7. WP Fastest Cache
+		if ( function_exists( 'wpfc_clear_all_cache' ) ) {
+			wpfc_clear_all_cache( true );
+		}
+
+		// 8. SiteGround Optimizer
+		if ( function_exists( 'sg_cachepress_purge_cache' ) ) {
+			sg_cachepress_purge_cache();
+		}
+
+		// 9. Breeze (Cloudways)
+		if ( has_action( 'breeze_clear_all_cache' ) ) {
+			do_action( 'breeze_clear_all_cache' );
+		}
 	}
 
 	/**
@@ -34,7 +142,7 @@ class Enqueue {
 			'hello-elementor-child-style',
 			$uri . '/style.css',
 			array( 'hello-elementor-theme-style' ),
-			$ver
+			self::get_asset_version( '/style.css' )
 		);
 
 		// Vendor: Slick Carousel
@@ -90,7 +198,7 @@ class Enqueue {
 			'jubelio-custom-script',
 			$uri . '/assets/js/custom.js',
 			array( 'jquery', 'jubelio-slider' ),
-			$ver,
+			self::get_asset_version( '/assets/js/custom.js' ),
 			true
 		);
 
@@ -117,7 +225,7 @@ class Enqueue {
 				'jubelio-cerita-pebisnis',
 				$uri . '/assets/css/cerita-pebisnis.css',
 				array( 'elementor-frontend', 'hello-elementor-child-style', 'jubelio-swiper' ),
-				$ver
+				self::get_asset_version( '/assets/css/cerita-pebisnis.css' )
 			);
 		}
 
@@ -126,7 +234,7 @@ class Enqueue {
 				'jubelio-cerita-pebisnis',
 				$uri . '/assets/js/cerita-pebisnis.js',
 				array( 'jquery', 'jubelio-swiper' ),
-				$ver,
+				self::get_asset_version( '/assets/js/cerita-pebisnis.js' ),
 				true
 			);
 		}
@@ -137,7 +245,7 @@ class Enqueue {
 				'jubelio-lead-tracker',
 				$uri . '/assets/js/lead-tracker.js',
 				array(),
-				$ver,
+				self::get_asset_version( '/assets/js/lead-tracker.js' ),
 				true
 			);
 		}
