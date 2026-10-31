@@ -48,23 +48,22 @@ class Enqueue {
 	/**
 	 * Detect when theme CSS/JS files have changed (e.g. after theme ZIP upload/import)
 	 * and automatically purge Elementor & page/minification caches once per update.
+	 * Automatically scans style.css and all CSS/JS files inside /assets/.
 	 */
 	public static function maybe_flush_caches_on_update() {
 		$dir = get_stylesheet_directory();
-		$tracked_files = array(
-			'/style.css',
-			'/assets/css/cerita-pebisnis.css',
-			'/assets/js/cerita-pebisnis.js',
-			'/assets/js/custom.js',
-			'/assets/js/lead-tracker.js',
+
+		$asset_files = array_merge(
+			glob( $dir . '/assets/css/*.css' ) ?: array(),
+			glob( $dir . '/assets/js/*.js' ) ?: array()
 		);
+		if ( file_exists( $dir . '/style.css' ) ) {
+			array_unshift( $asset_files, $dir . '/style.css' );
+		}
 
 		$fingerprint_parts = array( defined( '_S_VERSION' ) ? _S_VERSION : '1.0.0' );
-		foreach ( $tracked_files as $rel ) {
-			$path = $dir . $rel;
-			if ( file_exists( $path ) ) {
-				$fingerprint_parts[] = $rel . ':' . (int) @filemtime( $path ) . ':' . (int) @filesize( $path );
-			}
+		foreach ( $asset_files as $path ) {
+			$fingerprint_parts[] = basename( $path ) . ':' . (int) @filemtime( $path ) . ':' . (int) @filesize( $path );
 		}
 
 		$current_hash = md5( implode( '|', $fingerprint_parts ) );
