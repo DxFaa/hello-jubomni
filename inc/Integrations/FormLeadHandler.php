@@ -364,6 +364,11 @@ class FormLeadHandler {
 		$utm_content  = isset( $posted_data['utm_content'] ) ? sanitize_text_field( $posted_data['utm_content'] ) : '';
 		$utm_term     = isset( $posted_data['utm_term'] ) ? sanitize_text_field( $posted_data['utm_term'] ) : '';
 
+		$bitrix_source_id = '12';
+		if ( 'referral' === strtolower( trim( $utm_source ) ) && 'affiliate' === strtolower( trim( $utm_medium ) ) ) {
+			$bitrix_source_id = 'UC_E1DI25';
+		}
+
 		// 1. Create or match company in Bitrix24
 		$company_id = Bitrix24::add_company( $nama_toko, $phone, $email );
 
@@ -372,7 +377,7 @@ class FormLeadHandler {
 			'TITLE'             => $nama_toko . ' - ' . $nama_lengkap,
 			'NAME'              => $nama_lengkap,
 			'STATUS_ID'         => 'UC_P5VBGE',
-			'SOURCE_ID'         => '12',
+			'SOURCE_ID'         => $bitrix_source_id,
 			'TRACE'             => $bitrix_trace,
 			'OPENED'            => 'Y',
 			'PHONE'             => ! empty( $phone ) ? array( array( 'VALUE' => $phone, 'VALUE_TYPE' => 'WORK' ) ) : array(),

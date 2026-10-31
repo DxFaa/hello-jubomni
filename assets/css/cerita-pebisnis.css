@@ -2190,6 +2190,7 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 
 :is(.elementor, .elementor-page, [class*="elementor-"], body) .jubelio-client-spec-card,
 .jubelio-client-spec-card {
+	--jubelio-logo-base: 120px;
 	padding: 32px 0px;
 	display: flex;
 	flex-direction: row;
@@ -2207,7 +2208,7 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 .jubelio-spec-col-logo {
 	flex: 0 0 auto;
 	min-width: 0;
-	max-width: 220px;
+	max-width: 260px;
 	height: auto;
 	min-height: 48px;
 	display: flex;
@@ -2215,11 +2216,12 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 	justify-content: flex-end;
 }
 
+:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-client-spec-card img.jubelio-spec-logo-img,
 .jubelio-spec-logo-img {
-	width: auto;
-	height: auto;
-	max-width: 220px;
-	max-height: 72px;
+	width: auto !important;
+	height: calc(var(--jubelio-logo-base, 120px) * var(--jubelio-logo-scale, 0.60)) !important;
+	max-width: min(calc(var(--jubelio-logo-base, 120px) * 2.0), 100%) !important;
+	max-height: calc(var(--jubelio-logo-base, 120px) * 1.25) !important;
 	object-fit: contain;
 	object-position: right top;
 	display: block;
@@ -2472,6 +2474,7 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 @media (max-width: 1024px) {
 	:is(.elementor, .elementor-page, [class*="elementor-"], body) .jubelio-client-spec-card,
 	.jubelio-client-spec-card {
+		--jubelio-logo-base: 92px;
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 28px;
@@ -2490,9 +2493,8 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 		margin-bottom: 4px;
 	}
 
+	:is(.elementor-kit-8, [class*="elementor-kit-"], body) .jubelio-client-spec-card img.jubelio-spec-logo-img,
 	.jubelio-spec-logo-img {
-		max-height: 48px;
-		max-width: 180px;
 		object-position: left center;
 	}
 
@@ -2531,6 +2533,7 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 @media (max-width: 600px) {
 	:is(.elementor, .elementor-page, [class*="elementor-"], body) .jubelio-client-spec-card,
 	.jubelio-client-spec-card {
+		--jubelio-logo-base: 78px;
 		padding: 20px 0px !important;
 		gap: 20px;
 		border-radius: 0 !important;
@@ -2539,11 +2542,6 @@ html body :is(.elementor, .elementor-page, [class*="elementor-"]) :is(.elementor
 
 	.jubelio-spec-col-logo {
 		margin-bottom: 0px;
-	}
-
-	.jubelio-spec-logo-img {
-		max-height: 40px;
-		max-width: 150px;
 	}
 
 	.jubelio-spec-details {

@@ -569,6 +569,25 @@ class SingleClientOverviewWidget extends Widget_Base {
 			)
 		);
 
+		$this->add_responsive_control(
+			'client_logo_base_size',
+			array(
+				'label'       => __( 'Ukuran Dinamis Logo Klien (px)', 'hello-elementor-child' ),
+				'description' => __( 'Skala dasar logo yang otomatis menyesuaikan rasio (1:1 & potret tampil lebih besar secara proporsional dibanding lanskap).', 'hello-elementor-child' ),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => array( 'px' ),
+				'range'       => array(
+					'px' => array(
+						'min' => 48,
+						'max' => 200,
+					),
+				),
+				'selectors'   => array(
+					'{{WRAPPER}} .jubelio-client-spec-card' => '--jubelio-logo-base: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
 		$this->end_controls_section();
 	}
 
@@ -583,12 +602,39 @@ class SingleClientOverviewWidget extends Widget_Base {
 		// 1. Resolve Profile Data
 		$is_custom_profile = ( 'custom' === $settings['profile_data_source'] );
 
-		// Logo
-		$logo_url = '';
+		// Logo & Aspect-Ratio Optical Sizing
+		$logo_url    = '';
+		$logo_width  = 0;
+		$logo_height = 0;
 		if ( $is_custom_profile && ! empty( $settings['custom_client_logo']['url'] ) ) {
 			$logo_url = $settings['custom_client_logo']['url'];
+			if ( ! empty( $settings['custom_client_logo']['id'] ) ) {
+				$img_src = wp_get_attachment_image_src( (int) $settings['custom_client_logo']['id'], 'full' );
+				if ( is_array( $img_src ) ) {
+					$logo_width  = ! empty( $img_src[1] ) ? (int) $img_src[1] : 0;
+					$logo_height = ! empty( $img_src[2] ) ? (int) $img_src[2] : 0;
+				}
+			}
 		} else {
-			$logo_url = ! empty( $post_data['company_logo'] ) ? $post_data['company_logo'] : '';
+			$logo_url    = ! empty( $post_data['company_logo'] ) ? $post_data['company_logo'] : '';
+			$logo_width  = ! empty( $post_data['company_logo_width'] ) ? (int) $post_data['company_logo_width'] : 0;
+			$logo_height = ! empty( $post_data['company_logo_height'] ) ? (int) $post_data['company_logo_height'] : 0;
+		}
+
+		$logo_ratio = 2.5;
+		$logo_scale = 0.60;
+		$logo_shape = 'landscape';
+		if ( $logo_width > 0 && $logo_height > 0 ) {
+			$logo_ratio = round( $logo_width / $logo_height, 3 );
+			$raw_scale  = pow( $logo_ratio, -0.55 );
+			$logo_scale = round( min( max( 0.60, $raw_scale ), 1.20, 2.0 / $logo_ratio ), 3 );
+			if ( $logo_ratio < 0.85 ) {
+				$logo_shape = 'portrait';
+			} elseif ( $logo_ratio <= 1.35 ) {
+				$logo_shape = 'square';
+			} else {
+				$logo_shape = 'landscape';
+			}
 		}
 
 		// Location
@@ -809,8 +855,21 @@ class SingleClientOverviewWidget extends Widget_Base {
 						</div>
 
 						<?php if ( ! empty( $logo_url ) ) : ?>
-							<div class="jubelio-spec-col jubelio-spec-col-logo">
-								<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $post_data['client_name'] ); ?>" class="jubelio-spec-logo-img" loading="lazy" decoding="async" />
+							<div class="jubelio-spec-col jubelio-spec-col-logo" data-logo-shape="<?php echo esc_attr( $logo_shape ); ?>">
+								<img
+									src="<?php echo esc_url( $logo_url ); ?>"
+									alt="<?php echo esc_attr( $post_data['client_name'] ); ?>"
+									class="jubelio-spec-logo-img"
+									data-logo-shape="<?php echo esc_attr( $logo_shape ); ?>"
+									data-logo-ratio="<?php echo esc_attr( $logo_ratio ); ?>"
+									style="--jubelio-logo-ratio: <?php echo esc_attr( $logo_ratio ); ?>; --jubelio-logo-scale: <?php echo esc_attr( $logo_scale ); ?>;"
+									<?php if ( $logo_width > 0 && $logo_height > 0 ) : ?>
+										width="<?php echo esc_attr( $logo_width ); ?>"
+										height="<?php echo esc_attr( $logo_height ); ?>"
+									<?php endif; ?>
+									loading="lazy"
+									decoding="async"
+								/>
 							</div>
 						<?php else : ?>
 							<div class="jubelio-spec-col jubelio-spec-col-logo">

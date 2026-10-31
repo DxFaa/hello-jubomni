@@ -564,12 +564,53 @@
 		});
 	}
 
+	/**
+	 * Initialize Client Overview Dynamic Logo Optical Scaling
+	 * Ensures 1:1 square & portrait logos scale up proportionally relative to landscape logos
+	 */
+	function initClientOverviewSection($scope) {
+		var $sections = $scope ? $scope.find('.jubelio-client-overview-section') : $('.jubelio-client-overview-section');
+
+		function updateLogoScale(img) {
+			var w = img.naturalWidth || parseInt(img.getAttribute('width'), 10) || 0;
+			var h = img.naturalHeight || parseInt(img.getAttribute('height'), 10) || 0;
+			if (!w || !h) return;
+
+			var ratio = w / h;
+			var rawScale = Math.pow(ratio, -0.55);
+			var scale = Math.min(Math.max(0.60, rawScale), 1.20, 2.0 / ratio);
+			var shape = ratio < 0.85 ? 'portrait' : (ratio <= 1.35 ? 'square' : 'landscape');
+
+			img.style.setProperty('--jubelio-logo-ratio', ratio.toFixed(3));
+			img.style.setProperty('--jubelio-logo-scale', scale.toFixed(3));
+			img.setAttribute('data-logo-ratio', ratio.toFixed(3));
+			img.setAttribute('data-logo-shape', shape);
+
+			var col = img.closest('.jubelio-spec-col-logo');
+			if (col) {
+				col.setAttribute('data-logo-shape', shape);
+			}
+		}
+
+		$sections.find('.jubelio-spec-logo-img').each(function() {
+			var img = this;
+			if (img.complete && img.naturalWidth > 0) {
+				updateLogoScale(img);
+			} else {
+				$(img).off('load.jubelioLogoScale').on('load.jubelioLogoScale', function() {
+					updateLogoScale(img);
+				});
+			}
+		});
+	}
+
 	// Document Ready
 	$(document).ready(function() {
 		initCeritaPebisnis();
 		initMetricsSection();
 		initTestimonialsSection();
 		initSingleHeroSection();
+		initClientOverviewSection();
 	});
 
 	// Elementor Live Editor Support
@@ -586,6 +627,9 @@
 			});
 			elementorFrontend.hooks.addAction('frontend/element_ready/jubelio_cerita_pebisnis_single_hero.default', function($scope) {
 				initSingleHeroSection($scope);
+			});
+			elementorFrontend.hooks.addAction('frontend/element_ready/jubelio_cerita_pebisnis_client_overview.default', function($scope) {
+				initClientOverviewSection($scope);
 			});
 		}
 	});

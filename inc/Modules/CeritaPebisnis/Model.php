@@ -74,15 +74,33 @@ class Model {
 			$data['description'] = ! empty( $excerpt ) ? $excerpt : wp_trim_words( get_post_field( 'post_content', $post_id ), 26 );
 		}
 
-		// 3. Company Logo (array, id, or url)
+		// 3. Company Logo (array, id, or url) + intrinsic dimensions for aspect-ratio scaling
+		$data['company_logo_width']  = 0;
+		$data['company_logo_height'] = 0;
 		$logo_val = $get_val(
 			isset( $field_keys['company_logo'] ) ? $field_keys['company_logo'] : '',
 			array( 'cp_logo_bisnis', 'logo_bisnis', 'logo', 'logo_toko', 'brand_logo', 'client_logo', 'company_logo' )
 		);
 		if ( is_array( $logo_val ) && isset( $logo_val['url'] ) ) {
-			$data['company_logo'] = $logo_val['url'];
+			$data['company_logo']        = $logo_val['url'];
+			$data['company_logo_width']  = ! empty( $logo_val['width'] ) ? (int) $logo_val['width'] : 0;
+			$data['company_logo_height'] = ! empty( $logo_val['height'] ) ? (int) $logo_val['height'] : 0;
+			if ( ( ! $data['company_logo_width'] || ! $data['company_logo_height'] ) && ! empty( $logo_val['ID'] ) ) {
+				$img_src = wp_get_attachment_image_src( (int) $logo_val['ID'], 'full' );
+				if ( is_array( $img_src ) ) {
+					$data['company_logo_width']  = ! empty( $img_src[1] ) ? (int) $img_src[1] : 0;
+					$data['company_logo_height'] = ! empty( $img_src[2] ) ? (int) $img_src[2] : 0;
+				}
+			}
 		} elseif ( is_numeric( $logo_val ) ) {
-			$data['company_logo'] = wp_get_attachment_image_url( $logo_val, 'full' );
+			$img_src = wp_get_attachment_image_src( (int) $logo_val, 'full' );
+			if ( is_array( $img_src ) ) {
+				$data['company_logo']        = $img_src[0];
+				$data['company_logo_width']  = ! empty( $img_src[1] ) ? (int) $img_src[1] : 0;
+				$data['company_logo_height'] = ! empty( $img_src[2] ) ? (int) $img_src[2] : 0;
+			} else {
+				$data['company_logo'] = wp_get_attachment_image_url( $logo_val, 'full' );
+			}
 		} elseif ( is_string( $logo_val ) ) {
 			$data['company_logo'] = $logo_val;
 		}
